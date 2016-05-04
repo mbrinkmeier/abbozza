@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<options>
+    <group name="gui.blocks">
+        <item name="gui.operations" option="operations"/>
+        <item name="gui.local_variables" option="localVars"/>
+        <item name="gui.devices" option="devices"/>
+        <item name="gui.serial_communication" option="serial"/>
+        <group name="gui.arrays">
+            <choice name="gui.no_arrays" option="noArrays"/> 
+            <choice name="gui.lin_arrays" option="linArrays"/> 
+            <choice name="gui.mult_arrays" option="multArrays"/> 
+        </group> 
+    </group>
+    <group name ="gui.misc">
+    </group>
+</options>

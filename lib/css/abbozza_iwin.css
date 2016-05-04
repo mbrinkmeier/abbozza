@@ -1,0 +1,84 @@
+.iwinHead {
+   background-color: #a0a0a0;
+   font-weight: bold;
+   color: white;
+   font-family: sans-serif;    
+   overflow: auto;
+}
+
+.iwinCloser {
+    float: right;
+    background-color: #a0a0a0;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    width: 13px; 
+    height: 13px; 
+    border-color: white; 
+    border-radius: 3px; 
+    border-width: 2px; 
+    border-style: solid;
+    margin-bottom: 4px;
+}
+
+.iwin {
+    margin: 0pt;
+}
+
+/**
+ * Variable Window
+ */
+
+#abbozzaVarWin {
+	background-color : #f0fff0;
+}
+#abbozzaVarWinCloser {
+    display: none;
+}
+
+/**
+ * Message Window
+ */
+
+
+#abbozzaMsgWin {
+	background-color : #f0f0ff;
+	padding: 5px;
+	vertical-align: top;
+	text-align : left;
+}
+
+/**
+ * Server Window
+ */
+
+#abbozzaSrvWin {
+	background-color : #fff0f0;
+	padding-top: 5pt;
+	padding-bottom: 10pt;
+}
+
+/**
+ * Error Icon
+ */
+
+.abbozzaError{
+	font-family: sans-serif;
+	stroke: black;
+}
+
+.abbozzaErrorIconShield{
+	fill: white;
+	stroke: red;
+}
+
+.abbozzaErrorIcon{
+	fill: white;
+	stroke: red;
+	font-size: 14px;
+}
+
+.blocklyDraggable {
+    z-index: 1;
+}

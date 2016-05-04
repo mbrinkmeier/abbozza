@@ -1,0 +1,155 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package de.uos.inf.did.abbozza;
+
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Enumeration;
+import java.util.Vector;
+import java.util.jar.JarFile;
+import java.util.zip.ZipEntry;
+
+/**
+ *
+ * @author michael
+ */
+public class JarDirHandler implements HttpHandler {
+
+    private Vector<Object> entries;
+
+    public JarDirHandler() {
+        entries = new Vector<Object>();
+    }
+
+    public void addDir(File dir) {
+        entries.add(dir);
+    }
+
+    public void addJar(JarFile jar) {
+        entries.add(jar);
+    }
+
+    public void clear() {
+        entries.clear();
+    }
+
+    @Override
+    public void handle(HttpExchange exchg) throws IOException {
+
+        String path = exchg.getRequestURI().getPath();
+        OutputStream os = exchg.getResponseBody();
+
+        byte[] bytearray = getBytes(path);
+
+        if (bytearray == null) {
+            String result = "abbozza! : " + path + " nicht gefunden!";
+            // System.out.println(result);
+
+            exchg.sendResponseHeaders(400, result.length());
+            os.write(result.getBytes());
+            os.close();
+            return;
+        }
+
+        Headers responseHeaders = exchg.getResponseHeaders();
+        if (path.endsWith(".css")) {
+            responseHeaders.set("Content-Type", "text/css");
+        } else if (path.endsWith(".js")) {
+            responseHeaders.set("Content-Type", "text/javascript");
+        } else if (path.endsWith(".xml")) {
+            responseHeaders.set("Content-Type", "text/xml");
+        }
+
+        // ok, we are ready to send the response.
+        exchg.sendResponseHeaders(200, bytearray.length);
+        os.write(bytearray, 0, bytearray.length);
+        os.close();
+    }
+
+    public byte[] getBytes(String path) throws IOException {
+        byte[] bytearray = null;
+        int tries = 0;
+
+        while ((tries < 3) && (bytearray == null)) {
+
+            Enumeration<Object> it = entries.elements();
+            while (it.hasMoreElements() && (bytearray == null)) {
+                Object entry = it.nextElement();
+                if (entry instanceof JarFile) {
+                    bytearray = getBytesFromJar((JarFile) entry, path);
+                } else if (entry instanceof File) {
+                    bytearray = getBytesFromDir((File) entry, path);
+                }
+            }
+
+            if (bytearray == null) {
+                tries++;
+                Abbozza.getInstance().findJarsAndDirs(this);
+            }
+        }
+
+        if (bytearray == null) {
+            AbbozzaLogger.out(AbbozzaLocale.entry("msg.not_found",path),AbbozzaLogger.ERROR);
+        }
+        return bytearray;
+    }
+    
+    
+    public byte[] getBytesFromDir(File webDir, String path) throws IOException {
+        File file = new File(webDir + path);
+        if (!file.exists()) {
+            return null;
+        }
+        FileInputStream fis = new FileInputStream(file);
+
+        byte[] bytearray = new byte[(int) file.length()];
+        BufferedInputStream bis = new BufferedInputStream(fis);
+        bis.read(bytearray, 0, bytearray.length);
+        bis.close();
+
+        return bytearray;
+    }
+
+    
+    public byte[] getBytesFromJar(JarFile jar, String path) throws IOException {
+
+        path = path.substring(1, path.length());
+        ZipEntry entry = this.getEntry(jar, path);
+        if (entry == null) {
+            return null;
+        }
+        InputStream fis = jar.getInputStream(entry);
+
+        if (fis == null) {
+            return null;
+        }
+
+        byte[] bytearray = new byte[(int) entry.getSize()];
+        BufferedInputStream bis = new BufferedInputStream(fis);
+        bis.read(bytearray, 0, bytearray.length);
+        bis.close();
+
+        return bytearray;
+    }
+
+    
+    public ZipEntry getEntry(JarFile jar, String name) {
+        ZipEntry entry = jar.getEntry(name);
+        if (entry != null) {
+            return entry;
+        }
+        return null;
+    }
+    
+    
+}
