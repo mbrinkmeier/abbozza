@@ -52,6 +52,10 @@
         <msg id="gui.feature_title">Optionen und Features</msg>         
         <msg id="gui.new_version">Soll die aktuellere Version # heruntergeladen werden?&#10;(Experimentelles Feature)&#10;&#10;Anschließend ist ein Neustart erforderlich.</msg>
         <msg id="gui.new_version_title">Aktueller abbozza! Version gefunden</msg>
+        <msg id="gui.colorize">Blockfarben</msg>
+        <msg id="gui.color_default">Standardfärbung</msg>
+        <msg id="gui.color_category">Färbung nach Blockkategorie</msg>
+        <msg id="gui.color_type">Färbung nach Rückgabetyp</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>

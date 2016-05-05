@@ -12,6 +12,11 @@
             <choice name="gui.mult_arrays" option="multArrays"/> 
         </group> 
     </group>
-    <group name ="gui.misc">
+    <group name="gui.misc">
+        <group name="gui.colorize">
+            <choice name="gui.color_default" option ="colorDefault"/>
+            <choice name="gui.color_category" option ="colorCategory"/>
+            <choice name="gui.color_type" option ="colorType"/>
+        </group>
     </group>
 </options>
