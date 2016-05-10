@@ -4,7 +4,7 @@
  * Copyright 2015 Michael Brinkmeier ( michael.brinkmeier@uni-osnabrueck.de )
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
+ * use this file except in compliance with the Licenseo. You may obtain a copy of
  * the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
@@ -704,6 +704,15 @@ public class Abbozza implements Tool, HttpHandler {
                     if (dialog.getState() == 0) {
                         config.set(dialog.getConfiguration());
                         AbbozzaLocale.setLocale(config.getLocale());
+                        config.write();
+                        String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/abbozza.html";
+                        try {
+                            AbbozzaLogger.out("Starting browser " + cmd);
+                            runtime.exec(cmd);
+                            editor.toBack();
+                        } catch (IOException e) {
+                        // TODO Browser could not be started
+                        }
                         // sendResponse(exchg, 200, "text/plain", abbozza.getProperties().toString());
                     } else {
                         // sendResponse(exchg, 440, "text/plain", "");
@@ -779,6 +788,10 @@ public class Abbozza implements Tool, HttpHandler {
                         sendResponse(exchg, 201, "text/plain", result.getId() + "|" + result.getName() + "|???");
                         BaseNoGui.selectBoard(result.getBoard());
                         Base.INSTANCE.onBoardOrPortChange();
+                    } else {
+                        AbbozzaLogger.out("IDE set to : " + targetBoard.getId() + " " + targetBoard.getName() + " " + port,AbbozzaLogger.INFO);
+                        sendResponse(exchg, 201, "text/plain", targetBoard.getId() + "|" + targetBoard.getName() + "|" + port);
+                        return false;
                     }
                     return false;
                 }
