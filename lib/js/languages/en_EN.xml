@@ -24,6 +24,15 @@
         <msg id="msg.click_to_continue">Click to continue</msg>
     </messages>
     <gui>
+        <msg id="gui.generate_button">Generate Code</msg>
+        <msg id="gui.upload_button">Upload Code to Board</msg>
+        <msg id="gui.new_button">New Sketch</msg>
+        <msg id="gui.load_button">Load Sketch</msg>
+        <msg id="gui.save_button">Save Sketch</msg>
+        <msg id="gui.serial_button">Serial Plotter</msg>
+        <msg id="gui.connect_button">Connect to board</msg>
+        <msg id="gui.config_button">Settings</msg>
+        <msg id="gui.info_button">Information and help</msg>        
         <msg id="gui.language">Language</msg>         
         <msg id="gui.start_directly">Start abbozza! with the IDE</msg>         
         <msg id="gui.start_browser">Open the browser at start</msg>         

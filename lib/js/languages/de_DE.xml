@@ -24,6 +24,15 @@
         <msg id="msg.click_to_continue">Klicken um fortzufahren</msg>
     </messages>
     <gui>
+        <msg id="gui.generate_button">Erzeuge Code</msg>
+        <msg id="gui.upload_button">Lade Code auf Arduino</msg>
+        <msg id="gui.new_button">Neuer Sketch</msg>
+        <msg id="gui.load_button">Lade Sketch</msg>
+        <msg id="gui.save_button">Speichere Sketch</msg>
+        <msg id="gui.serial_button">Serieller Plotter</msg>
+        <msg id="gui.connect_button">Verbinde zu Board</msg>
+        <msg id="gui.config_button">Einstellungen</msg>
+        <msg id="gui.info_button">Informationen und Hilfe</msg>
         <msg id="gui.language">Sprache</msg>         
         <msg id="gui.start_directly">Starte abbozza! sofort</msg>         
         <msg id="gui.start_browser">Den Browser beim Start öffnen</msg>         

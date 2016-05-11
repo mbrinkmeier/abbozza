@@ -1,7 +1,7 @@
 BODY {
     /* background-color: #19999e; */ /* green background */
     /* background-color: #97a2db;*/
-    background-color: #d4daff;
+    background-color: #f0f0f0;
 }
 
 
@@ -45,15 +45,26 @@ BODY {
 
 
 .menu_div {
-    width: 840px;
+    width: 800px;
+    background-color: white;
     margin-right: auto;
     margin-left: auto;
     margin-top: 0px;
-    margin-bottom: 0px;
-    background: #19999e;
-    height: 30px;
-    padding: 0px;
-    border: 1px black solid;
+    margin-bottom: 10px;
+    padding: 20px;
+    padding-top : 15px;
+    padding-bottom : 15px;
+    font-family: sans-serif;
+    border-radius : 10pt;
+    border-color : black;
+}
+
+.menu_div A {
+    font-weight: bold;
+    text-decoration: none;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    padding: 5px;
 }
 
 .menu_div DIV.item {
@@ -81,6 +92,7 @@ BODY {
     padding: 20px;
     font-family: sans-serif;
     border-radius : 10pt;
+    border-color : black;
 }
 
 .goog-slider-vertical,

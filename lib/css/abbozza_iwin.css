@@ -1,10 +1,11 @@
-.iwinHead {
+ .iwinHead {
    background-color: #a0a0a0;
    font-weight: bold;
    color: white;
    font-family: sans-serif;    
    overflow: auto;
 }
+
 
 .iwinCloser {
     float: right;
@@ -26,6 +27,7 @@
     margin: 0pt;
 }
 
+
 /**
  * Variable Window
  */
@@ -33,9 +35,12 @@
 #abbozzaVarWin {
 	background-color : #f0fff0;
 }
+
+/*
 #abbozzaVarWinCloser {
     display: none;
 }
+*/
 
 /**
  * Message Window
