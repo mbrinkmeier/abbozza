@@ -364,7 +364,7 @@ public class Abbozza implements Tool, HttpHandler {
                 sendResponse(exchg, 200, "text/plain", config.get().toString());
             } else if (path.equalsIgnoreCase(prefix + "/frame")) {
                 Properties props = config.get();
-                AbbozzaConfigDialog dialog = new AbbozzaConfigDialog(props, null, true);
+                AbbozzaConfigDialog dialog = new AbbozzaConfigDialog(props, null, false, true);
                 dialog.setAlwaysOnTop(true);
                 dialog.setModal(true);
                 dialog.toFront();
@@ -698,7 +698,7 @@ public class Abbozza implements Tool, HttpHandler {
                     }
                     break;
                 case "2":
-                    AbbozzaConfigDialog dialog = new AbbozzaConfigDialog(config.get(), null, true);
+                    AbbozzaConfigDialog dialog = new AbbozzaConfigDialog(config.get(), null, true, true);
                     dialog.setModal(true);
                     dialog.setVisible(true);
                     if (dialog.getState() == 0) {

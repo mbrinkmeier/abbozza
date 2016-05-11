@@ -45,7 +45,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
     /**
      * Creates new form AbbozzaConfigDialog
      */
-    public AbbozzaConfigDialog(Properties props, java.awt.Frame parent, boolean modal) {
+    public AbbozzaConfigDialog(Properties props, java.awt.Frame parent, boolean showServer, boolean modal) {
         super(parent, modal);      
         
         config = new AbbozzaConfig();
@@ -60,6 +60,10 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         this.setLocation(x, y);
         
         loadConfiguration();
+        
+        if (showServer) {
+            jTabbedPane1.setSelectedComponent(jPanel1);
+        }
         
         AbbozzaLogger.out(AbbozzaLocale.getLocale());
     }
