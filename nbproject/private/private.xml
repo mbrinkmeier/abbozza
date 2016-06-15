@@ -14,16 +14,7 @@
         <group name="NetBeansProjects">
             <file>file:/home/michael/Projekte/Abbozza/src/de/uos/inf/did/abbozza/Abbozza.java</file>
         </group>
-        <group>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/ColorMgr.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Configuration.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/docs/development/AddingOptions.md</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/options.xml</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/ToolboxMgr.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/languages/de_DE.xml</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/languages/en_EN.xml</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
-        </group>
+        <group/>
         <group/>
     </open-files>
 </project-private>

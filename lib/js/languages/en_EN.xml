@@ -176,6 +176,7 @@
         <msg id ="cond.IF">If</msg>
         <msg id ="cond.ELSE">Else</msg>
 		
+        <msg id="dev.DEVICE">Device</msg>
         <msg id="dev.ON">on</msg>
         <msg id="dev.OFF">off</msg>
         <msg id="dev.LED">LED</msg>
