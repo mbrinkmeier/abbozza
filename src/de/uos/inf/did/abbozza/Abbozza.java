@@ -472,9 +472,24 @@ public class Abbozza implements Tool, HttpHandler {
         });        
     }
 
+    
+    
+    protected void checkSketch() {
+        if (!editor.isVisible()) {
+            AbbozzaLogger.out("Editor not visible. Making it visible again.",AbbozzaLogger.INFO);
+            editor.setVisible(true);
+        }
+        // @TODO Check if the current sketch is read only and open a new sketch
+        if (editor.getSketch().isReadOnly(BaseNoGui.librariesIndexer.getInstalledLibraries(), BaseNoGui.getExamplesPath())) {
+            AbbozzaLogger.out("Current Sketch is read only",AbbozzaLogger.INFO);
+            Base.INSTANCE.handleNewReplace();
+        }        
+    }
+    
+
     public String uploadCode(String code) {
         // System.out.println("hier");
-
+        
         logger.reset();
         
         String response;
@@ -482,8 +497,10 @@ public class Abbozza implements Tool, HttpHandler {
         PreferencesData.setBoolean("editor.save_on_verify", false);
 
         editor.getSketch().getCurrentCode().setProgram(code);
-        editor.getSketch().getCurrentCode().setModified(true);
         setEditorText(code);
+
+        editor.getSketch().getCurrentCode().setModified(true);
+
         
         try {
             editor.getSketch().prepare();
@@ -536,18 +553,22 @@ public class Abbozza implements Tool, HttpHandler {
         return response;
     }
 
-    
+
     public String setCode(String code) {     
         logger.reset();
-
+        
         String response;
         boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
         PreferencesData.setBoolean("editor.save_on_verify", false);
-
-        setEditorText(code);
         
         editor.getSketch().getCurrentCode().setProgram(code);
+        setEditorText(code);
+        
+        System.out.println(editor.getSketch().getCurrentCode().getProgram());
+        System.out.println(editor.getText());
+        
         editor.getSketch().getCurrentCode().setModified(true);
+        
         try {
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.compiling"), AbbozzaLogger.INFO);
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.compiling"));
