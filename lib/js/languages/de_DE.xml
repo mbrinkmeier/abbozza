@@ -194,6 +194,9 @@
         <msg id="dev.FORMULA">Entfernung [in mm] = # / ( Sensorwert - # ) + </msg>
         <msg id="dev.LCD">LCD # Spalten # Reihen</msg>
         <msg id="dev.IRRECEIVER">Infrarot-Empfänger</msg>
+        <msg id="dev.SERIAL">Serielle Verbindung</msg>
+        <msg id="dev.WRITEBYTE">Schreibe Byte</msg>
+        <msg id="dev.TOLINE">auf Verbindung</msg>
         <msg id="AND">und</msg>
         <msg id="MILLIS">Zeit in ms</msg>
 			
