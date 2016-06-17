@@ -121,6 +121,8 @@
                     <block type="math_number"></block>
                 </value>
             </block>
+            <block type="dev_serial_read"></block>
+            <block type="dev_serial_available"></block>
         </category>
     </feature>
         
@@ -146,6 +148,9 @@
                     <block type="math_number"></block>
                 </value>
             </block>
+            <block type="dev_motor"></block>            
+            <block type="dev_motor_dir"></block>            
+            <block type="dev_motor_speed"></block>            
         </category> 		
         <category name="Sensoren" id="cat.DEVIN">
             <block type="dev_button"></block>

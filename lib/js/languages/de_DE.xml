@@ -194,9 +194,15 @@
         <msg id="dev.FORMULA">Entfernung [in mm] = # / ( Sensorwert - # ) + </msg>
         <msg id="dev.LCD">LCD # Spalten # Reihen</msg>
         <msg id="dev.IRRECEIVER">Infrarot-Empfänger</msg>
-        <msg id="dev.SERIAL">Serielle Verbindung</msg>
-        <msg id="dev.WRITEBYTE">Schreibe Byte</msg>
-        <msg id="dev.TOLINE">auf Verbindung</msg>
+        <msg id="dev.SERIAL">Serielle Verbindung # Input Pin # Output Pin</msg>
+        <msg id="dev.WRITEBYTE">Schreibe Byte # auf</msg>
+        <msg id="dev.READFROMLINE">Lies Byte von</msg>
+        <msg id="dev.LINEAVAILABLE">Byte an # verfügbar</msg>
+        <msg id="dev.MOTOR">Motor # Richtung # Geschwindigkeit</msg>
+        <msg id="dev.MOTORDIR">Setze Richtung von Motor # auf</msg>
+        <msg id="dev.MOTORSPEED">Setze Geschwindigkeit von Motor # auf</msg>
+        <msg id="dev.FORWARD">vorwärts</msg>
+        <msg id="dev.BACKWARD">rückwärts</msg>
         <msg id="AND">und</msg>
         <msg id="MILLIS">Zeit in ms</msg>
 			

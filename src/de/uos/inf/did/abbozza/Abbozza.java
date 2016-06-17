@@ -55,6 +55,7 @@ import java.awt.HeadlessException;
 import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -465,11 +466,17 @@ public class Abbozza implements Tool, HttpHandler {
     }
     
     public void setEditorText(final String code) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                editor.setText(code);
-            }
-        });        
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                public void run() {
+                    editor.setText(code);
+                }
+            });
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Abbozza.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(Abbozza.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     
@@ -564,8 +571,13 @@ public class Abbozza implements Tool, HttpHandler {
         editor.getSketch().getCurrentCode().setProgram(code);
         setEditorText(code);
         
-        System.out.println(editor.getSketch().getCurrentCode().getProgram());
-        System.out.println(editor.getText());
+//        System.out.println("#####");
+//        System.out.println(code);
+//        System.out.println("#####");
+//        System.out.println(editor.getSketch().getCurrentCode().getProgram());
+//        System.out.println("#####");
+//        System.out.println(editor.getText());
+//        System.out.println("#####");
         
         editor.getSketch().getCurrentCode().setModified(true);
         
