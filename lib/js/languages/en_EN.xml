@@ -82,6 +82,8 @@
         <msg id="menu.inline_inputs">Internal inputs</msg>
     </menu>
     <categories>
+        <msg id="cat.CTRL">Control</msg>
+        <msg id="cat.COND">Conditionals</msg>
         <msg id="cat.LOGIC">Logic</msg>
         <msg id="cat.LOOPS">Loops</msg>
         <msg id="cat.INOUT">In- and Output</msg>
@@ -140,7 +142,7 @@
         <msg id="logic.AND">and</msg>
         <msg id="logic.OR">or</msg>
         <msg id="logic.NOT">not</msg>
-        <msg id="logic.EQUALS">=</msg>
+        <msg id="logic.EQUALS">==</msg>
         <msg id="logic.INEQUAL">≠</msg>
         <msg id="logic.LESS">&lt;</msg>
         <msg id="logic.LESSEQ">≤</msg>

@@ -82,8 +82,10 @@
         <msg id="menu.inline_inputs">Interne Eingänge</msg>
     </menu>
     <categories>
+        <msg id="cat.CTRL">Kontrolle</msg>
         <msg id="cat.LOGIC">Logik</msg>
         <msg id="cat.LOOPS">Schleifen</msg>
+        <msg id="cat.COND">Entscheidungen</msg>
         <msg id="cat.INOUT">Ein- und Ausgabe</msg>
         <msg id="cat.DEVIN">Sensoren</msg>
         <msg id="cat.DEVOUT">Aktuatoren</msg>
@@ -140,7 +142,7 @@
         <msg id="logic.AND">und</msg>
         <msg id="logic.OR">oder</msg>
         <msg id="logic.NOT">nicht</msg>
-        <msg id="logic.EQUALS">=</msg>
+        <msg id="logic.EQUALS">==</msg>
         <msg id="logic.INEQUAL">≠</msg>
         <msg id="logic.LESS">&lt;</msg>
         <msg id="logic.LESSEQ">≤</msg>

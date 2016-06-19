@@ -1,16 +1,11 @@
 <features>
 
     <feature id="feat.BASE">
-	
-        <category name="Logik" id="cat.LOGIC">
+        <category name="Entscheidungen" id="cat.COND">
             <block type="cond_if"></block>
             <block type="cond_if_else"></block>
-            <block type="logic_const"></block>
-            <block type="logic_op"></block>
-            <block type="logic_not"></block>
-            <block type="logic_compare"></block>
         </category>
-	    
+
         <category name="Schleifen" id="cat.LOOPS">
             <block type="loop_endless"></block>
             <block type="loop_while"></block>
@@ -22,9 +17,46 @@
                 <value name="TIME">
                     <block type="math_number"></block>
                 </value>
+            </block>            
+        </category>
+
+        <category id="cat.FUNC">
+        </category>
+        
+        <category name="Variablen" id="cat.VAR">
+            <block type="var_block"></block>
+            <block type="var_assign">
+                <value name="LEFT">
+                    <block type="var_block" movable="false"></block>
+                </value>
             </block>
         </category>
+
+        <category name="Logik" id="cat.LOGIC">
+            <block type="logic_const"></block>
+            <block type="logic_op"></block>
+            <block type="logic_not"></block>
+            <block type="logic_compare"></block>
+        </category>
 	    
+        <category name="Mathe" id="cat.MATH">
+            <block type="math_number"></block>
+            <block type="math_calc"></block>
+            <!-- block type="math_round"></block -->
+            <block type="math_unary"></block>
+            <block type="math_binary"></block>
+            <block type="math_random"></block>
+            <block type="math_random2"></block>
+            <block type="math_randomseed"></block>
+            <block type="math_millis"></block>
+        </category>
+	    
+        <category name="Text" id="cat.TEXT">
+            <block type="text_const"></block>
+            <block type="text_charat"></block>
+            <block type="text_concat"></block>
+        </category>
+
         <category name="Ein- und Ausgabe" id="cat.INOUT">
             <block type="inout_pin"></block>
             <block type="inout_pinmode">
@@ -60,36 +92,16 @@
                 </value>
             </block>
         </category>
-	    
-        <category name="Mathe" id="cat.MATH">
-            <block type="math_number"></block>
-            <block type="math_calc"></block>
-            <!-- block type="math_round"></block -->
-            <block type="math_unary"></block>
-            <block type="math_binary"></block>
-            <block type="math_random"></block>
-            <block type="math_random2"></block>
-            <block type="math_randomseed"></block>
-            <block type="math_millis"></block>
+
+        <category name="Sensoren" id="cat.DEVIN">
+        </category>
+
+        <category name="Aktuatoren" id="cat.DEVOUT">
         </category>
 	    
-        <category name="Text" id="cat.TEXT">
-            <block type="text_const"></block>
-            <block type="text_charat"></block>
-            <block type="text_concat"></block>
+        <category id="cat.SERIAL">
         </category>
-	    
-            
-        <category name="Variablen" id="cat.VAR">
-            <block type="var_block"></block>
-            <block type="var_assign">
-                <value name="LEFT">
-                    <block type="var_block" movable="false"></block>
-                </value>
-            </block>
-        </category>
-  		
-                
+	            
         <category name="Interrupts" id="cat.INT">
             <block type="int_interrupts"></block>
             <block type="int_no_interrupts"></block>
@@ -100,8 +112,7 @@
             <block type="test"></block>
         </category-->
     </feature>
-	
-	
+		
     <feature id="feat.FUNC">
         <category id="cat.FUNC">
             <block type="func_decl"></block>
@@ -165,6 +176,5 @@
             <block type="dev_ir_read_dist"></block>
         </category> 		
     </feature>
-   
 
 </features>
