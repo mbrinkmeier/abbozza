@@ -67,6 +67,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.color_default">Standardfärbung</msg>
         <msg id="gui.color_category">Färbung nach Blockkategorie</msg>
         <msg id="gui.color_type">Färbung nach Rückgabetyp</msg>
+        <msg id="gui.send">Senden</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>

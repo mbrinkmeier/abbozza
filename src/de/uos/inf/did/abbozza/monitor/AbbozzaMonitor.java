@@ -39,6 +39,7 @@ import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 import javax.swing.Timer;
 import processing.app.Serial;
 
@@ -70,6 +71,12 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         initComponents();
         // System.out.println("AbbozzaMonitor after init");
 
+        this.sendText.getEditor().addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendTextEditorActionPerformed(evt);
+            }
+        });
+        
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent event) {
                 try {
@@ -133,12 +140,16 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         protocolPopUp = new javax.swing.JPopupMenu();
         resetItem = new javax.swing.JMenuItem();
         tabPanel = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
         textPane = new javax.swing.JScrollPane();
         textArea = new javax.swing.JTextArea();
+        sendButton = new javax.swing.JButton();
+        sendText = new javax.swing.JComboBox();
         logoPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -155,13 +166,51 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("abbozza! Monitor");
-        setPreferredSize(new java.awt.Dimension(750, 500));
+        setMinimumSize(new java.awt.Dimension(640, 480));
+        setPreferredSize(new java.awt.Dimension(640, 480));
 
+        java.awt.GridBagLayout jPanel1Layout = new java.awt.GridBagLayout();
+        jPanel1Layout.columnWidths = new int[] {0};
+        jPanel1Layout.rowHeights = new int[] {0, 17, 0};
+        jPanel1Layout.columnWeights = new double[] {100.0};
+        jPanel1Layout.rowWeights = new double[] {100.0};
+        jPanel1.setLayout(jPanel1Layout);
+
+        textArea.setEditable(false);
         textArea.setColumns(20);
         textArea.setRows(5);
         textPane.setViewportView(textArea);
 
-        tabPanel.addTab("Protokoll", textPane);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel1.add(textPane, gridBagConstraints);
+
+        sendButton.setText(AbbozzaLocale.entry("gui.send"));
+        sendButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel1.add(sendButton, gridBagConstraints);
+        sendButton.getAccessibleContext().setAccessibleName("sendButton");
+        sendButton.getAccessibleContext().setAccessibleDescription("");
+
+        sendText.setEditable(true);
+        sendText.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel1.add(sendText, gridBagConstraints);
+
+        tabPanel.addTab("Protokoll", jPanel1);
 
         getContentPane().add(tabPanel, java.awt.BorderLayout.CENTER);
 
@@ -182,6 +231,24 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         textArea.setText("");
     }//GEN-LAST:event_resetItemActionPerformed
 
+    private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
+        String msg = (String) this.sendText.getEditor().getItem();
+        if (msg != null && !msg.isEmpty()) {
+            this.sendMessage(msg);
+            this.sendText.addItem(new String(msg));
+            this.sendText.setSelectedItem(null);
+        }
+    }//GEN-LAST:event_sendButtonActionPerformed
+
+    private void sendTextEditorActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        String msg = evt.getActionCommand();
+        if (msg != null && !msg.isEmpty() ) {
+            this.sendMessage(msg);
+            this.sendText.addItem(new String(msg));
+            this.sendText.setSelectedItem(null);
+        }
+    }
+
     public synchronized void addToUpdateBuffer(char buff[], int n) {
         updateBuffer.append(buff,0, n);
     }
@@ -194,13 +261,17 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel logoPanel;
     private javax.swing.JPopupMenu protocolPopUp;
     private javax.swing.JMenuItem resetItem;
+    private javax.swing.JButton sendButton;
+    private javax.swing.JComboBox sendText;
     private javax.swing.JTabbedPane tabPanel;
     private javax.swing.JTextArea textArea;
     private javax.swing.JScrollPane textPane;
     // End of variables declaration//GEN-END:variables
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         String s = consumeUpdateBuffer();
@@ -230,6 +301,11 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
          textArea.appendNoTrim(s);
          }
          */
+    }
+    
+    private void sendMessage(String msg) {
+        serial.write(msg+'\n');
+        this.textArea.append(">>> " + msg+'\n');
     }
 
     private void processMessage(String s) {

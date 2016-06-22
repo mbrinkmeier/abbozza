@@ -124,6 +124,8 @@
     <feature id="feat.SERIAL">
         <category id="cat.SERIAL">
             <block type="serial_println"></block>
+            <block type="serial_readln"></block>
+            <block type="serial_available"></block>
             <!--block type="serial_write_byte"></block -->
             <block type="serial_table"></block>
             <block type="dev_serial"></block>

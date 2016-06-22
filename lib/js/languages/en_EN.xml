@@ -67,6 +67,7 @@ Continuing?</msg>
         <msg id="gui.color_default">Default coloring</msg>
         <msg id="gui.color_category">Colors by category</msg>
         <msg id="gui.color_type">Colors by output type</msg>
+        <msg id="gui.send">Send</msg>        
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>
