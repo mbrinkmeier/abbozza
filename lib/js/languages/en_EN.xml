@@ -20,7 +20,9 @@
         <msg id="msg.generate_sketch">Generating sketch ...</msg>
         <msg id="msg.code_generated">Code generated without errors ...</msg>
         <msg id="msg.error_upload">Error during upload!</msg>
-        <msg id="msg.drop_sketch">The sketch wasn't saved.\nChanges may be lost.\nContinuing?</msg> 
+        <msg id="msg.drop_sketch">The sketch wasn't saved.
+Changes may be lost.
+Continuing?</msg> 
         <msg id="msg.click_to_continue">Click to continue</msg>
     </messages>
     <gui>

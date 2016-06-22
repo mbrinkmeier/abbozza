@@ -625,6 +625,7 @@ public class Abbozza implements Tool, HttpHandler {
 
         };
         chooser.setFileFilter(new FileNameExtensionFilter("abbozza! (*.abz)", "abz"));
+        chooser.setSelectedFile(lastSketchFile);
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             reader = new BufferedReader(new FileReader(file));
@@ -657,6 +658,7 @@ public class Abbozza implements Tool, HttpHandler {
 
         };
         chooser.setFileFilter(new FileNameExtensionFilter("abbozza! (*.abz)", "abz"));
+        chooser.setSelectedFile(lastSketchFile);
         if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             if (!file.getName().endsWith(".abz") && !file.getName().endsWith(".ABZ")) {

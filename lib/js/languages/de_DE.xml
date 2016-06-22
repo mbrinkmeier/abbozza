@@ -20,7 +20,9 @@
         <msg id="msg.generate_sketch">Generiere Sketch ...</msg>
         <msg id="msg.code_generated">Code wurde fehlerfrei generiert ...</msg>
         <msg id="msg.error_upload">Fehler beim Upload auf das Board!</msg>
-        <msg id="msg.drop_sketch">Der Sketch wurde nicht gespeichert.\nWenn Du fortfährst gehen eventuell Änderungen verloren.\nTrotzdem fortfahren?</msg> 
+        <msg id="msg.drop_sketch">Der Sketch wurde nicht gespeichert.
+Wenn Du fortfährst gehen eventuell Änderungen verloren.
+Trotzdem fortfahren?</msg> 
         <msg id="msg.click_to_continue">Klicken um fortzufahren</msg>
     </messages>
     <gui>

@@ -159,9 +159,9 @@
                     <block type="math_number"></block>
                 </value>
             </block>
-            <block type="dev_motor"></block>            
+            <!-- block type="dev_motor"></block>            
             <block type="dev_motor_dir"></block>            
-            <block type="dev_motor_speed"></block>            
+            <block type="dev_motor_speed"></block-->            
         </category> 		
         <category name="Sensoren" id="cat.DEVIN">
             <block type="dev_button"></block>
