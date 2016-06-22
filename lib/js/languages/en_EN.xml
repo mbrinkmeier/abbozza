@@ -170,6 +170,8 @@ Continuing?</msg>
         <msg id ="serial.WRITEBYTE">Send # to the computer</msg>
         <msg id ="serial.PRINT">Send # to the computer(w/o newline)</msg>
         <msg id ="serial.PRINTLN">Send # to the computer</msg>
+        <msg id ="serial.AVAILABLE">Received characters from the computer</msg>
+        <msg id ="serial.READLN">Read line from computer</msg>
                 
         <msg id ="func.NAME">Name</msg>
         <msg id ="func.CALL">Call # </msg>

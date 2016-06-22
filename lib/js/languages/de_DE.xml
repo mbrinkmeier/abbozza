@@ -170,6 +170,8 @@ Trotzdem fortfahren?</msg>
         <msg id ="serial.WRITEBYTE">Sende # an den Computer</msg>
         <msg id ="serial.PRINT">Schreibe # an den Computer (ohne Zeilenende)</msg>
         <msg id ="serial.PRINTLN">Schreibe # an den Computer</msg>
+        <msg id ="serial.AVAILABLE">Zeichen vom Computer empfangen</msg>
+        <msg id ="serial.READLN">Lese Zeile vom Computer</msg>
                 
         <msg id ="func.NAME">Name</msg>
         <msg id ="func.CALL">Führe # aus</msg>
