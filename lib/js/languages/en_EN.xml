@@ -68,6 +68,9 @@ Continuing?</msg>
         <msg id="gui.color_category">Colors by category</msg>
         <msg id="gui.color_type">Colors by output type</msg>
         <msg id="gui.send">Send</msg>        
+        <msg id="gui.teacher">Blocks for teachers</msg>
+        <msg id="gui.task">Task</msg>
+        <msg id="gui.hint">Hint</msg>        
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>
@@ -102,6 +105,7 @@ Continuing?</msg>
         <msg id="cat.TEST">Testblocks</msg>
         <msg id="cat.MISC">Misc</msg>
         <msg id="cat.INT">Interrupts</msg>
+        <msg id="cat.TEACHER">Teacher</msg>        
     </categories>
     <blocks>
         <msg id="STRING">Text</msg>

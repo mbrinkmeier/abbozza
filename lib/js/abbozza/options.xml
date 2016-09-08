@@ -11,6 +11,7 @@
             <choice name="gui.lin_arrays" option="linArrays"/> 
             <choice name="gui.mult_arrays" option="multArrays"/> 
         </group> 
+        <item name="gui.teacher" option="teacher"/>
     </group>
     <group name="gui.misc">
         <group name="gui.colorize">

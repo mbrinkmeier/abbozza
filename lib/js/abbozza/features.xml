@@ -179,4 +179,10 @@
         </category> 		
     </feature>
 
+    <feature id="feat.TEACHER">
+        <category name="Lehrer" id="cat.TEACHER">
+            <block type="teacher_text"></block>
+        </category>
+    </feature>
+    
 </features>

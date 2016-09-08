@@ -68,6 +68,9 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.color_category">Färbung nach Blockkategorie</msg>
         <msg id="gui.color_type">Färbung nach Rückgabetyp</msg>
         <msg id="gui.send">Senden</msg>
+        <msg id="gui.teacher">Blöcke für Lehrer</msg>
+        <msg id="gui.task">Aufgabe</msg>
+        <msg id="gui.hint">Hinweis</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
@@ -102,6 +105,7 @@ Trotzdem fortfahren?</msg>
         <msg id="cat.TEST">Testblöcke</msg>
         <msg id="cat.MISC">Verschiedenes</msg>
         <msg id="cat.INT">Interrupts</msg>
+        <msg id="cat.TEACHER">Lehrer</msg>
     </categories>
     <blocks>
         <msg id="STRING">Text</msg>
