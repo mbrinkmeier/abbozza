@@ -71,6 +71,8 @@ Continuing?</msg>
         <msg id="gui.teacher">Blocks for teachers</msg>
         <msg id="gui.task">Task</msg>
         <msg id="gui.hint">Hint</msg>        
+        <msg id="gui.close">Close</msg>
+        <msg id="gui.edit">Edit</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>

@@ -43,7 +43,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.server_and_browser">Server und Browser</msg>         
         <msg id="gui.save">Speichern</msg>         
         <msg id="gui.cancel">Abbrechen</msg>         
-        <msg id="gui.options">Optionen</msg>         
+        <msg id="gui.options">Optionen</msg>
         <msg id="gui.blocks">Blöcke</msg>
         <msg id="gui.code">Code</msg>         
         <msg id="gui.misc">Sonstiges</msg>         
@@ -71,6 +71,8 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.teacher">Blöcke für Lehrer</msg>
         <msg id="gui.task">Aufgabe</msg>
         <msg id="gui.hint">Hinweis</msg>
+        <msg id="gui.close">Schließen</msg>
+        <msg id="gui.edit">Editieren</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>

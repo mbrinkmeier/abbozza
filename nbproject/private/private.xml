@@ -15,7 +15,12 @@
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/ColorMgr.js</file>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
         </group>
-        <group/>
-        <group/>
+        <group>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/gui/InternalWindow.js</file>
+        </group>
+        <group>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/gui/InternalWindow.js</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/blocks/Teacher.js</file>
+        </group>
     </open-files>
 </project-private>
