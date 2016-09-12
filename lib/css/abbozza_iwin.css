@@ -4,8 +4,7 @@
    color: white;
    font-family: sans-serif;    
    overflow: auto;
-}
-
+ }
 
 .iwinButton {
     float: right;
@@ -24,8 +23,14 @@
 }
 
 
-.iwin {
-    margin: 0pt;
+.iwinContent {
+    margin: 0px;
+    padding: 5px;
+    border: 0px;
+}
+
+.iwinInner {
+    margin : 0px;
 }
 
 
