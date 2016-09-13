@@ -17,9 +17,15 @@
         </group>
         <group>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/gui/InternalWindow.js</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/blocks/Teacher.js</file>
         </group>
         <group>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/gui/InternalWindow.js</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/abbozza.html</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/css/abbozza_iwin.css</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/languages/de_DE.xml</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/languages/en_EN.xml</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/blocks/Teacher.js</file>
         </group>
     </open-files>
