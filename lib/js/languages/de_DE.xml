@@ -73,6 +73,9 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.hint">Hinweis</msg>
         <msg id="gui.close">Schließen</msg>
         <msg id="gui.edit">Editieren</msg>
+        <msg id="gui.saveoptions">Speichere Optionen in Sketch</msg>
+        <msg id="gui.saveundeletable">Schütze Blöcke vor dem Löschen</msg>
+        <msg id="gui.description">Beschreibung</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>

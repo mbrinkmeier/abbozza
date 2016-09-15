@@ -73,6 +73,9 @@ Continuing?</msg>
         <msg id="gui.hint">Hint</msg>        
         <msg id="gui.close">Close</msg>
         <msg id="gui.edit">Edit</msg>
+        <msg id="gui.saveoptions">Store options in sketch</msg>
+        <msg id="gui.saveundeletable">Spave blocks as undeletable</msg>
+        <msg id="gui.description">Description</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>

@@ -49,6 +49,8 @@ import processing.app.helpers.PreferencesMapException;
 import processing.app.tools.Tool;
 
 import com.sun.net.httpserver.*;
+import de.uos.inf.did.abbozza.handler.LoadHandler;
+import de.uos.inf.did.abbozza.handler.SaveHandler;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.HeadlessException;
@@ -103,6 +105,7 @@ public class Abbozza implements Tool, HttpHandler {
     private static int counter;
 
     private Editor editor;
+
     public ByteArrayOutputStream logger;
     private DuplexPrintStream duplexer;
     public String sketchbookPath;
@@ -272,6 +275,8 @@ public class Abbozza implements Tool, HttpHandler {
             while (httpServer == null) {
                 try {
                     httpServer = HttpServer.create(new InetSocketAddress(serverPort), 0);
+                    httpServer.createContext("/abbozza/load", new LoadHandler(this));
+                    httpServer.createContext("/abbozza/save", new SaveHandler(this));
                     httpServer.createContext("/abbozza/", this /* handler */);
                     httpServer.createContext("/", jarHandler);
                     httpServer.start();
@@ -310,21 +315,23 @@ public class Abbozza implements Tool, HttpHandler {
             os.write(result.getBytes());
             os.close();
         } else {
-            if (path.equals(prefix + "/load")) {
+            /* if (path.equals(prefix + "/load")) {
                 try {
                     String sketch = loadSketch();
                     sendResponse(exchg, 200, "text/xml", sketch);
                 } catch (IOException ioe) {
                     sendResponse(exchg, 404, "", "");
                 }
-            } else if (path.equalsIgnoreCase(prefix + "/save")) {
+            } else
+            if (path.equalsIgnoreCase(prefix + "/save")) {
                 try {
                     saveSketch(exchg.getRequestBody());
                     sendResponse(exchg, 200, "text/xml", "saved");
                 } catch (IOException ioe) {
                     sendResponse(exchg, 404, "", "");
                 }
-            } else if (path.equalsIgnoreCase(prefix + "/check")) {
+            } else */
+            if (path.equalsIgnoreCase(prefix + "/check")) {
                 try {
                     BufferedReader in = new BufferedReader(new InputStreamReader(exchg.getRequestBody()));
                     StringBuffer code = new StringBuffer();
@@ -570,15 +577,7 @@ public class Abbozza implements Tool, HttpHandler {
         
         editor.getSketch().getCurrentCode().setProgram(code);
         setEditorText(code);
-        
-//        System.out.println("#####");
-//        System.out.println(code);
-//        System.out.println("#####");
-//        System.out.println(editor.getSketch().getCurrentCode().getProgram());
-//        System.out.println("#####");
-//        System.out.println(editor.getText());
-//        System.out.println("#####");
-        
+                
         editor.getSketch().getCurrentCode().setModified(true);
         
         try {
@@ -607,6 +606,7 @@ public class Abbozza implements Tool, HttpHandler {
         this.editor.handleSerial();
     }
 
+    /*
     public String loadSketch() throws IOException {
         String result = "";
         BufferedReader reader;
@@ -641,7 +641,9 @@ public class Abbozza implements Tool, HttpHandler {
         this.editor.setExtendedState(JFrame.ICONIFIED);
         return result;
     }
-
+    */
+    
+    /*
     public void saveSketch(InputStream stream) throws IOException {
         String path = ((lastSketchFile != null) ? lastSketchFile.getAbsolutePath() : getSketchbookPath());
         JFileChooser chooser = new JFileChooser(path) {
@@ -689,7 +691,8 @@ public class Abbozza implements Tool, HttpHandler {
         this.editor.setState(JFrame.ICONIFIED);
         this.editor.setExtendedState(JFrame.ICONIFIED);
     }
-
+    */
+    
     public void startBrowser() {
         Runtime runtime = Runtime.getRuntime();
 
@@ -983,4 +986,17 @@ public class Abbozza implements Tool, HttpHandler {
         return optionsXml;        
     }
 
+    public Editor getEditor() {
+        return editor;
+    }
+
+    public File getLastSketchFile() {
+        return lastSketchFile;
+    }
+
+    public void setLastSketchFile(File lastSketchFile) {
+        this.lastSketchFile = lastSketchFile;
+    }
+
+    
 }
