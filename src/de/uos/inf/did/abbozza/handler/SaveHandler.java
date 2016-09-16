@@ -129,7 +129,7 @@ public class SaveHandler implements HttpHandler {
             chooser.setAccessory(panel);
             panel.setDescription(desc.getTextContent());
             panel.setOptionSelected(opts.getAttribute("apply").equals("yes") ? true : false);
-            panel.setOptionSelected(opts.getAttribute("protected").equals("yes") ? true : false);
+            panel.setUndeletableSelected(opts.getAttribute("protected").equals("yes") ? true : false);
 
             // Prepare File filters
             chooser.setFileFilter(new FileNameExtensionFilter("abbozza! (*.abz)", "abz"));

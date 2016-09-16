@@ -24,6 +24,7 @@
 Wenn Du fortfährst gehen eventuell Änderungen verloren.
 Trotzdem fortfahren?</msg> 
         <msg id="msg.click_to_continue">Klicken um fortzufahren</msg>
+        <msg id="msg.sketch_description">Ein abbozza! Sketch</msg>        
     </messages>
     <gui>
         <msg id="gui.generate_button">Erzeuge Code</msg>
@@ -91,6 +92,7 @@ Trotzdem fortfahren?</msg>
         <msg id="menu.disable_block">Block deaktivieren</msg>
         <msg id="menu.external_inputs">Externe Eingänge</msg>
         <msg id="menu.inline_inputs">Interne Eingänge</msg>
+        <msg id="menu.protect_block">Schütze Block vor Löschen</msg>
     </menu>
     <categories>
         <msg id="cat.CTRL">Kontrolle</msg>

@@ -21,10 +21,12 @@
  */
 package de.uos.inf.did.abbozza;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.StringBufferInputStream;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -69,7 +71,8 @@ public class AbbozzaConfig {
     /**
      * This method reads the configuration from the file
      * 
-     * @throws IOException
+     * @throws IOException                console.log(response);
+
      */
     public void read() {
         if ( sketchbookPath == null ) return;
@@ -195,6 +198,15 @@ public class AbbozzaConfig {
         props.setProperty("update",config_update ? "true" : "false");
     }
  
+    
+    public void apply(String options) throws IOException {
+        options = options.replace('{',' ');
+        options = options.replace('}',' ');
+        options = options.replace(',','\n');
+        options = options.trim();
+        config.load(new ByteArrayInputStream(options.getBytes()));
+    }
+    
     
     /**
      * Options

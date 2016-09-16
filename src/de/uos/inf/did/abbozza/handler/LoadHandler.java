@@ -75,6 +75,12 @@ public class LoadHandler implements HttpHandler {
             }
 
         };
+        
+        // Prepare accessory-panel
+        LoadHandlerPanel panel = new LoadHandlerPanel(chooser);
+        chooser.setAccessory(panel);
+        chooser.addPropertyChangeListener(panel);
+
         chooser.setFileFilter(new FileNameExtensionFilter("abbozza! (*.abz)", "abz"));
         chooser.setSelectedFile(lastSketchFile);
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -84,6 +90,9 @@ public class LoadHandler implements HttpHandler {
                 result = result + reader.readLine() + '\n';
             }
             reader.close();
+            if (panel.applyOptions()) {
+                Abbozza.getConfig().apply(panel.getOptions());
+            }
             lastSketchFile = file;
         } else {
             throw new IOException();

@@ -24,6 +24,7 @@
 Changes may be lost.
 Continuing?</msg> 
         <msg id="msg.click_to_continue">Click to continue</msg>
+        <msg id="msg.sketch_description">An abbozza! sketch</msg>
     </messages>
     <gui>
         <msg id="gui.generate_button">Generate Code</msg>
@@ -91,6 +92,7 @@ Continuing?</msg>
         <msg id="menu.disable_block">Deactivate block</msg>
         <msg id="menu.external_inputs">External inputs</msg>
         <msg id="menu.inline_inputs">Internal inputs</msg>
+        <msg id="menu.protect_block">Protect block against deletion</msg>
     </menu>
     <categories>
         <msg id="cat.CTRL">Control</msg>
