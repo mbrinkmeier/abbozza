@@ -22,12 +22,22 @@
 package de.uos.inf.did.abbozza.handler;
 
 import de.uos.inf.did.abbozza.AbbozzaLocale;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.FileInputStream;
+import javax.swing.JFileChooser;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  *
  * @author mbrinkmeier
  */
-public class SaveHandlerPanel extends javax.swing.JPanel {
+public class SaveHandlerPanel extends javax.swing.JPanel implements PropertyChangeListener {
 
     /**
      * Creates new form SaveHandlerPanel
@@ -122,6 +132,49 @@ public class SaveHandlerPanel extends javax.swing.JPanel {
     
     public void setDescription(String text) {
         this.descriptionPanel.setText(text);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      String fileName = evt.getPropertyName();
+                      
+      if (JFileChooser.DIRECTORY_CHANGED_PROPERTY.equals(fileName))
+      {
+          this.descriptionPanel.setText("");
+      }
+
+      if (JFileChooser.SELECTED_FILE_CHANGED_PROPERTY.equals(fileName))
+      {
+         // Extract selected file's File object.
+
+         File file = (File) evt.getNewValue();
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+
+          try {
+              builder = factory.newDocumentBuilder();
+
+            // Read DOM from stream
+            Document xml = builder.parse(new FileInputStream(file));
+            NodeList descs = xml.getElementsByTagName("description");
+            if (descs.getLength() == 0 ) {
+                this.descriptionPanel.setText("");
+            } else {
+                this.descriptionPanel.setText(descs.item(0).getTextContent());
+            }
+            NodeList opts = xml.getElementsByTagName("options");
+            if (opts.getLength() != 0 ) {
+                // this.options = opts.item(0).getTextContent();
+                this.optionBox.setSelected(((Element) opts.item(0)).getAttribute("apply").equals("yes") ? true : false);
+            }
+
+            // Read DOM from stream
+          } catch (Exception ex) {
+              this.descriptionPanel.setText("");
+          }
+
+       }
     }
     
 }

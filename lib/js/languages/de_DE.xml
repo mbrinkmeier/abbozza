@@ -77,6 +77,8 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.saveoptions">Speichere Optionen in Sketch</msg>
         <msg id="gui.saveundeletable">Schütze Blöcke vor dem Löschen</msg>
         <msg id="gui.description">Beschreibung</msg>
+        <msg id="gui.protect_block">Schütze Block vor Löschen</msg>
+        <msg id="gui.unprotect_block">Erlaube das Löschen des Blocks</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>

@@ -40,21 +40,19 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author mbrinkmeier
  */
-public class LoadHandler implements HttpHandler {
+public class LoadHandler extends AbstractHandler {
 
-    private Abbozza _abbozza;
-
-    public LoadHandler(Abbozza instance) {
-        this._abbozza = instance;
+    public LoadHandler(Abbozza abbozza) {
+        super(abbozza);
     }
 
     @Override
     public void handle(HttpExchange exchg) throws IOException {
         try {
             String sketch = loadSketch();
-            _abbozza.sendResponse(exchg, 200, "text/xml", sketch);
+            this.sendResponse(exchg, 200, "text/xml", sketch);
         } catch (IOException ioe) {
-            _abbozza.sendResponse(exchg, 404, "", "");
+            this.sendResponse(exchg, 404, "", "");
         }
     }
 

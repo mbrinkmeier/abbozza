@@ -59,20 +59,19 @@ import org.w3c.dom.NodeList;
  *
  * @author mbrinkmeier
  */
-public class SaveHandler implements HttpHandler {
+public class SaveHandler extends AbstractHandler {
 
-    private Abbozza _abbozza;
-
-    public SaveHandler(Abbozza instance) {
-        this._abbozza = instance;
+    public SaveHandler(Abbozza abbozza) {
+        super(abbozza);
     }
 
+    
     public void handle(HttpExchange exchg) throws IOException {
         try {
             saveSketch(exchg.getRequestBody());
-            _abbozza.sendResponse(exchg, 200, "text/xml", "saved");
+            this.sendResponse(exchg, 200, "text/xml", "saved");
         } catch (IOException ioe) {
-            _abbozza.sendResponse(exchg, 404, "", "");
+            this.sendResponse(exchg, 404, "", "");
         }
     }
 
@@ -127,6 +126,8 @@ public class SaveHandler implements HttpHandler {
             // Prepare accessory-panel
             SaveHandlerPanel panel = new SaveHandlerPanel();
             chooser.setAccessory(panel);
+            chooser.addPropertyChangeListener(panel);            
+            
             panel.setDescription(desc.getTextContent());
             panel.setOptionSelected(opts.getAttribute("apply").equals("yes") ? true : false);
             panel.setUndeletableSelected(opts.getAttribute("protected").equals("yes") ? true : false);

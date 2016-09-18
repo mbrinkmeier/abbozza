@@ -119,11 +119,34 @@ public class Graph extends javax.swing.JPanel implements TableModelListener {
     }
     
     public void paint(Graphics gr) {
+        
+        // Fill background
         Graphics2D gr2d = (Graphics2D) gr;
-        gr.setColor(Color.WHITE);
+        gr.setColor(Color.BLACK);
         gr.fillRect(0,0,getWidth(), getHeight());
 
         Rectangle rect = this.getVisibleRect();
+        
+        // Draw marks
+        // Digital marks
+        gr.setColor(Color.GRAY);
+        gr.drawLine(rect.x, (getHeight()-1)*6/7, rect.x+rect.width, (getHeight()-1)*6/7);
+        gr.drawLine(rect.x, (getHeight()-1)*1/7, rect.x+rect.width, (getHeight()-1)*1/7);
+        gr.drawString("low", rect.x + rect.width - 30, (getHeight()-1)*6/7 - 2);
+        gr.drawString("high", rect.x + rect.width - 30, (getHeight()-1)*1/7 + 13);
+        
+        // 10 and 16 Bit marks
+        for (int i=0; i < rect.width; i=i+20) {
+            gr.drawLine(rect.x+i,getHeight()/2,rect.x+i+10,getHeight()/2);
+            gr.drawLine(rect.x+i,getHeight()*3/4,rect.x+i+10,getHeight()*3/4);
+            gr.drawLine(rect.x+i,getHeight()/4,rect.x+i+10,getHeight()/4);
+        }
+        gr.drawString("512",rect.x+5,getHeight()/2-2);
+        gr.drawString("256",rect.x+5,getHeight()/4-2);
+        gr.drawString("768",rect.x+5,getHeight()*3/4-2);
+        gr.drawString("32768",rect.x+rect.width/2-15,getHeight()/2-2);
+        gr.drawString("16348",rect.x+rect.width/2-15,getHeight()/4-2);
+        gr.drawString("49152",rect.x+rect.width/2-15,getHeight()*3/4-2);
         
         int row = 0;
         Enumeration<TableMonitorModel.Entry> en = myTable.getEntries();
@@ -135,7 +158,7 @@ public class Graph extends javax.swing.JPanel implements TableModelListener {
                 int y = entry.values[i];
                 switch ( myTable.getType(i) ) {
                     case '0' :
-                        y = (getHeight()-1)*(3-2*y)/4;
+                        y = (getHeight()-1)*(6-5*y)/7;
                         break;
                     case '1' :
                         y = (getHeight()-1)*(1023-y)/1023;

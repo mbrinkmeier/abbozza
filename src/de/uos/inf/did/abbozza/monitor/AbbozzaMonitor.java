@@ -82,7 +82,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
                 try {
                     closed = true;
                     close();
-                    Abbozza.getInstance().closeMonitor();
+                    Abbozza.getInstance().monitorIsClosed();
                 } catch (Exception e) {
                     // ignore
                 }

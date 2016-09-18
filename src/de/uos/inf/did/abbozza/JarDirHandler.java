@@ -31,10 +31,37 @@ public class JarDirHandler implements HttpHandler {
         entries = new Vector<Object>();
     }
 
+    public void addDir(String path, String name) {
+        File file = new File(path);
+        if (!file.exists()) {
+            AbbozzaLogger.out(file.getAbsolutePath() + " not found");
+            file = null;
+        } else {
+            AbbozzaLogger.out(name + " : " + file.getAbsolutePath());
+            return;
+        }
+        entries.add(file);
+    }
+    
+    
     public void addDir(File dir) {
         entries.add(dir);
     }
 
+    
+    public void addJar(String path, String name) {
+        JarFile file;
+        try {
+            file = new JarFile(path);
+            AbbozzaLogger.out(name + " : " + file.getName());
+        } catch (IOException e) {
+            AbbozzaLogger.out(name + " not found");
+            return;
+        }        
+        entries.add(file);
+    }
+    
+    
     public void addJar(JarFile jar) {
         entries.add(jar);
     }
