@@ -50,6 +50,7 @@ public class AbbozzaConfig {
     private String config_locale = "de_DE";
     private String config_updateUrl = "http://inf-didaktik.rz.uos.de/abbozza/current/";
     private boolean config_update = false;
+    private String config_taskPath = sketchbookPath;
     
     /**
      *  Reads the configuration from the given path
@@ -112,6 +113,7 @@ public class AbbozzaConfig {
             config_locale = System.getProperty("user.language") + "_" + System.getProperty("user.country");
             config_updateUrl = "http://inf-didaktik.rz.uos.de/abbozza/current/";
             config_update = false;
+            config_taskPath = sketchbookPath;
             storeProperties(config);
             setOption("operations", true);
             setOption("localVars", true);
@@ -148,7 +150,7 @@ public class AbbozzaConfig {
         config_locale = properties.getProperty("locale",System.getProperty("user.language") + "_" + System.getProperty("user.country"));
         config_updateUrl = properties.getProperty("updateUrl","http://inf-didaktik.rz.uos.de/abbozza/current/");
         config_update = "true".equals(properties.getProperty("update","false"));
-        
+        config_taskPath = properties.getProperty("taskPath",sketchbookPath);
         if (properties.getProperty("loglevel") != null) {
             AbbozzaLogger.setLevel(Integer.parseInt(properties.getProperty("loglevel","0")));
         } else {
@@ -196,6 +198,7 @@ public class AbbozzaConfig {
         props.setProperty("loglevel", Integer.toString(AbbozzaLogger.getLevel()));
         props.setProperty("updateUrl",config_updateUrl);
         props.setProperty("update",config_update ? "true" : "false");
+        props.setProperty("taskPath",config_taskPath);
     }
  
     
@@ -302,6 +305,14 @@ public class AbbozzaConfig {
     
     public boolean getUpdate() {
         return config_update;
+    }
+    
+    public String getTaskPath() {
+        return config_taskPath;
+    }
+    
+    public void setTaskPath(String taskPath) {
+        config_taskPath = taskPath;
     }
 
 }

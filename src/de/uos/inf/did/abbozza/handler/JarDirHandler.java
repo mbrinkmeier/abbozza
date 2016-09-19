@@ -3,11 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.uos.inf.did.abbozza;
+package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import de.uos.inf.did.abbozza.Abbozza;
+import de.uos.inf.did.abbozza.AbbozzaLocale;
+import de.uos.inf.did.abbozza.AbbozzaLogger;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -75,7 +78,7 @@ public class JarDirHandler implements HttpHandler {
 
         String path = exchg.getRequestURI().getPath();
         OutputStream os = exchg.getResponseBody();
-
+        
         byte[] bytearray = getBytes(path);
 
         if (bytearray == null) {

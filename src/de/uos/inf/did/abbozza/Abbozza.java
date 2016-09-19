@@ -21,6 +21,7 @@
  */
 package de.uos.inf.did.abbozza;
 
+import de.uos.inf.did.abbozza.handler.JarDirHandler;
 import cc.arduino.packages.BoardPort;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
 import java.awt.Color;
@@ -56,6 +57,7 @@ import de.uos.inf.did.abbozza.handler.ConfigHandler;
 import de.uos.inf.did.abbozza.handler.LoadHandler;
 import de.uos.inf.did.abbozza.handler.MonitorHandler;
 import de.uos.inf.did.abbozza.handler.SaveHandler;
+import de.uos.inf.did.abbozza.handler.TaskHandler;
 import de.uos.inf.did.abbozza.handler.UploadHandler;
 import de.uos.inf.did.abbozza.monitor.VersionHandler;
 import java.awt.Component;
@@ -126,6 +128,7 @@ public class Abbozza implements Tool, HttpHandler {
     private AbbozzaConfig config = null;
 
     private JarDirHandler jarHandler;
+    private TaskHandler taskHandler;
 
     private File lastSketchFile = null;
 
@@ -165,6 +168,9 @@ public class Abbozza implements Tool, HttpHandler {
         // AbbozzaLocale.setLocale("de_DE");
         AbbozzaLogger.out(AbbozzaLocale.entry("msg.loaded"), AbbozzaLogger.INFO);
 
+        taskHandler = new TaskHandler(this);
+        // AbbozzaLogger.out("Path to tasks : " + config.getTaskPath(),AbbozzaLogger.ALL);
+        
         if (config.startAutomatically()) {
             this.startServer();
             if (config.startBrowser()) {
@@ -289,6 +295,7 @@ public class Abbozza implements Tool, HttpHandler {
                     httpServer.createContext("/abbozza/monitorresume", monitorHandler);
                     httpServer.createContext("/abbozza/version", new VersionHandler(this));
                     httpServer.createContext("/abbozza/", this /* handler */);
+                    httpServer.createContext("/task/", taskHandler);
                     httpServer.createContext("/", jarHandler);
                     httpServer.start();
                     AbbozzaLogger.out("Http-server started on port: " + serverPort, AbbozzaLogger.INFO);

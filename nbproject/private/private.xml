@@ -11,22 +11,14 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/gui/InternalWindow.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/abbozza.html</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/css/abbozza_iwin.css</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/languages/de_DE.xml</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/languages/en_EN.xml</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/blocks/Teacher.js</file>
+        <group name="NetBeansProjects">
+            <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/monitor/Graph.java</file>
         </group>
         <group>
             <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/Abbozza.java</file>
-            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/LoadHandler.java</file>
-            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
         </group>
-        <group name="NetBeansProjects">
-            <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/monitor/Graph.java</file>
+        <group>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/Abbozza.java</file>
         </group>
     </open-files>
 </project-private>
