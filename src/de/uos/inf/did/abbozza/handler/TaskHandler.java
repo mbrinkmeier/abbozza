@@ -65,10 +65,11 @@ public class TaskHandler extends AbstractHandler {
         Headers responseHeaders = exchg.getResponseHeaders();
         responseHeaders.set("Content-Type", "text/xml");
 
+        AbbozzaLogger.out(new String(bytearray),AbbozzaLogger.ALL);
         // ok, we are ready to send the response.
         exchg.sendResponseHeaders(200, bytearray.length);
         os.write(bytearray, 0, bytearray.length);
-        os.close();        
+        os.close();    
     }
     
     
