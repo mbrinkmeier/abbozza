@@ -74,10 +74,16 @@ public class TaskHandler extends AbstractHandler {
     
     
     public byte[] getBytes(String path) throws IOException {
-        File file = new File(path);
+        File file = new File(path); 
         if (!file.exists()) {
             return null;
         }
+        
+        String taskPath = this._abbozza.getConfiguration().getTaskPath();
+        if (!file.getAbsolutePath().startsWith(taskPath)) {
+            return null;
+        }
+        
         FileInputStream fis = new FileInputStream(file);
 
         byte[] bytearray = new byte[(int) file.length()];

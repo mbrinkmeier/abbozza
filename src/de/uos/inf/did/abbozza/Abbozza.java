@@ -4,8 +4,8 @@
  * Copyright 2015 Michael Brinkmeier ( michael.brinkmeier@uni-osnabrueck.de )
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the Licenseo. You may obtain a copy of
- * the License at
+ * use this file except in compliance with the Licenseo. You may obtain a copy
+ * of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -128,7 +128,7 @@ public class Abbozza implements Tool, HttpHandler {
     private AbbozzaConfig config = null;
 
     private JarDirHandler jarHandler;
-    private TaskHandler taskHandler;
+    // private TaskHandler taskHandler;
 
     private File lastSketchFile = null;
 
@@ -168,9 +168,8 @@ public class Abbozza implements Tool, HttpHandler {
         // AbbozzaLocale.setLocale("de_DE");
         AbbozzaLogger.out(AbbozzaLocale.entry("msg.loaded"), AbbozzaLogger.INFO);
 
-        taskHandler = new TaskHandler(this);
+        // taskHandler = new TaskHandler(this);
         // AbbozzaLogger.out("Path to tasks : " + config.getTaskPath(),AbbozzaLogger.ALL);
-        
         if (config.startAutomatically()) {
             this.startServer();
             if (config.startBrowser()) {
@@ -288,14 +287,14 @@ public class Abbozza implements Tool, HttpHandler {
                     httpServer.createContext("/abbozza/upload", new UploadHandler(this));
                     httpServer.createContext("/abbozza/config", new ConfigHandler(this));
                     httpServer.createContext("/abbozza/frame", new ConfigDialogHandler(this));
-                    httpServer.createContext("/abbozza/board", new BoardHandler(this,false));
-                    httpServer.createContext("/abbozza/queryboard", new BoardHandler(this,true));
+                    httpServer.createContext("/abbozza/board", new BoardHandler(this, false));
+                    httpServer.createContext("/abbozza/queryboard", new BoardHandler(this, true));
                     this.monitorHandler = new MonitorHandler(this);
                     httpServer.createContext("/abbozza/monitor", monitorHandler);
                     httpServer.createContext("/abbozza/monitorresume", monitorHandler);
                     httpServer.createContext("/abbozza/version", new VersionHandler(this));
                     httpServer.createContext("/abbozza/", this /* handler */);
-                    httpServer.createContext("/task/", taskHandler);
+                    httpServer.createContext("/task/", new TaskHandler(this));
                     httpServer.createContext("/", jarHandler);
                     httpServer.start();
                     AbbozzaLogger.out("Http-server started on port: " + serverPort, AbbozzaLogger.INFO);
@@ -362,36 +361,34 @@ public class Abbozza implements Tool, HttpHandler {
         }
     }
 
-    
-/*    protected void checkSketch() {
-        if (!editor.isVisible()) {
-            AbbozzaLogger.out("Editor not visible. Making it visible again.", AbbozzaLogger.INFO);
-            editor.setVisible(true);
-        }
-        // @TODO Check if the current sketch is read only and open a new sketch
-        if (editor.getSketch().isReadOnly(BaseNoGui.librariesIndexer.getInstalledLibraries(), BaseNoGui.getExamplesPath())) {
-            AbbozzaLogger.out("Current Sketch is read only", AbbozzaLogger.INFO);
-            Base.INSTANCE.handleNewReplace();
-        }
-    }
-*/
-    
+    /*    protected void checkSketch() {
+     if (!editor.isVisible()) {
+     AbbozzaLogger.out("Editor not visible. Making it visible again.", AbbozzaLogger.INFO);
+     editor.setVisible(true);
+     }
+     // @TODO Check if the current sketch is read only and open a new sketch
+     if (editor.getSketch().isReadOnly(BaseNoGui.librariesIndexer.getInstalledLibraries(), BaseNoGui.getExamplesPath())) {
+     AbbozzaLogger.out("Current Sketch is read only", AbbozzaLogger.INFO);
+     Base.INSTANCE.handleNewReplace();
+     }
+     }
+     */
     public String uploadCode(String code) {
         // System.out.println("hier");
-        
+
         logger.reset();
-       
+
         String response;
         boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
         /*
-        PreferencesData.setBoolean("editor.save_on_verify", false);
+         PreferencesData.setBoolean("editor.save_on_verify", false);
 
-        editor.getSketch().getCurrentCode().setProgram(code);
-        setEditorText(code);
+         editor.getSketch().getCurrentCode().setProgram(code);
+         setEditorText(code);
 
-        editor.getSketch().getCurrentCode().setModified(true);
-        */
-        
+         editor.getSketch().getCurrentCode().setModified(true);
+         */
+
         try {
             editor.getSketch().prepare();
         } catch (IOException ioe) {
@@ -429,16 +426,15 @@ public class Abbozza implements Tool, HttpHandler {
             }
             i--;
         }
-        while ( (last != null) && (last.isAlive()) ) {
+        while ((last != null) && (last.isAlive())) {
         }
 
         response = logger.toString();
-                
+
         PreferencesData.setBoolean("editor.save_on_verify", flag);
         return response;
     }
-    
-    
+
     public void serialMonitor() {
         this.editor.handleSerial();
     }
@@ -509,7 +505,6 @@ public class Abbozza implements Tool, HttpHandler {
             }
         }
     }
-
 
     public void findJarsAndDirs(JarDirHandler jarHandler) {
         jarHandler.clear();
@@ -620,7 +615,7 @@ public class Abbozza implements Tool, HttpHandler {
     public AbbozzaConfig getConfiguration() {
         return config;
     }
-    
+
     public File getLastSketchFile() {
         return lastSketchFile;
     }
@@ -629,12 +624,37 @@ public class Abbozza implements Tool, HttpHandler {
         this.lastSketchFile = lastSketchFile;
     }
 
+    public int openConfigDialog() {
+        Editor editor = this.getEditor();
+        AbbozzaConfig config = this.getConfiguration();
+        Properties props = config.get();
+        AbbozzaLogger.out("Hier", AbbozzaLogger.ALL);
+        AbbozzaConfigDialog dialog = new AbbozzaConfigDialog(props, null, false, true);
+        AbbozzaLogger.out("Da", AbbozzaLogger.ALL);
+        dialog.setAlwaysOnTop(true);
+        dialog.setModal(true);
+        dialog.toFront();
+        dialog.setVisible(true);
+        editor.setState(JFrame.ICONIFIED);
+        editor.setExtendedState(JFrame.ICONIFIED);
+        if (dialog.getState() == 0) {
+            config.set(dialog.getConfiguration());
+            AbbozzaLocale.setLocale(config.getLocale());
+            AbbozzaLogger.out("closed with " + config.getLocale());
+            config.write();
+            return 0;
+            //sendResponse(exchg, 200, "text/plain", config.get().toString());
+        } else {
+            return 1;
+            //sendResponse(exchg, 440, "text/plain", "");
+        }
+
+    }
 }
 
 //    public AbbozzaMonitor getMonitor() {
 //        return monitor;
 //    }
-
 //    public void suspendMonitor() {
 //        try {
 //            if (monitor != null) {
@@ -646,11 +666,10 @@ public class Abbozza implements Tool, HttpHandler {
 //        } catch (Exception ex) {
 //        }
 //    }
-
-    /**
-     *
-     * @return ctions
-     */
+/**
+ *
+ * @return ctions
+ */
 //    public boolean openMonitor() {
 //
 //        if (monitor != null) {
@@ -689,15 +708,14 @@ public class Abbozza implements Tool, HttpHandler {
 //    }
 
 /*    public void sendResponse(HttpExchange exchg, int code, String type, String response) throws IOException {
-        byte[] buf = response.getBytes();
-        OutputStream out = exchg.getResponseBody();
-        Headers responseHeaders = exchg.getResponseHeaders();
-        responseHeaders.set("Content-Type", type);
-        exchg.sendResponseHeaders(code, buf.length);
-        out.write(buf);
-        out.close();
-    } */
-
+ byte[] buf = response.getBytes();
+ OutputStream out = exchg.getResponseBody();
+ Headers responseHeaders = exchg.getResponseHeaders();
+ responseHeaders.set("Content-Type", type);
+ exchg.sendResponseHeaders(code, buf.length);
+ out.write(buf);
+ out.close();
+ } */
 //    public boolean connectToBoard(HttpExchange exchg, boolean query) {
 //        String port = null;
 //        String board = null;
@@ -776,37 +794,37 @@ public class Abbozza implements Tool, HttpHandler {
 //        }
 //    }
 
-    /*
-    public String setCode(String code) {     
-        logger.reset();
+/*
+ public String setCode(String code) {     
+ logger.reset();
         
-        String response;
-        boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
-        PreferencesData.setBoolean("editor.save_on_verify", false);
+ String response;
+ boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
+ PreferencesData.setBoolean("editor.save_on_verify", false);
         
-        editor.getSketch().getCurrentCode().setProgram(code);
-        setEditorText(code);
+ editor.getSketch().getCurrentCode().setProgram(code);
+ setEditorText(code);
                 
-        editor.getSketch().getCurrentCode().setModified(true);
+ editor.getSketch().getCurrentCode().setModified(true);
         
-        try {
-            AbbozzaLogger.out(AbbozzaLocale.entry("msg.compiling"), AbbozzaLogger.INFO);
-            editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.compiling"));
-            editor.getSketch().prepare();
-            editor.getSketch().save();
-            editor.getSketch().build(false, false);
-            editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.done_compiling"));
-            AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
-        } catch (IOException | RunnerException | PreferencesMapException e) {
-            e.printStackTrace(System.out);
-            editor.statusError(e);
-            AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
-        }
+ try {
+ AbbozzaLogger.out(AbbozzaLocale.entry("msg.compiling"), AbbozzaLogger.INFO);
+ editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.compiling"));
+ editor.getSketch().prepare();
+ editor.getSketch().save();
+ editor.getSketch().build(false, false);
+ editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.done_compiling"));
+ AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
+ } catch (IOException | RunnerException | PreferencesMapException e) {
+ e.printStackTrace(System.out);
+ editor.statusError(e);
+ AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
+ }
         
         
-        response = logger.toString();
-        PreferencesData.setBoolean("editor.save_on_verify", flag);
+ response = logger.toString();
+ PreferencesData.setBoolean("editor.save_on_verify", flag);
         
-        return response;
-    }
-     */
+ return response;
+ }
+ */

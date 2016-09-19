@@ -45,24 +45,10 @@ public class ConfigDialogHandler extends AbstractHandler {
 
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-        Editor editor = _abbozza.getEditor();
-        AbbozzaConfig config = _abbozza.getConfiguration();
-        Properties props = config.get();
-        AbbozzaConfigDialog dialog = new AbbozzaConfigDialog(props, null, false, true);
-        dialog.setAlwaysOnTop(true);
-        dialog.setModal(true);
-        dialog.toFront();
-        dialog.setVisible(true);
-        editor.setState(JFrame.ICONIFIED);
-        editor.setExtendedState(JFrame.ICONIFIED);
-        if (dialog.getState() == 0) {
-            config.set(dialog.getConfiguration());
-            AbbozzaLocale.setLocale(config.getLocale());
-            AbbozzaLogger.out("closed with " + config.getLocale());
-            config.write();
-            sendResponse(exchg, 200, "text/plain", config.get().toString());
+        if ( this._abbozza.openConfigDialog() == 0 ) {
+            sendResponse(exchg, 200, "text/plain", this._abbozza.getConfiguration().get().toString());
         } else {
-            sendResponse(exchg, 440, "text/plain", "");
+           sendResponse(exchg, 440, "text/plain", ""); 
         }
     }
 
