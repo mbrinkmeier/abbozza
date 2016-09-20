@@ -25,6 +25,7 @@ package de.uos.inf.did.abbozza.handler;
 import cc.arduino.packages.BoardPort;
 import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.Abbozza;
+import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
 import java.io.IOException;
 import processing.app.Base;

@@ -47,7 +47,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
      */
     public AbbozzaConfigDialog(Properties props, java.awt.Frame parent, boolean showServer, boolean modal) {
         super(parent, modal);      
-        
+
         config = new AbbozzaConfig();
         config.set(props);
 
@@ -65,7 +65,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
             jTabbedPane1.setSelectedComponent(jPanel1);
         }
         
-        AbbozzaLogger.out(AbbozzaLocale.getLocale());
+        // AbbozzaLogger.out(AbbozzaLocale.getLocale());
     }
 
     public int getState() {
@@ -102,7 +102,6 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         config.setBrowserPath(browserPathField.getText());
         config.setServerPort(Integer.parseInt(serverPortSpinner.getValue().toString()));
         LocaleEntry le = (LocaleEntry) localeComboBox.getSelectedItem();
-        AbbozzaLogger.out("storeConfiguration");
         config.setLocale(le.getLocale());
         config.setUpdate(this.updateBox.isSelected());
         config.setUpdateUrl(this.updateUrlField.getText());
