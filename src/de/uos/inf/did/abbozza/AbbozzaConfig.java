@@ -148,7 +148,7 @@ public class AbbozzaConfig {
         config_locale = properties.getProperty("locale",System.getProperty("user.language") + "_" + System.getProperty("user.country"));
         config_updateUrl = properties.getProperty("updateUrl","http://inf-didaktik.rz.uos.de/abbozza/current/");
         config_update = "true".equals(properties.getProperty("update","false"));
-        config_taskPath = properties.getProperty("taskPath",(sketchbookPath != null) ? sketchbookPath : System.getProperty("user.home"));
+        config_taskPath = properties.getProperty("taskPath",Abbozza.getInstance().getSketchbookPath());
         if (properties.getProperty("loglevel") != null) {
             AbbozzaLogger.setLevel(Integer.parseInt(properties.getProperty("loglevel","0")));
         } else {
@@ -199,7 +199,7 @@ public class AbbozzaConfig {
         props.setProperty("loglevel", Integer.toString(AbbozzaLogger.getLevel()));
         props.setProperty("updateUrl",config_updateUrl);
         props.setProperty("update",config_update ? "true" : "false");
-        props.setProperty("taskPath",sketchbookPath);
+        props.setProperty("taskPath",config_taskPath);
     }
  
     
