@@ -401,11 +401,11 @@ public class Abbozza implements Tool, HttpHandler {
 
         this.monitorHandler.suspend();
 
-        try {
-            editor.getSketch().save();
+        // try {
+            // editor.getSketch().save();
             editor.handleExport(false);
-        } catch (IOException ex) {
-        }
+        // } catch (IOException ex) {
+        // }
 
         Thread[] threads2 = new Thread[group.activeCount()];
         group.enumerate(threads2, false);

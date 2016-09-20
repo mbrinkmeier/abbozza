@@ -91,7 +91,7 @@ public class LoadHandler extends AbstractHandler {
             if (panel.applyOptions()) {
                 Abbozza.getConfig().apply(panel.getOptions());
             }
-            lastSketchFile = file;
+            _abbozza.setLastSketchFile(file);
         } else {
             throw new IOException();
         }

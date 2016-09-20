@@ -25,6 +25,7 @@ Wenn Du fortfährst gehen eventuell Änderungen verloren.
 Trotzdem fortfahren?</msg> 
         <msg id="msg.click_to_continue">Klicken um fortzufahren</msg>
         <msg id="msg.sketch_description">Ein abbozza! Sketch</msg>        
+        <msg id="msg.invalid_sketch"># nicht gefunden, # nicht lesbar oder kein gültiger Sketch!</msg>
     </messages>
     <gui>
         <msg id="gui.generate_button">Erzeuge Code</msg>
@@ -72,7 +73,6 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.teacher">Blöcke für Lehrer</msg>
         <msg id="gui.task">Aufgabe</msg>
         <msg id="gui.hint">Hinweis</msg>
-        <msg id="gui.close">Schließen</msg>
         <msg id="gui.edit">Editieren</msg>
         <msg id="gui.saveoptions">Speichere Optionen in Sketch</msg>
         <msg id="gui.saveundeletable">Schütze Blöcke vor dem Löschen</msg>

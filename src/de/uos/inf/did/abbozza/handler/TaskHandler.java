@@ -80,7 +80,7 @@ public class TaskHandler extends AbstractHandler {
         }
         
         String taskPath = this._abbozza.getConfiguration().getTaskPath();
-        if (!file.getAbsolutePath().startsWith(taskPath)) {
+        if (!file.getCanonicalPath().startsWith(taskPath)) {
             return null;
         }
         

@@ -71,9 +71,6 @@ public class AbbozzaConfig {
     
     /**
      * This method reads the configuration from the file
-     * 
-     * @throws IOException                console.log(response);
-
      */
     public void read() {
         if ( sketchbookPath == null ) return;
@@ -96,6 +93,7 @@ public class AbbozzaConfig {
     public void setDefault() {    
         // Check for Abbozza.cfg in global dir
         String runtimePath = PreferencesData.get("runtime.ide.path");
+        sketchbookPath = Abbozza.getInstance().getSketchbookPath();
         File defaultFile = new File(runtimePath + "/tools/Abbozza/Abbozza.cfg");
         config = new Properties();
         try {
@@ -113,7 +111,7 @@ public class AbbozzaConfig {
             config_locale = System.getProperty("user.language") + "_" + System.getProperty("user.country");
             config_updateUrl = "http://inf-didaktik.rz.uos.de/abbozza/current/";
             config_update = false;
-            config_taskPath = (sketchbookPath != null) ? sketchbookPath : System.getProperty("user.home");
+            config_taskPath = sketchbookPath;
             storeProperties(config);
             setOption("operations", true);
             setOption("localVars", true);
@@ -160,7 +158,7 @@ public class AbbozzaConfig {
     
     
     /**
-     * @throws IOException
+     * Writes the current configuration to a file
      */
     public void write() {
         if ( sketchbookPath == null ) return;
@@ -189,6 +187,9 @@ public class AbbozzaConfig {
     }
     
    
+    /*
+     * Stores the current config_* values in the properties
+     */
     private void storeProperties(Properties props) {
         props.setProperty("autoStart", config_autoStart ? "true" : "false");
         props.setProperty("startBrowser", config_browserStart ? "true" : "false");
@@ -198,7 +199,7 @@ public class AbbozzaConfig {
         props.setProperty("loglevel", Integer.toString(AbbozzaLogger.getLevel()));
         props.setProperty("updateUrl",config_updateUrl);
         props.setProperty("update",config_update ? "true" : "false");
-        props.setProperty("taskPath",(sketchbookPath != null) ? sketchbookPath : System.getProperty("user.home"));
+        props.setProperty("taskPath",sketchbookPath);
     }
  
     

@@ -151,7 +151,7 @@ public class SaveHandler extends AbstractHandler {
                     }
                 }
 
-                // PRepare output writer
+                // Prepare output writer
                 writer = new FileWriter(file);
 
                 // 1st step: Update description

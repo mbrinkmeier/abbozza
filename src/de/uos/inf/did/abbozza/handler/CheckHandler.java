@@ -79,16 +79,16 @@ public class CheckHandler extends AbstractHandler {
                 
         editor.getSketch().getCurrentCode().setModified(true);
         
-        // Compile sketch        
+        // Compile sketch                
         try {
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.compiling"), AbbozzaLogger.INFO);
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.compiling"));
             editor.getSketch().prepare();
-            editor.getSketch().save();
+            // editor.getSketch().save();
             editor.getSketch().build(false, false);
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.done_compiling"));
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
-        } catch (IOException | RunnerException | PreferencesMapException e) {
+        } catch (IOException | RunnerException  | PreferencesMapException e) {
             e.printStackTrace(System.out);
             editor.statusError(e);
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);

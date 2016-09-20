@@ -25,6 +25,7 @@ Changes may be lost.
 Continuing?</msg> 
         <msg id="msg.click_to_continue">Click to continue</msg>
         <msg id="msg.sketch_description">An abbozza! sketch</msg>
+        <msg id="msg.invalid_sketch"># not found, not accessible or no valid sketch!</msg>
     </messages>
     <gui>
         <msg id="gui.generate_button">Generate Code</msg>
@@ -42,7 +43,7 @@ Continuing?</msg>
         <msg id="gui.browser_path">Path to the browser</msg>         
         <msg id="gui.server_port">Server port</msg>         
         <msg id="gui.server_and_browser">Server and browser</msg>         
-        <msg id="gui.save">Save &amp; Apply</msg>         
+        <msg id="gui.save">Save</msg>         
         <msg id="gui.cancel">Cancel</msg>         
         <msg id="gui.options">Options</msg>         
         <msg id="gui.blocks">Blocks</msg>
@@ -72,7 +73,6 @@ Continuing?</msg>
         <msg id="gui.teacher">Blocks for teachers</msg>
         <msg id="gui.task">Task</msg>
         <msg id="gui.hint">Hint</msg>        
-        <msg id="gui.close">Close</msg>
         <msg id="gui.edit">Edit</msg>
         <msg id="gui.saveoptions">Store options in sketch</msg>
         <msg id="gui.saveundeletable">Spave blocks as undeletable</msg>
