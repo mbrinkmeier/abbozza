@@ -92,7 +92,7 @@ public class LevelMonitor extends MonitorPanel implements TableModelListener {
 
     public void paint(Graphics gr) {
         Graphics2D gr2d = (Graphics2D) gr;
-        gr.setColor(Color.WHITE);
+        gr.setColor(Color.BLACK);
         gr.fillRect(0, 0, getWidth(), getHeight());
 
         Rectangle rect = this.getVisibleRect();
@@ -116,11 +116,15 @@ public class LevelMonitor extends MonitorPanel implements TableModelListener {
                 case '1':
                     y = (getHeight() - 20) * (1023 - value) / 1023;
                     break;
+                case '3' :
+                    y = (getHeight()-20)*(32767-value)/65535;
+                    break;
                 default:
                     y = (getHeight() - 20) * (65535 - value) / 65535;
             }
             gr.setFont(new Font("SansSerif", Font.BOLD, 16));
-            gr.fillRect(channelWidth * (col - 1), y, channelWidth, 20);
+            gr.drawLine(channelWidth * (col - 1), y+10, channelWidth, y+10);
+            gr.fillRect(channelWidth * (col - 1)+25, y, channelWidth-50, 20);
             gr.setColor(Color.WHITE);
             int w = gr.getFontMetrics().stringWidth("Kanal " + col);
             int h = gr.getFontMetrics().getHeight();

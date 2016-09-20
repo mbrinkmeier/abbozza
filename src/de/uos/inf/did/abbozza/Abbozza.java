@@ -373,6 +373,8 @@ public class Abbozza implements Tool, HttpHandler {
      }
      }
      */
+    
+    /*
     public String uploadCode(String code) {
         // System.out.println("hier");
 
@@ -380,14 +382,14 @@ public class Abbozza implements Tool, HttpHandler {
 
         String response;
         boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
-        /*
-         PreferencesData.setBoolean("editor.save_on_verify", false);
-
-         editor.getSketch().getCurrentCode().setProgram(code);
-         setEditorText(code);
-
-         editor.getSketch().getCurrentCode().setModified(true);
-         */
+        
+        // PreferencesData.setBoolean("editor.save_on_verify", false);
+        //
+        // editor.getSketch().getCurrentCode().setProgram(code);
+        // setEditorText(code);
+        // 
+        // editor.getSketch().getCurrentCode().setModified(true);
+        
 
         try {
             editor.getSketch().prepare();
@@ -402,18 +404,19 @@ public class Abbozza implements Tool, HttpHandler {
         this.monitorHandler.suspend();
 
         // try {
-            // editor.getSketch().save();
-            editor.handleExport(false);
+        // editor.getSketch().save();
+        editor.handleExport(false);
         // } catch (IOException ex) {
         // }
 
         Thread[] threads2 = new Thread[group.activeCount()];
         group.enumerate(threads2, false);
 
+        // Find the exporting thread
         Thread last = null;
         int j;
-        int i = threads2.length - 1;
 
+        int i = threads2.length - 1;
         while ((i >= 0) && (last == null)) {
 
             j = threads.length - 1;
@@ -426,15 +429,17 @@ public class Abbozza implements Tool, HttpHandler {
             }
             i--;
         }
-        while ((last != null) && (last.isAlive())) {
-        }
+        
+        // Wait for the termination of the export thread
+        while ((last != null) && (last.isAlive())) {}
 
         response = logger.toString();
 
         PreferencesData.setBoolean("editor.save_on_verify", flag);
         return response;
     }
-
+    */
+    
     public void serialMonitor() {
         this.editor.handleSerial();
     }

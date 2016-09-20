@@ -159,9 +159,12 @@ public class Graph extends javax.swing.JPanel implements TableModelListener {
                 switch ( myTable.getType(i) ) {
                     case '0' :
                         y = (getHeight()-1)*(6-5*y)/7;
-                        break;
+                        break;  
                     case '1' :
                         y = (getHeight()-1)*(1023-y)/1023;
+                        break;
+                    case '3' :
+                        y = (getHeight()-1)*(32767-y)/65535;
                         break;
                     default:
                         y = (getHeight()-1)*(65535-y)/65535;

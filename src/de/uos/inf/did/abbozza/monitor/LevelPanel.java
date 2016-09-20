@@ -97,11 +97,15 @@ public class LevelPanel extends javax.swing.JPanel implements TableModelListener
                 case '1' :
                     y = (getHeight()-20)*(1023-value)/1023;
                     break;
+                case '3' :
+                    y = (getHeight()-20)*(32767-value)/65535;
+                    break;
                 default:
                     y = (getHeight()-20)*(65535-value)/65535;
             }
             gr.setFont(new Font("SansSerif",Font.BOLD,16));
-            gr.fillRect(channelWidth*(col-1),y, channelWidth,20 );
+            gr.drawLine(channelWidth*(col-1), y+10, channelWidth,y+10);
+            gr.fillRect(channelWidth*(col-1)+30,y, channelWidth-60,20 );
             gr.setColor(Color.BLACK);
             int w = gr.getFontMetrics().stringWidth("Kanal " + col);
             int h = gr.getFontMetrics().getHeight();
