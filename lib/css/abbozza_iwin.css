@@ -172,7 +172,7 @@
     min-width: 300px;
     width: 40%;
     height: 80%;
-    background-color: #e0e0e0;
+    background-color: #d0d0d0;
     position: fixed;
     top : 60px;
     right: 20px;
@@ -181,7 +181,10 @@
     font-family : sans-serif;
     font-size: 120%;
     color: gray;
-    border: 1px #a0a0a0 solid;
+    border-bottom: 2px #a0a0a0 solid;
+    border-right: 2px #a0a0a0 solid;
+    border-top: 2px #f0f0f0 solid;
+    border-left: 2px #f0f0f0 solid;
     border-radius: 5px;
     padding: 0px;
     -webkit-touch-callout: none;
@@ -190,6 +193,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    cursor:default;
 }
 
 .taskOverlayButton {
@@ -201,6 +205,8 @@
     height: 24px;
     border: 2px white solid;
     border-radius: 5px;
+    background-color: #a0a0a0;
+    cursor: pointer;
 }
 
 .taskOverlayButton IMG {
@@ -224,7 +230,6 @@
 }
 
 .taskOverlayContent {
-    border: 1px #a0a0a0 solid;
     margin: 3px;
     padding: 3px;
     overflow: auto;
@@ -237,6 +242,11 @@
     background-color: white;
     text-align: left;
     font-size: 75%;
+    border-top: 2px #a0a0a0 solid;
+    border-left: 2px #a0a0a0 solid;
+    border-bottom: 2px #f0f0f0 solid;
+    border-right: 2px #f0f0f0 solid;    
+    cursor:default;
 }
 
 .editorOverlay {        
