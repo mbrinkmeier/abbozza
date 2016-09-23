@@ -36,7 +36,7 @@ Continuing?</msg>
         <msg id="gui.serial_button">Serial Plotter</msg>
         <msg id="gui.connect_button">Connect to board</msg>
         <msg id="gui.config_button">Settings</msg>
-        <msg id="gui.info_button">Information and help</msg>        
+        <msg id="gui.info_button">Tasks and information</msg>        
         <msg id="gui.language">Language</msg>         
         <msg id="gui.start_directly">Start abbozza! with the IDE</msg>         
         <msg id="gui.start_browser">Open the browser at start</msg>         
