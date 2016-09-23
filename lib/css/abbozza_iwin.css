@@ -231,6 +231,10 @@
 }
 
 .taskOverlayContent {
+    display: none;
+}
+
+.taskOverlayPage {
     margin: 3px;
     padding: 3px;
     overflow: auto;
@@ -271,6 +275,27 @@
     border-right: 2px #f0f0f0 solid;    
     cursor: text;
 }
+
+.taskOverlayNav {
+    position: absolute;
+    margin: 0px;
+    bottom: 10px;
+    left: 3px;
+    right: 3px;
+    height: 20px;
+    cursor: default;
+    color: black;
+}
+
+.taskOverlayNavButton {
+    font-size: 100%;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: default;
+    color: black;
+}
+
 
 .editorOverlay {        
  	width: 100%;
