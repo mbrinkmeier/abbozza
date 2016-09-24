@@ -18,7 +18,7 @@ REV SYS
 [ ] [ ] TabMgr.js
 [X] [X] TaskWindow.js
 [ ] [ ] ToolboxMgr.js
-[ ] [ ] Validator.js
+[X] [X] Validator.js
 
 [ ] [ ] abbozza/blocks:
 [ ] [ ] Conditionals.js
