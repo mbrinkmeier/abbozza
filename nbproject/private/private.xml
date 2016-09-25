@@ -19,13 +19,13 @@
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
         </group>
         <group>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/TaskOverlay.js</file>
-        </group>
-        <group>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/gui/InternalWindow.js</file>
             <file>file:/home/michael/Projekte/abbozza/lib/abbozza.html</file>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/TaskWindow.js</file>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/TaskHint.js</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
+        </group>
+        <group>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
         </group>
     </open-files>

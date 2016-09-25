@@ -2,15 +2,15 @@ REV SYS
 
 [ ] [ ] abbozza:
 [ ] [ ] Abbozza.js
-[ ] [ ] Boards.js
-[ ] [ ] boards.xml
-[ ] [ ] ColorMgr.js
-[ ] [ ] Configuration.js
-[ ] [ ] Connection.js
+[X] [X] Boards.js
+[X] [X] boards.xml
+[X] [X] ColorMgr.js
+[X] [X] Configuration.js
+[X] [X] Connection.js
 [X] [X] DraggingManager.js
-[ ] [ ] DynamicMutator.js
-[ ] [ ] EditorOverlay.js
-[ ] [ ] ErrorMgr.js
+[X] [X] DynamicMutator.js
+[X] [X] EditorOverlay.js (unused)
+[X] [X] ErrorMgr.js
 [ ] [ ] features.xml
 [ ] [ ] Generator.js
 [ ] [ ] options.xml

@@ -356,3 +356,69 @@
     color: black;
     cursor: pointer;
 }
+
+
+.taskHint {
+   background-color: #d0d0d0;
+   font-weight: bold;
+   color: white;
+   font-family: sans-serif;    
+   overflow: auto;
+   -webkit-touch-callout: none;
+   -webkit-user-select: none;
+   -khtml-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;   
+ }
+
+.taskHintButton {
+    float: right;
+    background-color: #d0d0d0;
+    width: 13px; 
+    height: 13px; 
+    border-color: white; 
+    border-radius: 3px; 
+    border-width: 1px; 
+    border-style: solid;
+    margin-bottom: 6px;
+    padding: 0px;
+    margin-left: 5px;
+    cursor: pointer;
+    padding: 1px;
+}
+
+
+.taskHintContent {
+    margin: 0px;
+    padding: 5px;
+    border: 0px;
+    overflow: auto;
+    color: black;
+    background-color: #ffffff;
+    font-weight: normal;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.taskHintInner {
+    margin : 0px;
+}
+
+.taskHintHead {
+   background-color: #d0d0d0;
+   font-weight: bold;
+   color: white;
+   font-family: sans-serif;    
+   overflow: auto;
+   -webkit-touch-callout: none;
+   -webkit-user-select: none;
+   -khtml-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;   
+ }
