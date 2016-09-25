@@ -79,6 +79,8 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.description">Beschreibung</msg>
         <msg id="gui.protect_block">Schütze Block vor Löschen</msg>
         <msg id="gui.unprotect_block">Erlaube das Löschen des Blocks</msg>
+        <msg id="gui.block_id">Setze Block ID</msg>
+        <msg id="gui.ask_for_id">ID des Blocks:</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>

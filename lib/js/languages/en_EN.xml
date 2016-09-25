@@ -79,6 +79,8 @@ Continuing?</msg>
         <msg id="gui.description">Description</msg>
         <msg id="gui.protect_block">Protect block against deletion</msg>
         <msg id="gui.unprotect_block">Allow deletion of block</msg>
+        <msg id="gui.block_id">Set block ID</msg>
+        <msg id="gui.ask_for_id">Block ID:</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>
