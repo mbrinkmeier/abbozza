@@ -11,13 +11,6 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group name="NetBeansProjects">
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/gui/InternalWindow.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/abbozza.html</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/css/overlayDialog.css</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/css/abbozza.css</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
-        </group>
         <group>
             <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/DraggingManager.js</file>
             <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/abbozza.html</file>
@@ -31,5 +24,6 @@
             <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
             <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/css/abbozza_iwin.css</file>
         </group>
+        <group name="NetBeansProjects"/>
     </open-files>
 </project-private>
