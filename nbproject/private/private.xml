@@ -19,8 +19,17 @@
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
         </group>
         <group>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/DraggingManager.js</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/abbozza.html</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/css/abbozza_iwin.css</file>
         </group>
-        <group/>
+        <group>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/TaskWindow.js</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/DraggingManager.js</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/abbozza.html</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/css/abbozza_iwin.css</file>
+        </group>
     </open-files>
 </project-private>
