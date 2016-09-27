@@ -105,7 +105,7 @@ public class Abbozza implements Tool, HttpHandler {
     public static final int VER_MAJOR = 0;
     public static final int VER_MINOR = 4;
     public static final int VER_REV = 6;
-    public static final String VER_REM = "(pre-alpha)";
+    public static final String VER_REM = "(calliope)";
 
     public static final String VERSION = "" + VER_MAJOR + "." + VER_MINOR + "." + VER_REV + " " + VER_REM;
 
