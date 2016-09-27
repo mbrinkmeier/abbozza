@@ -102,11 +102,11 @@
         <category id="cat.SERIAL">
         </category>
 	            
-        <category name="Interrupts" id="cat.INT">
+        <!-- category name="Interrupts" id="cat.INT">
             <block type="int_interrupts"></block>
             <block type="int_no_interrupts"></block>
             <block type="int_attach"></block>
-        </category>
+        </category -->
                 
         <!--category name="Test" id="cat.TEST">
             <block type="test"></block>
@@ -179,10 +179,10 @@
         </category> 		
     </feature>
 
-    <feature id="feat.TEACHER">
+    <!-- feature id="feat.TEACHER">
         <category name="Lehrer" id="cat.TEACHER">
             <block type="teacher_text"></block>
         </category>
-    </feature>
+    </feature -->
     
 </features>

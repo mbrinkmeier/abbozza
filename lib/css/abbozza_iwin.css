@@ -359,11 +359,13 @@
 
 
 .taskHint {
+   z-index: 42;
    background-color: #d0d0d0;
    font-weight: bold;
    color: white;
    font-family: sans-serif;    
    overflow: auto;
+   opacity: 0.9;
    -webkit-touch-callout: none;
    -webkit-user-select: none;
    -khtml-user-select: none;
