@@ -25,6 +25,7 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,13 +38,13 @@ import java.io.OutputStream;
  */
 public class TaskHandler extends AbstractHandler {
     
-    public TaskHandler(Abbozza abbozza) {
+    public TaskHandler(AbbozzaServer abbozza) {
         super(abbozza);
     }
 
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-        String taskPath = this._abbozza.getConfiguration().getTaskPath();
+        String taskPath = this._abbozzaServer.getConfiguration().getTaskPath();
         
         String path = exchg.getRequestURI().getPath();
         path = path.substring(6);
@@ -79,7 +80,7 @@ public class TaskHandler extends AbstractHandler {
             return null;
         }
         
-        String taskPath = this._abbozza.getConfiguration().getTaskPath();
+        String taskPath = this._abbozzaServer.getConfiguration().getTaskPath();
         if (!file.getCanonicalPath().startsWith(taskPath)) {
             return null;
         }

@@ -20,9 +20,10 @@
  * @fileoverview ...
  * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
  */
-package de.uos.inf.did.abbozza.monitor;
+package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
+import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.handler.AbstractHandler;
 import java.io.IOException;
@@ -33,13 +34,13 @@ import java.io.IOException;
  */
 public class VersionHandler extends AbstractHandler {
 
-    public VersionHandler(Abbozza abbozza) {
+    public VersionHandler(AbbozzaServer abbozza) {
         super(abbozza);
     }
 
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-        sendResponse(exchg, 200, "text/plain", _abbozza.VERSION);
+        sendResponse(exchg, 200, "text/plain", _abbozzaServer.VERSION);
     }
     
 }

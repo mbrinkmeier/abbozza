@@ -40,7 +40,7 @@ import processing.app.PreferencesData;
  */
 public class AbbozzaConfig {
 
-    private String sketchbookPath;
+    private String configPath;
     private Properties config;
 
     // General configuration
@@ -51,13 +51,13 @@ public class AbbozzaConfig {
     private String config_locale = "de_DE";
     private String config_updateUrl = "http://inf-didaktik.rz.uos.de/abbozza/current/";
     private boolean config_update = false;
-    private String config_taskPath = sketchbookPath;
+    private String config_taskPath = configPath;
     
     /**
      *  Reads the configuration from the given path
      */
     public AbbozzaConfig(String path) {
-        sketchbookPath = path;
+        configPath = path;
         read();
     }
 
@@ -65,7 +65,7 @@ public class AbbozzaConfig {
      * Sets the default configuration
      */
     public AbbozzaConfig() {
-        sketchbookPath = null;
+        configPath = null;
         setDefault();
     }
     
@@ -74,13 +74,14 @@ public class AbbozzaConfig {
      * This method reads the configuration from the file
      */
     public void read() {
-        if ( sketchbookPath == null ) return;
-        File prefFile = new File(sketchbookPath + "/tools/Abbozza/Abbozza.cfg");
+        if ( configPath == null ) return;
+        File prefFile = new File(configPath);
         config = new Properties();
         try {
             config.load(new FileInputStream(prefFile));
             set(config);        
         } catch (IOException ex) {
+            AbbozzaLogger.err("Configuration file " + configPath + " not found! Creating one!");
             setDefault();
             write();
         }        
@@ -93,17 +94,17 @@ public class AbbozzaConfig {
      */
     public void setDefault() {    
         // Check for Abbozza.cfg in global dir
-        String runtimePath = PreferencesData.get("runtime.ide.path");
-        sketchbookPath = Abbozza.getInstance().getSketchbookPath();
-        File defaultFile = new File(runtimePath + "/tools/Abbozza/Abbozza.cfg");
+        String runtimePath = AbbozzaServer.getInstance().getGlobalJarPath();
+        if (configPath == null) configPath = AbbozzaServer.getInstance().getConfigPath();
+        File defaultFile = new File(runtimePath + "/" + AbbozzaServer.getInstance().system + "/abbozza.cfg");
         config = new Properties();
         try {
             config.load(new FileInputStream(defaultFile));
-            AbbozzaLogger.out("Reading default configuration from " + defaultFile.getAbsolutePath(),AbbozzaLogger.INFO);
+            AbbozzaLogger.err("Reading default configuration from " + defaultFile.getAbsolutePath());
             set(config);        
             write();
         } catch (IOException ex) {
-            AbbozzaLogger.out("Setting internal default configuration.",AbbozzaLogger.INFO);
+            AbbozzaLogger.err("Setting internal default configuration.");
             config.remove("freshInstall");
             config_serverPort = 54242;
             config_autoStart = false;
@@ -112,7 +113,7 @@ public class AbbozzaConfig {
             config_locale = System.getProperty("user.language") + "_" + System.getProperty("user.country");
             config_updateUrl = "http://inf-didaktik.rz.uos.de/abbozza/current/";
             config_update = false;
-            config_taskPath = sketchbookPath;
+            config_taskPath = configPath;
             storeProperties(config);
             setOption("operations", true);
             setOption("localVars", true);
@@ -162,15 +163,16 @@ public class AbbozzaConfig {
      * Writes the current configuration to a file
      */
     public void write() {
-        if ( sketchbookPath == null ) return;
-        File prefFile = new File(sketchbookPath + "/tools/Abbozza/Abbozza.cfg");
+        if ( configPath == null ) return;
+        File prefFile = new File(configPath);
         try {
+            prefFile.getParentFile().mkdirs();
             prefFile.createNewFile();
             Properties props = get();
             props.store(new FileOutputStream(prefFile), "abbozza! preferences");
             
         } catch (IOException ex) {
-            AbbozzaLogger.err("Could not write configuration file " + sketchbookPath + "/tools/Abbozza/Abbozza.cfg");                
+            AbbozzaLogger.err("Could not write configuration file " + configPath);                
         }
     }
 

@@ -37,10 +37,10 @@ public class JarDirHandler implements HttpHandler {
     public void addDir(String path, String name) {
         File file = new File(path);
         if (!file.exists()) {
-            AbbozzaLogger.out(file.getAbsolutePath() + " not found");
+            AbbozzaLogger.err(file.getAbsolutePath() + " not found");
             file = null;
         } else {
-            AbbozzaLogger.out(name + " : " + file.getAbsolutePath());
+            AbbozzaLogger.err(name + " : " + file.getAbsolutePath());
             return;
         }
         entries.add(file);
@@ -56,9 +56,9 @@ public class JarDirHandler implements HttpHandler {
         JarFile file;
         try {
             file = new JarFile(path);
-            AbbozzaLogger.out(name + " : " + file.getName());
+            AbbozzaLogger.err(name + " : " + file.getName());
         } catch (IOException e) {
-            AbbozzaLogger.out(name + " not found");
+            AbbozzaLogger.err(name + " not found (" + path + ")");
             return;
         }        
         entries.add(file);

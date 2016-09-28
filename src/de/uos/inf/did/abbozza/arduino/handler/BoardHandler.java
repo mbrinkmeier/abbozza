@@ -20,7 +20,7 @@
  * @fileoverview ...
  * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
  */
-package de.uos.inf.did.abbozza.handler;
+package de.uos.inf.did.abbozza.arduino.handler;
 
 import cc.arduino.packages.BoardPort;
 import com.sun.net.httpserver.HttpExchange;
@@ -28,6 +28,7 @@ import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.BoardListEntry;
+import de.uos.inf.did.abbozza.handler.AbstractHandler;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;

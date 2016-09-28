@@ -28,6 +28,7 @@ package de.uos.inf.did.abbozza.monitor;
 import cc.arduino.packages.BoardPort;
 import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
+import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -82,7 +83,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
                 try {
                     closed = true;
                     close();
-                    Abbozza.getInstance().monitorIsClosed();
+                    AbbozzaServer.getInstance().monitorIsClosed();
                 } catch (Exception e) {
                     // ignore
                 }

@@ -27,6 +27,7 @@ import com.sun.net.httpserver.HttpHandler;
 import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -41,7 +42,7 @@ import processing.app.helpers.PreferencesMapException;
  */
 public class CheckHandler extends AbstractHandler {
 
-    public CheckHandler(Abbozza abbozza) {
+    public CheckHandler(AbbozzaServer abbozza) {
         super(abbozza);
     }
 
@@ -67,34 +68,36 @@ public class CheckHandler extends AbstractHandler {
     
     
     public String setCode(String code) {     
-        _abbozza.logger.reset();
+        _abbozzaServer.logger.reset();
         
         String response;
         boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
         PreferencesData.setBoolean("editor.save_on_verify", false);
         
-        Editor editor = _abbozza.getEditor();
-        editor.getSketch().getCurrentCode().setProgram(code);
-        _abbozza.setEditorText(code);
-                
-        editor.getSketch().getCurrentCode().setModified(true);
-        
-        // Compile sketch                
-        try {
-            AbbozzaLogger.out(AbbozzaLocale.entry("msg.compiling"), AbbozzaLogger.INFO);
-            editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.compiling"));
-            editor.getSketch().prepare();
-            // editor.getSketch().save();
-            editor.getSketch().build(false, false);
-            editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.done_compiling"));
-            AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
-        } catch (IOException | RunnerException  | PreferencesMapException e) {
-            e.printStackTrace(System.out);
-            editor.statusError(e);
-            AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
-        }
-        
-        response = _abbozza.logger.toString();
+        _abbozzaServer.toolSetCode(code);
+        // Editor editor = _abbozza.getEditor();
+        // editor.getSketch().getCurrentCode().setProgram(code);
+        // _abbozza.setEditorText(code);
+
+        response = _abbozzaServer.compileCode(code);
+//        editor.getSketch().getCurrentCode().setModified(true);
+//        
+//        // Compile sketch                
+//        try {
+//            AbbozzaLogger.out(AbbozzaLocale.entry("msg.compiling"), AbbozzaLogger.INFO);
+//            editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.compiling"));
+//            editor.getSketch().prepare();
+//            // editor.getSketch().save();
+//            editor.getSketch().build(false, false);
+//            editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.done_compiling"));
+//            AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
+//        } catch (IOException | RunnerException  | PreferencesMapException e) {
+//            e.printStackTrace(System.out);
+//            editor.statusError(e);
+//            AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
+//        }
+//        
+//        response = _abbozzaServer.logger.toString();
         PreferencesData.setBoolean("editor.save_on_verify", flag);
         
         return response;
