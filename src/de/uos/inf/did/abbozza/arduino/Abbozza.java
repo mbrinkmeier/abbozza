@@ -19,7 +19,7 @@
  * @fileoverview The main class for the abbozza! server
  * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
  */
-package de.uos.inf.did.abbozza;
+package de.uos.inf.did.abbozza.arduino;
 
 import de.uos.inf.did.abbozza.handler.JarDirHandler;
 import cc.arduino.packages.BoardPort;
@@ -50,6 +50,12 @@ import processing.app.helpers.PreferencesMapException;
 import processing.app.tools.Tool;
 
 import com.sun.net.httpserver.*;
+import de.uos.inf.did.abbozza.AbbozzaConfig;
+import de.uos.inf.did.abbozza.AbbozzaConfigDialog;
+import de.uos.inf.did.abbozza.AbbozzaLocale;
+import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.DuplexPrintStream;
+import de.uos.inf.did.abbozza.LocaleEntry;
 import de.uos.inf.did.abbozza.handler.BoardHandler;
 import de.uos.inf.did.abbozza.handler.CheckHandler;
 import de.uos.inf.did.abbozza.handler.ConfigDialogHandler;

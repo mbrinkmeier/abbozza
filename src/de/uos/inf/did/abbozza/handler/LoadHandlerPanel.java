@@ -21,7 +21,7 @@
  */
 package de.uos.inf.did.abbozza.handler;
 
-import de.uos.inf.did.abbozza.Abbozza;
+import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

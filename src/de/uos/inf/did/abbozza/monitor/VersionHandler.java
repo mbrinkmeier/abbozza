@@ -23,7 +23,7 @@
 package de.uos.inf.did.abbozza.monitor;
 
 import com.sun.net.httpserver.HttpExchange;
-import de.uos.inf.did.abbozza.Abbozza;
+import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.handler.AbstractHandler;
 import java.io.IOException;
 

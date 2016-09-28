@@ -23,7 +23,7 @@ package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import de.uos.inf.did.abbozza.Abbozza;
+import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import java.io.BufferedInputStream;
 import java.io.File;

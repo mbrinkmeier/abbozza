@@ -21,6 +21,7 @@
  */
 package de.uos.inf.did.abbozza;
 
+import de.uos.inf.did.abbozza.arduino.Abbozza;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;

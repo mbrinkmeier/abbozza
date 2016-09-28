@@ -21,6 +21,7 @@
  */
 package de.uos.inf.did.abbozza;
 
+import de.uos.inf.did.abbozza.arduino.Abbozza;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;

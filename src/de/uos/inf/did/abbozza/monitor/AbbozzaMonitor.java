@@ -26,7 +26,7 @@
 package de.uos.inf.did.abbozza.monitor;
 
 import cc.arduino.packages.BoardPort;
-import de.uos.inf.did.abbozza.Abbozza;
+import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import java.awt.Dimension;
 import java.awt.Toolkit;

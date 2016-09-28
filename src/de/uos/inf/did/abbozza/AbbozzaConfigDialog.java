@@ -5,6 +5,7 @@
  */
 package de.uos.inf.did.abbozza;
 
+import de.uos.inf.did.abbozza.arduino.Abbozza;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
