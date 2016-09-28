@@ -21,18 +21,12 @@
  */
 package de.uos.inf.did.abbozza;
 
-import de.uos.inf.did.abbozza.arduino.Abbozza;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringBufferInputStream;
-import java.util.Enumeration;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import processing.app.PreferencesData;
 
 /**
  *
@@ -150,7 +144,7 @@ public class AbbozzaConfig {
         config_locale = properties.getProperty("locale",System.getProperty("user.language") + "_" + System.getProperty("user.country"));
         config_updateUrl = properties.getProperty("updateUrl","http://inf-didaktik.rz.uos.de/abbozza/current/");
         config_update = "true".equals(properties.getProperty("update","false"));
-        config_taskPath = properties.getProperty("taskPath",Abbozza.getInstance().getSketchbookPath());
+        config_taskPath = properties.getProperty("taskPath",AbbozzaServer.getInstance().getSketchbookPath());
         if (properties.getProperty("loglevel") != null) {
             AbbozzaLogger.setLevel(Integer.parseInt(properties.getProperty("loglevel","0")));
         } else {

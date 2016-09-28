@@ -26,8 +26,6 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import de.uos.inf.did.abbozza.arduino.Abbozza;
-import de.uos.inf.did.abbozza.arduino.handler.BoardHandler;
 import de.uos.inf.did.abbozza.handler.CheckHandler;
 import de.uos.inf.did.abbozza.handler.ConfigDialogHandler;
 import de.uos.inf.did.abbozza.handler.ConfigHandler;
@@ -59,7 +57,6 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -68,7 +65,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import processing.app.Editor;
 
 /**
  *
@@ -249,7 +245,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     
     public void checkForUpdate(boolean reportNoUpdate) {
 
-        String updateUrl = Abbozza.getConfig().getUpdateUrl();
+        String updateUrl = AbbozzaServer.getConfig().getUpdateUrl();
         String version = "";
 
         int major;
@@ -311,7 +307,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                 AbbozzaLogger.out("Stopping arduino", AbbozzaLogger.INFO);
                 System.exit(0);
             } catch (Exception ex) {
-                Logger.getLogger(Abbozza.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AbbozzaServer.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             AbbozzaLogger.out(AbbozzaLocale.entry("gui.no_update"), AbbozzaLogger.INFO);
@@ -323,16 +319,18 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     public void startServer() {
 
-        if ((!isStarted) && (Abbozza.getInstance() == this)) {
+        if ((!isStarted) && (AbbozzaServer.getInstance() == this)) {
 
             this.isStarted = true;
-
-            AbbozzaLogger.out("Starting ... ");
 
             // Start ErrorMonitor
             logger = new ByteArrayOutputStream();
             duplexer = new DuplexPrintStream(logger, System.err);
             System.setErr(duplexer);
+
+            AbbozzaLogger.out("Duplexer Started ... ");
+
+            AbbozzaLogger.out("Starting ... ");
 
             serverPort = config.getServerPort();
             while (httpServer == null) {
@@ -342,6 +340,8 @@ public abstract class AbbozzaServer implements HttpHandler {
                     httpServer.start();
                     AbbozzaLogger.out("Http-server started on port: " + serverPort, AbbozzaLogger.INFO);
                 } catch (Exception e) {
+                    e.printStackTrace(System.err);
+                    AbbozzaLogger.out("Port " + serverPort + " failed", AbbozzaLogger.INFO);
                     serverPort++;
                     httpServer = null;
                 }
@@ -374,6 +374,8 @@ public abstract class AbbozzaServer implements HttpHandler {
                     null, options, options[0]);
             switch (selected.toString()) {
                 case "0":
+                    AbbozzaLogger.out("Aborted by user");
+                    System.exit(0);                    
                     break;
                 case "1":
                     boolean failed = false;
@@ -394,6 +396,8 @@ public abstract class AbbozzaServer implements HttpHandler {
                     }
                     if (failed) {
                         JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("msg.cant_open_standard_browser"), "abbozza!", JOptionPane.ERROR_MESSAGE);
+                        AbbozzaLogger.out("standard browser could not be started");
+                        System.exit(0);
                     }
                     break;
                 case "2":

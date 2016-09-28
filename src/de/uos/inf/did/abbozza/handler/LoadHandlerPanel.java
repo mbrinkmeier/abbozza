@@ -21,23 +21,15 @@
  */
 package de.uos.inf.did.abbozza.handler;
 
-import de.uos.inf.did.abbozza.arduino.Abbozza;
-import de.uos.inf.did.abbozza.AbbozzaLogger;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import static java.util.stream.DoubleStream.builder;
 import javax.swing.JFileChooser;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**

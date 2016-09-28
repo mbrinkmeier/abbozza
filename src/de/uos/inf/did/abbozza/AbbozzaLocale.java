@@ -21,7 +21,6 @@
  */
 package de.uos.inf.did.abbozza;
 
-import de.uos.inf.did.abbozza.arduino.Abbozza;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;
@@ -49,7 +48,7 @@ public class AbbozzaLocale {
         try {
             builder = factory.newDocumentBuilder();
             StringBuilder xmlStringBuilder = new StringBuilder();
-            byte[] bytes = Abbozza.getInstance().getLocaleBytes(loc);
+            byte[] bytes = AbbozzaServer.getInstance().getLocaleBytes(loc);
 
             ByteArrayInputStream input = new ByteArrayInputStream(bytes);
             localeXml = builder.parse(input);

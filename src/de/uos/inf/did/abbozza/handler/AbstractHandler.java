@@ -26,7 +26,6 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import de.uos.inf.did.abbozza.AbbozzaServer;
-import de.uos.inf.did.abbozza.arduino.Abbozza;
 import java.io.IOException;
 import java.io.OutputStream;
 

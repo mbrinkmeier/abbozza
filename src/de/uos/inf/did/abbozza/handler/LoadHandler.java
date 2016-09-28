@@ -22,9 +22,7 @@
 package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import de.uos.inf.did.abbozza.arduino.Abbozza;
-import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.awt.Component;
 import java.awt.HeadlessException;
@@ -34,7 +32,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
