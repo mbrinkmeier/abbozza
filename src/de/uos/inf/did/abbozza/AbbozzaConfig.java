@@ -27,6 +27,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -109,22 +112,45 @@ public class AbbozzaConfig {
             config_update = false;
             config_taskPath = configPath;
             storeProperties(config);
-            setOption("operations", true);
-            setOption("localVars", true);
-            setOption("noArrays", false);
-            setOption("linArrays", false);
-            setOption("multArrays", true);
-            setOption("devices", true);
-            setOptionInt("loglevel",AbbozzaLogger.NONE);
+            setDefaultOptions();
+            // setOption("operations", true);
+            // setOption("localVars", true);
+            // setOption("noArrays", false);
+            // setOption("linArrays", false);
+            // setOption("multArrays", true);
+            // setOption("devices", true);
+            // setOptionInt("loglevel",AbbozzaLogger.NONE);
             AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
-            setOptionStr("updateUrl",config_updateUrl);
-            setOption("update",false);
             write();
         }        
     }
     
         
-
+    public void setDefaultOptions() {    
+        Document optionXml = AbbozzaServer.getInstance().getOptionTree();
+        
+        // Options
+        NodeList items = optionXml.getElementsByTagName("item");
+        for (int i = 0; i < items.getLength(); i++) {
+            Node node = items.item(i);
+            String option = node.getAttributes().getNamedItem("option").getNodeValue();
+            String def = node.getAttributes().getNamedItem("default").getNodeValue();
+            setOption(option, def.equals("true"));
+            AbbozzaLogger.err(option);
+        }
+        
+        // Choices
+        items = optionXml.getElementsByTagName("choice");
+        for (int i = 0; i < items.getLength(); i++) {
+            Node node = items.item(i);
+            String option = node.getAttributes().getNamedItem("option").getNodeValue();
+            String def = node.getAttributes().getNamedItem("default").getNodeValue();
+            setOption(option, def.equals("true"));
+            AbbozzaLogger.err(option);
+        }
+}
+    
+    
     public void set(Properties properties) {
         
         if ("true".equals(properties.get("freshInstall"))) {
@@ -163,7 +189,7 @@ public class AbbozzaConfig {
             prefFile.getParentFile().mkdirs();
             prefFile.createNewFile();
             Properties props = get();
-            props.store(new FileOutputStream(prefFile), "abbozza! preferences");
+            props.store(new FileOutputStream(prefFile), "abbozza! preferences (" + AbbozzaServer.getInstance().system + ")");
             
         } catch (IOException ex) {
             AbbozzaLogger.err("Could not write configuration file " + configPath);                

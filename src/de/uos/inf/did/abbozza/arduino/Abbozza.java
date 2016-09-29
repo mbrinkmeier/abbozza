@@ -83,7 +83,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
     @Override
     public void init(Editor editor) {
         this.editor = editor;
-        super.init("abbozza");        
+        super.init("arduino");        
     }
 
     @Override
@@ -94,7 +94,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         }
 
         startServer();
-        startBrowser();
+        startBrowser("arduino.html");
     }
 
     @Override

@@ -101,7 +101,7 @@
                   <Font name="Dialog" size="10" style="0"/>
                 </Property>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="Abbozza.VERSION&#xa;" type="code"/>
+                  <Connection code="AbbozzaServer.VERSION&#xa;" type="code"/>
                 </Property>
                 <Property name="verticalAlignment" type="int" value="1"/>
               </Properties>
@@ -345,7 +345,7 @@
                       <Font name="Dialog" size="12" style="0"/>
                     </Property>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="new DefaultComboBoxModel(Abbozza.getInstance().getLocales())" type="code"/>
+                      <Connection code="new DefaultComboBoxModel(AbbozzaServer.getInstance().getLocales())" type="code"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -358,7 +358,7 @@
                       <Font name="Dialog" size="12" style="0"/>
                     </Property>
                     <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="Abbozza.getConfig().getUpdate()" type="code"/>
+                      <Connection code="AbbozzaServer.getConfig().getUpdate()" type="code"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="AbbozzaLocale.entry(&quot;gui.update_option&quot;)" type="code"/>

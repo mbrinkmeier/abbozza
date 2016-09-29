@@ -37,7 +37,7 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
         abbozza.init("calliope");
         
         abbozza.startServer();
-        abbozza.startBrowser();
+        abbozza.startBrowser("calliope.html");
     }
 
     @Override

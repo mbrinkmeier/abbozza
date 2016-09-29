@@ -8,9 +8,9 @@ package de.uos.inf.did.abbozza.handler;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -107,6 +107,7 @@ public class JarDirHandler implements HttpHandler {
     }
 
     public byte[] getBytes(String path) throws IOException {
+        AbbozzaLogger.err(path);
         byte[] bytearray = null;
         int tries = 0;
 
@@ -124,7 +125,7 @@ public class JarDirHandler implements HttpHandler {
 
             if (bytearray == null) {
                 tries++;
-                Abbozza.getInstance().findJarsAndDirs(this);
+                AbbozzaServer.getInstance().findJarsAndDirs(this);
             }
         }
 

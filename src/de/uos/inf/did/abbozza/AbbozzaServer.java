@@ -137,7 +137,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         if (config.startAutomatically()) {
             this.startServer();
             if (config.startBrowser()) {
-                this.startBrowser();
+                this.startBrowser(system+".html");
             }
         }
 
@@ -167,11 +167,11 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
     
     public void findJarsAndDirs(JarDirHandler jarHandler) {
-        System.out.println(sketchbookPath);
-        System.out.println(configPath);
-        System.out.println(globalJarPath);
-        System.out.println(localJarPath);
-        System.out.flush();
+        // System.out.println(sketchbookPath);
+        // System.out.println(configPath);
+        // System.out.println(globalJarPath);
+        // System.out.println(localJarPath);
+        // System.out.flush();
         
         jarHandler.clear();
         jarHandler.addDir(localJarPath + "files", "Local directory");
@@ -349,16 +349,16 @@ public abstract class AbbozzaServer implements HttpHandler {
 
             AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_started", Integer.toString(config.getServerPort())));
 
-            String url = "http://localhost:" + config.getServerPort() + "/abbozza.html";
+            String url = "http://localhost:" + config.getServerPort() + "/" + system + ".html";
             AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_reachable", url));
         }
     }
 
-    public void startBrowser() {
+    public void startBrowser(String file) {
         Runtime runtime = Runtime.getRuntime();
 
         if ((config.getBrowserPath() != null) && (!config.getBrowserPath().equals(""))) {
-            String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/abbozza.html";
+            String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/" + file;
             try {
                 AbbozzaLogger.out("Starting browser " + cmd);
                 runtime.exec(cmd);
@@ -478,7 +478,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         Document optionsXml = null;
         if (jarHandler != null) {
             try {
-                byte[] bytes = jarHandler.getBytes("/js/abbozza/options.xml");
+                byte[] bytes = jarHandler.getBytes("/js/abbozza/" + system +"/options.xml");
                 if (bytes != null) {
                     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                     DocumentBuilder builder;
@@ -488,7 +488,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                     optionsXml = builder.parse(input);
                 }
             } catch (IOException | SAXException | ParserConfigurationException ex) {
-                AbbozzaLogger.out("Could not find /js/abbozza/options.xml", AbbozzaLogger.ERROR);
+                AbbozzaLogger.out("Could not find /js/abbozza/" + system +"/options.xml", AbbozzaLogger.ERROR);
             }
         }
         return optionsXml;

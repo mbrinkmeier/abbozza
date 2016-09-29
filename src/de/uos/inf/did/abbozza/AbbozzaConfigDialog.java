@@ -5,7 +5,7 @@
  */
 package de.uos.inf.did.abbozza;
 
-import de.uos.inf.did.abbozza.arduino.Abbozza;
+// import de.uos.inf.did.abbozza.arduino.Abbozza;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
@@ -114,7 +114,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
 
     public String chooseBrowser() {
         File file;
-        JFileChooser chooser = new JFileChooser(Abbozza.getConfig().getBrowserPath());
+        JFileChooser chooser = new JFileChooser(AbbozzaServer.getConfig().getBrowserPath());
         chooser.setFileFilter(new FileFilter() {
 
             @Override
@@ -205,7 +205,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         logoPanel.add(jLabel1, java.awt.BorderLayout.LINE_START);
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
-        jLabel2.setText(Abbozza.VERSION
+        jLabel2.setText(AbbozzaServer.VERSION
         );
         jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         logoPanel.add(jLabel2, java.awt.BorderLayout.LINE_END);
@@ -249,7 +249,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         jLabel5.setText(AbbozzaLocale.entry("gui.server_port"));
 
         localeComboBox.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        localeComboBox.setModel(new DefaultComboBoxModel(Abbozza.getInstance().getLocales()));
+        localeComboBox.setModel(new DefaultComboBoxModel(AbbozzaServer.getInstance().getLocales()));
         localeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 localeComboBoxActionPerformed(evt);
@@ -257,7 +257,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         });
 
         updateBox.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        updateBox.setSelected(Abbozza.getConfig().getUpdate());
+        updateBox.setSelected(AbbozzaServer.getConfig().getUpdate());
         updateBox.setText(AbbozzaLocale.entry("gui.update_option"));
         updateBox.setLabel(AbbozzaLocale.entry("gui.update_option"));
         updateBox.addActionListener(new java.awt.event.ActionListener() {
@@ -398,7 +398,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_browserButtonActionPerformed
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
-        Abbozza.getInstance().checkForUpdate(true);
+        AbbozzaServer.getInstance().checkForUpdate(true);
     }//GEN-LAST:event_updateActionPerformed
 
     /**
@@ -454,7 +454,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
          */
         
         // Read DOM from options.xml
-        Document optionXml = Abbozza.getInstance().getOptionTree();
+        Document optionXml = AbbozzaServer.getInstance().getOptionTree();
         NodeList roots = optionXml.getElementsByTagName("options");
         for (int i = 0; i < roots.getLength(); i++) {
             Node node = roots.item(i);
