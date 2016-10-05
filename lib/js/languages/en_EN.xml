@@ -72,6 +72,9 @@ Continuing?</msg>
         <msg id="gui.send">Send</msg>        
         <msg id="gui.teacher">Blocks for teachers</msg>
         <msg id="gui.task">Task</msg>
+        <msg id="gui.tasks">Tasks</msg>
+        <msg id="gui.task_path">Task directory</msg>
+        <msg id="gui.tasks_editable">Tasks can be edited</msg>        
         <msg id="gui.hint">Hint</msg>        
         <msg id="gui.edit">Edit</msg>
         <msg id="gui.saveoptions">Store options in sketch</msg>

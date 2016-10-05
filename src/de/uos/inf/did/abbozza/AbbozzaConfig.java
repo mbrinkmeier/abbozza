@@ -49,6 +49,7 @@ public class AbbozzaConfig {
     private String config_updateUrl = "http://inf-didaktik.rz.uos.de/abbozza/current/";
     private boolean config_update = false;
     private String config_taskPath = configPath;
+    private boolean config_tasksEditable = true;
     
     /**
      *  Reads the configuration from the given path
@@ -93,6 +94,7 @@ public class AbbozzaConfig {
         // Check for Abbozza.cfg in global dir
         String runtimePath = AbbozzaServer.getInstance().getGlobalJarPath();
         if (configPath == null) configPath = AbbozzaServer.getInstance().getConfigPath();
+        AbbozzaLogger.err(configPath);
         File defaultFile = new File(runtimePath + "/" + AbbozzaServer.getInstance().system + "/abbozza.cfg");
         config = new Properties();
         try {
@@ -111,6 +113,7 @@ public class AbbozzaConfig {
             config_updateUrl = "http://inf-didaktik.rz.uos.de/abbozza/current/";
             config_update = false;
             config_taskPath = configPath;
+            config_tasksEditable = true;
             storeProperties(config);
             setDefaultOptions();
             // setOption("operations", true);
@@ -121,7 +124,6 @@ public class AbbozzaConfig {
             // setOption("devices", true);
             // setOptionInt("loglevel",AbbozzaLogger.NONE);
             AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
-            write();
         }        
     }
     
@@ -171,6 +173,7 @@ public class AbbozzaConfig {
         config_updateUrl = properties.getProperty("updateUrl","http://inf-didaktik.rz.uos.de/abbozza/current/");
         config_update = "true".equals(properties.getProperty("update","false"));
         config_taskPath = properties.getProperty("taskPath",AbbozzaServer.getInstance().getSketchbookPath());
+        config_tasksEditable = "true".equals(properties.getProperty("tasksEditable","true"));
         if (properties.getProperty("loglevel") != null) {
             AbbozzaLogger.setLevel(Integer.parseInt(properties.getProperty("loglevel","0")));
         } else {
@@ -223,6 +226,7 @@ public class AbbozzaConfig {
         props.setProperty("updateUrl",config_updateUrl);
         props.setProperty("update",config_update ? "true" : "false");
         props.setProperty("taskPath",config_taskPath);
+        props.setProperty("tasksEditable",config_tasksEditable ? "true" : "false");
     }
  
     
@@ -337,6 +341,14 @@ public class AbbozzaConfig {
     
     public void setTaskPath(String taskPath) {
         config_taskPath = taskPath;
+    }
+
+    public void setTasksEditable(boolean selected) {
+        config_tasksEditable = selected;
+    }
+
+    public boolean areTasksEditable() {
+        return config_tasksEditable;
     }
 
 }

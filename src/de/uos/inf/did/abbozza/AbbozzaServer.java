@@ -155,7 +155,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
 
     public String getConfigPath() {
-        return sketchbookPath;
+        return configPath;
     }
 
     public String getGlobalJarPath() {
@@ -498,9 +498,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     public int openConfigDialog() {
         AbbozzaConfig config = this.getConfiguration();
         Properties props = config.get();
-        AbbozzaLogger.out("Hier", AbbozzaLogger.ALL);
         AbbozzaConfigDialog dialog = new AbbozzaConfigDialog(props, null, false, true);
-        AbbozzaLogger.out("Da", AbbozzaLogger.ALL);
         dialog.setAlwaysOnTop(true);
         dialog.setModal(true);
         dialog.toFront();

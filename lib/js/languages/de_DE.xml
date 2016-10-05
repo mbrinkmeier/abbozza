@@ -72,6 +72,9 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.send">Senden</msg>
         <msg id="gui.teacher">Blöcke für Lehrer</msg>
         <msg id="gui.task">Aufgabe</msg>
+        <msg id="gui.tasks">Aufgaben</msg>
+        <msg id="gui.task_path">Aufgaben Verzeichnis</msg>        
+        <msg id="gui.tasks_editable">Aufgaben sind editierbar</msg>        
         <msg id="gui.hint">Hinweis</msg>
         <msg id="gui.edit">Editieren</msg>
         <msg id="gui.saveoptions">Speichere Optionen in Sketch</msg>
