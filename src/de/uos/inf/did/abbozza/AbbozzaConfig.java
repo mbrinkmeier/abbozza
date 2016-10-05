@@ -94,16 +94,15 @@ public class AbbozzaConfig {
         // Check for Abbozza.cfg in global dir
         String runtimePath = AbbozzaServer.getInstance().getGlobalJarPath();
         if (configPath == null) configPath = AbbozzaServer.getInstance().getConfigPath();
-        AbbozzaLogger.err(configPath);
         File defaultFile = new File(runtimePath + "/" + AbbozzaServer.getInstance().system + "/abbozza.cfg");
         config = new Properties();
         try {
             config.load(new FileInputStream(defaultFile));
-            AbbozzaLogger.err("Reading default configuration from " + defaultFile.getAbsolutePath());
+            AbbozzaLogger.out("Reading default configuration from " + defaultFile.getAbsolutePath(),AbbozzaLogger.INFO);
             set(config);        
             write();
         } catch (IOException ex) {
-            AbbozzaLogger.err("Setting internal default configuration.");
+            AbbozzaLogger.out("Setting internal default configuration.",AbbozzaLogger.INFO);
             config.remove("freshInstall");
             config_serverPort = 54242;
             config_autoStart = false;
@@ -138,7 +137,7 @@ public class AbbozzaConfig {
             String option = node.getAttributes().getNamedItem("option").getNodeValue();
             String def = node.getAttributes().getNamedItem("default").getNodeValue();
             setOption(option, def.equals("true"));
-            AbbozzaLogger.err(option);
+            // AbbozzaLogger.out(option);
         }
         
         // Choices
@@ -148,7 +147,7 @@ public class AbbozzaConfig {
             String option = node.getAttributes().getNamedItem("option").getNodeValue();
             String def = node.getAttributes().getNamedItem("default").getNodeValue();
             setOption(option, def.equals("true"));
-            AbbozzaLogger.err(option);
+            // AbbozzaLogger.out(option);
         }
 }
     

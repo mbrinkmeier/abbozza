@@ -45,17 +45,17 @@ public class AbbozzaLogger {
 
     public static void out(String msg) {
         if (level > NONE) {
-            System.out.println("abbozza! : " + msg);
+            System.out.println("abbozza! [out] : " + msg);
         }
     }
 
     public static void out(String msg, int lvl) {
         if (lvl <= level) {
-            System.out.println("abbozza! : " + msg);
+            System.out.println("abbozza! [out] : " + msg);
         }
     }
 
     public static void err(String msg) {
-        System.err.println("abbozza! : " + msg);
+        System.out.println("abbozza! [err] : " + msg);
     }
 }
