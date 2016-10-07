@@ -98,6 +98,8 @@ public class JarDirHandler implements HttpHandler {
             responseHeaders.set("Content-Type", "text/javascript");
         } else if (path.endsWith(".xml")) {
             responseHeaders.set("Content-Type", "text/xml");
+        } else if (path.endsWith(".svg")) {
+            responseHeaders.set("Content-Type", "image/svg+xml");            
         }
 
         // ok, we are ready to send the response.

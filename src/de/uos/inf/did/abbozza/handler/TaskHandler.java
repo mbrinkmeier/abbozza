@@ -63,9 +63,17 @@ public class TaskHandler extends AbstractHandler {
         }
 
         Headers responseHeaders = exchg.getResponseHeaders();
-        responseHeaders.set("Content-Type", "text/xml");
+        if (path.endsWith(".css")) {
+            responseHeaders.set("Content-Type", "text/css");
+        } else if (path.endsWith(".js")) {
+            responseHeaders.set("Content-Type", "text/javascript");
+        } else if (path.endsWith(".xml")) {
+            responseHeaders.set("Content-Type", "text/xml");
+        } else if (path.endsWith(".svg")) {
+            responseHeaders.set("Content-Type", "image/svg+xml");            
+        }
 
-        AbbozzaLogger.out(new String(bytearray),AbbozzaLogger.ALL);
+        // AbbozzaLogger.out(new String(bytearray),AbbozzaLogger.ALL);
         // ok, we are ready to send the response.
         exchg.sendResponseHeaders(200, bytearray.length);
         os.write(bytearray, 0, bytearray.length);
