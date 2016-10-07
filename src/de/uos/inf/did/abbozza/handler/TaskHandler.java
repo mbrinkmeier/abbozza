@@ -46,7 +46,7 @@ public class TaskHandler extends AbstractHandler {
         String taskPath = this._abbozzaServer.getConfiguration().getTaskPath();
         
         String path = exchg.getRequestURI().getPath();
-        path = path.substring(6);
+        path = path.substring(5);
         AbbozzaLogger.out("TaskHandler: " + taskPath + path + " requested", AbbozzaLogger.INFO);
         OutputStream os = exchg.getResponseBody();
         
