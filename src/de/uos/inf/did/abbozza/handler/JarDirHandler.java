@@ -143,6 +143,12 @@ public class JarDirHandler implements HttpHandler {
         if (!file.exists()) {
             return null;
         }
+        
+        // Check if the requested file is below the given directory
+        if (!file.getCanonicalPath().startsWith(webDir.getCanonicalPath())) {
+            return null;
+        }
+
         FileInputStream fis = new FileInputStream(file);
 
         byte[] bytearray = new byte[(int) file.length()];
