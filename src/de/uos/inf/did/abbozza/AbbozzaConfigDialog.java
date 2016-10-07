@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -141,17 +143,16 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
 
     public String chooseTaskPath() {
         File file;
-        JFileChooser chooser = new JFileChooser(AbbozzaServer.getConfig().getBrowserPath());
+        JFileChooser chooser = new JFileChooser(AbbozzaServer.getConfig().getTaskPath());
         chooser.setFileFilter(new FileFilter() {
-
             @Override
             public boolean accept(File f) {
-                return ( f.isDirectory() && f.canRead() );
+                return f.isDirectory();
             }
 
             @Override
             public String getDescription() {
-                return "Select readable cirectory";
+                return "Select readable directory";
             }
         });
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {

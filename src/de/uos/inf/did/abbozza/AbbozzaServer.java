@@ -199,7 +199,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         httpServer.createContext("/abbozza/monitorresume", monitorHandler);
         httpServer.createContext("/abbozza/version", new VersionHandler(this));
         httpServer.createContext("/abbozza/", this /* handler */);
-        httpServer.createContext("/task/", new TaskHandler(this));
+        httpServer.createContext("/task/", new TaskHandler(this, jarHandler));
         httpServer.createContext("/", jarHandler);
     }
 

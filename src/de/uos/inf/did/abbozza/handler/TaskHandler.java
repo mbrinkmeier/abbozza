@@ -37,8 +37,11 @@ import java.io.OutputStream;
  */
 public class TaskHandler extends AbstractHandler {
     
-    public TaskHandler(AbbozzaServer abbozza) {
+    private JarDirHandler _jarHandler;
+    
+    public TaskHandler(AbbozzaServer abbozza, JarDirHandler jarHandler) {
         super(abbozza);
+        this._jarHandler = jarHandler;
     }
 
     @Override
@@ -53,7 +56,14 @@ public class TaskHandler extends AbstractHandler {
         byte[] bytearray = getBytes(taskPath + path);
                 
         if (bytearray == null) {
-            String result = "abbozza! : " + path + " nicht gefunden!";
+            AbbozzaLogger.out("TaskHandler: " + taskPath + path + " not found! Looking in jars!", AbbozzaLogger.INFO);
+            // String result = "abbozza! : " + path + " not found in task directory! Looking in jars.";
+            bytearray = this._jarHandler.getBytes("/tasks" + path);
+        }
+        
+        if (bytearray == null) {        
+            AbbozzaLogger.out("TaskHandler: tasks" + path + " not found!", AbbozzaLogger.INFO);
+            String result = "abbozza! : " + path + " not found!";
             // System.out.println(result);
 
             exchg.sendResponseHeaders(400, result.length());
@@ -71,6 +81,8 @@ public class TaskHandler extends AbstractHandler {
             responseHeaders.set("Content-Type", "text/xml");
         } else if (path.endsWith(".svg")) {
             responseHeaders.set("Content-Type", "image/svg+xml");            
+        } else if (path.endsWith(".abz")) {
+            responseHeaders.set("Content-Type", "text/xml");            
         }
 
         // AbbozzaLogger.out(new String(bytearray),AbbozzaLogger.ALL);

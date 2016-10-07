@@ -37,10 +37,10 @@ public class JarDirHandler implements HttpHandler {
     public void addDir(String path, String name) {
         File file = new File(path);
         if (!file.exists()) {
-            AbbozzaLogger.err(file.getAbsolutePath() + " not found");
+            AbbozzaLogger.err("JarHandler: " + file.getAbsolutePath() + " not found");
             file = null;
         } else {
-            AbbozzaLogger.out(name + " : " + file.getAbsolutePath());
+            AbbozzaLogger.out("JarHandler: " + name + " : " + file.getAbsolutePath());
             return;
         }
         entries.add(file);
@@ -56,9 +56,9 @@ public class JarDirHandler implements HttpHandler {
         JarFile file;
         try {
             file = new JarFile(path);
-            AbbozzaLogger.out(name + " : " + file.getName());
+            AbbozzaLogger.out("JarHandler: " + name + " : " + file.getName());
         } catch (IOException e) {
-            AbbozzaLogger.err(name + " not found (" + path + ")");
+            AbbozzaLogger.err("JarHandler: " + name + " not found (" + path + ")");
             return;
         }        
         entries.add(file);
@@ -100,6 +100,8 @@ public class JarDirHandler implements HttpHandler {
             responseHeaders.set("Content-Type", "text/xml");
         } else if (path.endsWith(".svg")) {
             responseHeaders.set("Content-Type", "image/svg+xml");            
+        } else if (path.endsWith(".abz")) {
+            responseHeaders.set("Content-Type", "text/xml");            
         }
 
         // ok, we are ready to send the response.
@@ -109,7 +111,7 @@ public class JarDirHandler implements HttpHandler {
     }
 
     public byte[] getBytes(String path) throws IOException {
-        AbbozzaLogger.out("Reading " + path, AbbozzaLogger.INFO);
+        AbbozzaLogger.out("JarHandler: Reading " + path, AbbozzaLogger.INFO);
         byte[] bytearray = null;
         int tries = 0;
 
