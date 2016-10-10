@@ -208,6 +208,11 @@ DIV.iwindow DIV.close {
 	right: 20px;
 }
 
+#workspace {
+    width: 100%;
+    height: 100%;
+}
+
 .blocklySvg {
   background-image: url(../img/abbozza.png) !important;
   background-repeat: no-repeat;
