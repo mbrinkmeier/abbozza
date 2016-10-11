@@ -92,7 +92,7 @@ Trotzdem fortfahren?</msg>
         <msg id="menu.delete_block">Block löschen</msg>
         <msg id="menu.duplicate_block">Kopieren</msg>
         <msg id="menu.expand_all">Entfalte Blöcke</msg>
-        <msg id="menu.expand_block">Block entfalten</msg>
+        <msg id="menu.block_expand">Block entfalten</msg>
         <msg id="menu.help">Hilfe</msg>;
         <msg id="menu.delete_x_blocks">Block # löschen</msg>
         <msg id="menu.enable_block">Block aktivieren</msg>

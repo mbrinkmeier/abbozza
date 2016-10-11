@@ -92,7 +92,7 @@ Continuing?</msg>
         <msg id="menu.delete_block">Delete block</msg>
         <msg id="menu.duplicate_block">Copy</msg>
         <msg id="menu.expand_all">Unfold blocks</msg>
-        <msg id="menu.expand_block">Unfold single block</msg>
+        <msg id="menu.block_expand">Unfold single block</msg>
         <msg id="menu.help">Help</msg>;
         <msg id="menu.delete_x_blocks">Delete block #</msg>
         <msg id="menu.enable_block">Activate block</msg>
