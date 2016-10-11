@@ -59,7 +59,7 @@ public class BrowserRegion extends Region {
             "};");        
         // load the web page
         // System.out.println("Loading");
-        webEngine.load("http://localhost:54242/arduino.html");
+        webEngine.load("http://localhost:54242/arduino_internal.html");
         // webEngine.load("file:///home/mbrinkmeier/Projekte/abbozza/lib/arduino.html");
         //add the web view to the scene
         getChildren().add(browser);

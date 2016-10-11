@@ -55,7 +55,7 @@ public class Browser extends Application {
         Scene scene = new Scene(root, 300, 250);
         
         */
-        primaryStage.setTitle("abbozza! browser");
+        primaryStage.setTitle("abbozza!");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
