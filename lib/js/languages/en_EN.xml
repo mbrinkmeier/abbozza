@@ -74,6 +74,8 @@ Continuing?</msg>
         <msg id="gui.task">Task</msg>
         <msg id="gui.tasks">Tasks</msg>
         <msg id="gui.task_path">Task directory</msg>
+        <msg id="gui.go_to_task_path">Go to the task directory</msg>        
+        <msg id="gui.go_to_sketchbook_path">Go to the sketchbook directory</msg>        
         <msg id="gui.tasks_editable">Tasks can be edited</msg>        
         <msg id="gui.hint">Hint</msg>        
         <msg id="gui.edit">Edit</msg>

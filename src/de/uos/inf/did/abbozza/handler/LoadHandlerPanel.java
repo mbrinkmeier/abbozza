@@ -21,6 +21,9 @@
  */
 package de.uos.inf.did.abbozza.handler;
 
+import de.uos.inf.did.abbozza.AbbozzaLocale;
+import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.arduino.Abbozza;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -61,6 +64,8 @@ public class LoadHandlerPanel extends javax.swing.JPanel implements PropertyChan
 
         jScrollPane1 = new javax.swing.JScrollPane();
         description = new javax.swing.JTextArea();
+        taskPathButton = new javax.swing.JButton();
+        sketchbookPathButton = new javax.swing.JButton();
 
         jScrollPane1.setEnabled(false);
 
@@ -70,28 +75,59 @@ public class LoadHandlerPanel extends javax.swing.JPanel implements PropertyChan
         description.setAutoscrolls(false);
         jScrollPane1.setViewportView(description);
 
+        taskPathButton.setText(AbbozzaLocale.entry("gui.go_to_task_path"));
+        taskPathButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                taskPathButtonActionPerformed(evt);
+            }
+        });
+
+        sketchbookPathButton.setText(AbbozzaLocale.entry("gui.go_to_sketchbook_path"));
+        sketchbookPathButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sketchbookPathButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(sketchbookPathButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(taskPathButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(taskPathButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(sketchbookPathButton)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void taskPathButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taskPathButtonActionPerformed
+        chooser.setCurrentDirectory(new File(Abbozza.getConfig().getTaskPath()));
+    }//GEN-LAST:event_taskPathButtonActionPerformed
+
+    private void sketchbookPathButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sketchbookPathButtonActionPerformed
+        chooser.setCurrentDirectory(new File(Abbozza.getInstance().getSketchbookPath()));
+    }//GEN-LAST:event_sketchbookPathButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea description;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton sketchbookPathButton;
+    private javax.swing.JButton taskPathButton;
     // End of variables declaration//GEN-END:variables
 
     @Override

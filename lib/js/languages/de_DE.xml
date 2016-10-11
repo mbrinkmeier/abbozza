@@ -74,6 +74,8 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.task">Aufgabe</msg>
         <msg id="gui.tasks">Aufgaben</msg>
         <msg id="gui.task_path">Aufgaben Verzeichnis</msg>        
+        <msg id="gui.go_to_task_path">Zum Aufgaben Verzeichnis</msg>        
+        <msg id="gui.go_to_sketchbook_path">Zum Sketchbook Verzeichnis</msg>        
         <msg id="gui.tasks_editable">Aufgaben sind editierbar</msg>        
         <msg id="gui.hint">Hinweis</msg>
         <msg id="gui.edit">Editieren</msg>
