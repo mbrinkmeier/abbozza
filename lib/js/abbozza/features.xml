@@ -42,7 +42,7 @@
         <category name="Mathe" id="cat.MATH">
             <block type="math_number"></block>
             <block type="math_calc"></block>
-            <!-- block type="math_round"></block -->
+            <!--block type="math_round"></block-->
             <block type="math_unary"></block>
             <block type="math_binary"></block>
             <block type="math_random"></block>
