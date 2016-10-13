@@ -27,7 +27,7 @@
             <block type="var_block"></block>
             <block type="var_assign">
                 <value name="LEFT">
-                    <block type="var_block" movable="false"></block>
+                    <block type="var_block"></block>
                 </value>
             </block>
         </category>
