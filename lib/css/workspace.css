@@ -5,6 +5,12 @@ HTML, BODY {
 	padding: 0;
 	overflow: hidden;
 	border: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 BODY.editor {
@@ -50,6 +56,7 @@ DIV.buttons {
 	width: 260px;
 	height: 175px;
 	border: none;
+        
 }
 
 DIV.buttons BUTTON {
@@ -89,6 +96,7 @@ DIV.topButton {
 	border-bottom-right-radius: 5px;
 	border-bottom-left-radius: 5px;
 	opacity: 0.4;
+        z-index: 41;
 }
 
 DIV.topButton:hover {
@@ -208,6 +216,11 @@ DIV.iwindow DIV.close {
 	right: 20px;
 }
 
+#workspace {
+    width: 100%;
+    height: 100%;
+}
+
 .blocklySvg {
   background-image: url(../img/abbozza.png) !important;
   background-repeat: no-repeat;
@@ -219,24 +232,31 @@ DIV.iwindow DIV.close {
    background-image: url(../img/categoryframe.png);
    background-size: 100% 110%;
    background-repeat: no-repeat;
-   padding: 5px;
-}
-
-.blocklyTreeRow:hover {
-   background-image: url(../img/categoryframehover.png);
-}
-
-.blocklyTreeSelected {
-  background-image: url(../img/categoryframehover.png);
+   background-color: transparent;   
+   padding: 5px;   
 }
 
 .blocklyTreeLabel {
    font-weight: bold;
 }
 
-div[role="treeitem"] :hover {
-	background-color: transparent;
-	color: orange;
+.blocklyTreeRow:not(.blocklyTreeSelected):hover {
+    background-color: white;
+}
+
+.blocklyTreeRow:hover {
+   background-image: url(../img/categoryframehover.png);
+   background-color: transparent;   
+   color: orange;
+}
+
+div[role="treeitem"]:hover {
+    background-color: white;
+}
+
+.blocklyTreeSelected {
+  background-image: url(../img/categoryframehover.png);
+  background-color: white;
 }
 
 
