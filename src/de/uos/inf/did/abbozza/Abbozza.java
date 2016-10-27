@@ -351,7 +351,8 @@ public class Abbozza implements Tool, HttpHandler {
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
-                    editor.setText(code);
+                    editor.getCurrentTab().setText(code);
+                    // editor.setText(code);
                 }
             });
         } catch (InterruptedException ex) {
@@ -540,7 +541,8 @@ public class Abbozza implements Tool, HttpHandler {
     }
 
     public void processMessage(String message) {
-        this.editor.setText(message);
+        this.setEditorText(message);
+        // this.editor.setText(message);
     }
 
     @Override

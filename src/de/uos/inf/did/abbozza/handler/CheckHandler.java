@@ -74,18 +74,19 @@ public class CheckHandler extends AbstractHandler {
         PreferencesData.setBoolean("editor.save_on_verify", false);
         
         Editor editor = _abbozza.getEditor();
-        editor.getSketch().getCurrentCode().setProgram(code);
+        // editor.getSketch().getCurrentCode().setProgram(code);
         _abbozza.setEditorText(code);
-                
-        editor.getSketch().getCurrentCode().setModified(true);
+        editor.getCurrentTab().setText(code);
+       
+        // editor.getSketch().getCurrentCode().setModified(true);
+       
         
         // Compile sketch                
         try {
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.compiling"), AbbozzaLogger.INFO);
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.compiling"));
-            editor.getSketch().prepare();
-            // editor.getSketch().save();
-            editor.getSketch().build(false, false);
+            // editor.getSketch().prepare();
+            editor.getSketchController().build(false, false);
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.done_compiling"));
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
         } catch (IOException | RunnerException  | PreferencesMapException e) {
@@ -95,6 +96,7 @@ public class CheckHandler extends AbstractHandler {
         }
         
         response = _abbozza.logger.toString();
+        
         PreferencesData.setBoolean("editor.save_on_verify", flag);
         
         return response;

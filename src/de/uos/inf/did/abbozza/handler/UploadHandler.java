@@ -73,10 +73,11 @@ public class UploadHandler extends AbstractHandler {
         PreferencesData.setBoolean("editor.save_on_verify", false);
         
         Editor editor = _abbozza.getEditor();
-        editor.getSketch().getCurrentCode().setProgram(code);
+        editor.getCurrentTab().setText(code);
+        // editor.getSketch().getCurrentCode().setProgram(code);
         _abbozza.setEditorText(code);
                 
-        editor.getSketch().getCurrentCode().setModified(true);
+        // editor.getSketch().getCurrentCode().setModified(true);
            
         // return _abbozza.uploadCode(code.toString());
         
@@ -93,11 +94,11 @@ public class UploadHandler extends AbstractHandler {
          editor.getSketch().getCurrentCode().setModified(true);
          */
 
-        try {
-            editor.getSketch().prepare();
-        } catch (IOException ioe) {
-            ioe.printStackTrace(System.err);
-        }
+        // try {
+        //     editor.getSketch().prepare();
+        // } catch (IOException ioe) {
+        //     ioe.printStackTrace(System.err);
+        // }
 
         ThreadGroup group = Thread.currentThread().getThreadGroup();
         Thread[] threads = new Thread[group.activeCount()];
@@ -110,8 +111,6 @@ public class UploadHandler extends AbstractHandler {
         editor.handleExport(false);
         // } catch (IOException ex) {
         // }
-
-        AbbozzaLogger.out("Hier",4);
         
         Thread[] threads2 = new Thread[group.activeCount()];
         group.enumerate(threads2, false);
@@ -140,6 +139,7 @@ public class UploadHandler extends AbstractHandler {
         response = _abbozza.logger.toString();
 
         PreferencesData.setBoolean("editor.save_on_verify", flag);
+        
         return response;
         
     }   
