@@ -222,7 +222,8 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
     }
 
     public void processMessage(String message) {
-        this.editor.setText(message);
+        this.editor.getCurrentTab().setText(message);
+        // this.editor.setText(message);
     }
 
     @Override
@@ -249,16 +250,17 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
     @Override
     public void toolSetCode(String code) {
-        editor.getSketch().getCurrentCode().setProgram(code);
+        // editor.getSketch().getCurrentCode().setProgram(code);
         setEditorText(code);
-        editor.getSketch().getCurrentCode().setModified(true);        
+        // editor.getSketch().getCurrentCode().setModified(true);        
     }
 
     private void setEditorText(final String code) {
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
-                    editor.setText(code);
+                    editor.getCurrentTab().setText(code);
+                    // editor.setText(code);
                 }
             });
         } catch (InterruptedException ex) {
@@ -270,15 +272,15 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
     @Override
     public String compileCode(String code) {
-        editor.getSketch().getCurrentCode().setModified(true);
+        // editor.getSketch().getCurrentCode().setModified(true);
         
         // Compile sketch                
         try {
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.compiling"), AbbozzaLogger.INFO);
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.compiling"));
-            editor.getSketch().prepare();
-            // editor.getSketch().save();
-            editor.getSketch().build(false, false);
+            //editor.getSketch().prepare();
+            // editor.getSketch().build(false, false);
+            editor.getSketchController().build(false, false);
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.done_compiling"));
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
         } catch (IOException | RunnerException  | PreferencesMapException e) {
@@ -292,11 +294,11 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
     @Override
     public String uploadCode(String code) {
-        try {
-            editor.getSketch().prepare();
-        } catch (IOException ioe) {
-            ioe.printStackTrace(System.err);
-        }
+        // try {
+        //     editor.getSketch().prepare();
+        // } catch (IOException ioe) {
+        //     ioe.printStackTrace(System.err);
+        // }
 
         ThreadGroup group = Thread.currentThread().getThreadGroup();
         Thread[] threads = new Thread[group.activeCount()];
