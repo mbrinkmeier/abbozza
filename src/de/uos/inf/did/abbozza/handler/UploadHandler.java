@@ -73,7 +73,7 @@ public class UploadHandler extends AbstractHandler {
         PreferencesData.setBoolean("editor.save_on_verify", false);
         
         Editor editor = _abbozza.getEditor();
-        editor.getCurrentTab().setText(code);
+        // editor.getCurrentTab().setText(code);
         // editor.getSketch().getCurrentCode().setProgram(code);
         _abbozza.setEditorText(code);
                 

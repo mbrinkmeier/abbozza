@@ -76,7 +76,7 @@ public class CheckHandler extends AbstractHandler {
         Editor editor = _abbozza.getEditor();
         // editor.getSketch().getCurrentCode().setProgram(code);
         _abbozza.setEditorText(code);
-        editor.getCurrentTab().setText(code);
+        // editor.getCurrentTab().setText(code);
        
         // editor.getSketch().getCurrentCode().setModified(true);
        
