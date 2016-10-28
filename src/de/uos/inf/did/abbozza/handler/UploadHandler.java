@@ -24,6 +24,7 @@ package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
+import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,10 +46,12 @@ public class UploadHandler extends AbstractHandler {
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(exchg.getRequestBody()));
             StringBuffer code = new StringBuffer();
+            
             while (in.ready()) {
                 code.append(in.readLine());
                 code.append('\n');
             }
+            
             String response = uploadCode(code.toString());
             if (response.equals("")) {
                 sendResponse(exchg, 200, "text/plain", AbbozzaLocale.entry("msg.done-compiling"));
@@ -69,7 +72,6 @@ public class UploadHandler extends AbstractHandler {
         boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
         PreferencesData.setBoolean("editor.save_on_verify", false);
         
-        _abbozzaServer.toolSetCode(code);
         // Editor editor = _abbozzaServer.getEditor();
         // editor.getSketch().getCurrentCode().setProgram(code);
         // _abbozzaServer.setEditorText(code);                
