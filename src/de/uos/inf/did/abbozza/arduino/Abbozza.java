@@ -175,8 +175,8 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
     @Override
     public String compileCode(String code) {
-        // editor.getSketch().getCurrentCode().setModified(true);
-        
+        toolSetCode(code);        
+
         // Compile sketch                
         try {
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.compiling"), AbbozzaLogger.INFO);
@@ -209,7 +209,6 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
         monitorHandler.suspend();
 
-        AbbozzaLogger.out("Setting code ...", 4);
         toolSetCode(code);        
 
         try {
