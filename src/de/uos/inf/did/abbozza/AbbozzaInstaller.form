@@ -102,7 +102,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="10" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&#xa;Herzlich Willkommen!&#xa;&#xa;abbozza! erfordert Arduino 1.6.5 oder h&#xf6;her.&#xa;(https://www.arduino.cc/en/Main/Software)&#xa;&#xa;Au&#xdf;erdem ben&#xf6;tigt abbozza! einen JavaScript-f&#xe4;higen Browser.&#xa;Vorzugsweise Google Chrome, da er im Zusammenhang mit abbozza!&#xa;am besten getestet ist.&#xa;&#xa;Vielen Dank, dass Sie abbozza! benutzen!&#xa;&#xa;Das abbozza! Team&#xa;"/>
+                <Property name="text" type="java.lang.String" value="&#xa;Herzlich Willkommen!&#xa;&#xa;abbozza! erfordert Arduino 1.6.12 oder h&#xf6;her.&#xa;(https://www.arduino.cc/en/Main/Software)&#xa;&#xa;Au&#xdf;erdem ben&#xf6;tigt abbozza! einen JavaScript-f&#xe4;higen Browser.&#xa;Vorzugsweise Google Chrome, da er im Zusammenhang mit abbozza!&#xa;am besten getestet ist.&#xa;&#xa;Vielen Dank, dass Sie abbozza! benutzen!&#xa;&#xa;Das abbozza! Team&#xa;"/>
                 <Property name="focusable" type="boolean" value="false"/>
               </Properties>
             </Component>

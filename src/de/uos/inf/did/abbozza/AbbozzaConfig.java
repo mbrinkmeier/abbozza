@@ -64,7 +64,7 @@ public class AbbozzaConfig {
      */
     public AbbozzaConfig() {
         configPath = null;
-        setDefault();
+        setDefault("");
     }
     
     
@@ -80,7 +80,7 @@ public class AbbozzaConfig {
             set(config);        
         } catch (IOException ex) {
             AbbozzaLogger.err("Configuration file " + configPath + " not found! Creating one!");
-            setDefault();
+            setDefault("");
             write();
         }        
     }
@@ -90,7 +90,7 @@ public class AbbozzaConfig {
     /**
      * Prepare the default configuration
      */
-    public void setDefault() {    
+    public void setDefault(String browserPath) {    
         // Check for Abbozza.cfg in global dir
         String runtimePath = AbbozzaServer.getInstance().getGlobalJarPath();
         if (configPath == null) configPath = AbbozzaServer.getInstance().getConfigPath();
@@ -107,7 +107,7 @@ public class AbbozzaConfig {
             config_serverPort = 54242;
             config_autoStart = false;
             config_browserStart = true;
-            config_browserPath = "";
+            config_browserPath = browserPath;
             config_locale = System.getProperty("user.language") + "_" + System.getProperty("user.country");
             config_updateUrl = "http://inf-didaktik.rz.uos.de/abbozza/current/";
             config_update = false;
@@ -155,7 +155,7 @@ public class AbbozzaConfig {
     public void set(Properties properties) {
         
         if ("true".equals(properties.get("freshInstall"))) {
-            setDefault();
+            setDefault(properties.getProperty("browserPath"));
             return;
         }        
 

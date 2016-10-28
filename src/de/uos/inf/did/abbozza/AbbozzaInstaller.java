@@ -56,7 +56,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         if ( prefs.getProperty("sketchbook.path") != null ) {
             abbozzaDir = prefs.getProperty("sketchbook.path") + "/tools/Abbozza/";
         } else {
-            abbozzaDir = System.getProperty("user.home") + "/Arduino/tools/Abbozza/";
+            abbozzaDir = sketchbookDir + "/Arduino/tools/Abbozza/";
         }
         File aD = new File(abbozzaDir);
 
@@ -166,7 +166,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
 
         jTextPane1.setEditable(false);
         jTextPane1.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
-        jTextPane1.setText("\nHerzlich Willkommen!\n\nabbozza! erfordert Arduino 1.6.5 oder höher.\n(https://www.arduino.cc/en/Main/Software)\n\nAußerdem benötigt abbozza! einen JavaScript-fähigen Browser.\nVorzugsweise Google Chrome, da er im Zusammenhang mit abbozza!\nam besten getestet ist.\n\nVielen Dank, dass Sie abbozza! benutzen!\n\nDas abbozza! Team\n");
+        jTextPane1.setText("\nHerzlich Willkommen!\n\nabbozza! erfordert Arduino 1.6.12 oder höher.\n(https://www.arduino.cc/en/Main/Software)\n\nAußerdem benötigt abbozza! einen JavaScript-fähigen Browser.\nVorzugsweise Google Chrome, da er im Zusammenhang mit abbozza!\nam besten getestet ist.\n\nVielen Dank, dass Sie abbozza! benutzen!\n\nDas abbozza! Team\n");
         jTextPane1.setFocusable(false);
         jScrollPane1.setViewportView(jTextPane1);
 
