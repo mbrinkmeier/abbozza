@@ -77,7 +77,7 @@ public class AbbozzaConfig {
         config = new Properties();
         try {
             config.load(new FileInputStream(prefFile));
-            set(config);        
+            set(config);    
         } catch (IOException ex) {
             AbbozzaLogger.err("Configuration file " + configPath + " not found! Creating one!");
             setDefault("");
@@ -171,7 +171,11 @@ public class AbbozzaConfig {
         config_locale = properties.getProperty("locale",System.getProperty("user.language") + "_" + System.getProperty("user.country"));
         config_updateUrl = properties.getProperty("updateUrl","http://inf-didaktik.rz.uos.de/abbozza/current/");
         config_update = "true".equals(properties.getProperty("update","false"));
-        config_taskPath = properties.getProperty("taskPath",AbbozzaServer.getInstance().getSketchbookPath());
+        if (AbbozzaServer.getInstance() != null ) {
+            config_taskPath = properties.getProperty("taskPath",AbbozzaServer.getInstance().getSketchbookPath());
+        } else {
+            config_taskPath = properties.getProperty("taskPath","");            
+        }
         config_tasksEditable = "true".equals(properties.getProperty("tasksEditable","true"));
         if (properties.getProperty("loglevel") != null) {
             AbbozzaLogger.setLevel(Integer.parseInt(properties.getProperty("loglevel","0")));

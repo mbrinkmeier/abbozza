@@ -56,7 +56,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         if ( prefs.getProperty("sketchbook.path") != null ) {
             abbozzaDir = prefs.getProperty("sketchbook.path") + "/tools/Abbozza/";
         } else {
-            abbozzaDir = sketchbookDir + "/Arduino/tools/Abbozza/";
+            abbozzaDir = sketchbookDir + "/tools/Abbozza/";
         }
         File aD = new File(abbozzaDir);
 
@@ -67,6 +67,12 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
             if (result == JOptionPane.NO_OPTION) {
                 System.exit(1);
             }
+            File prefFile = new File(abbozzaDir+"Abbozza.cfg");
+            Properties config = new Properties();
+            try {
+                config.load(new FileInputStream(prefFile));
+                browserField.setText(config.getProperty("browserPath"));
+            } catch (Exception e) {}
         }
     }
 
