@@ -12,9 +12,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.security.CodeSource;
 import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -55,7 +57,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         if ( prefs.getProperty("sketchbook.path") != null ) {
             abbozzaDir = prefs.getProperty("sketchbook.path") + "/tools/Abbozza/";
         } else {
-            abbozzaDir = System.getProperty("user.home") + "/Arduino/tools/Abbozza/";
+            abbozzaDir = sketchbookDir + "/tools/Abbozza/";
         }
         File aD = new File(abbozzaDir);
 
@@ -269,7 +271,17 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
     private void installButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_installButtonActionPerformed
         File sketchbookDir = new File(sketchbookField.getText());
         File browserFile = new File(browserField.getText());
-        File file = new File(System.getProperty("user.dir"), "Abbozza.jar");
+        
+        CodeSource codeSource = AbbozzaInstaller.class.getProtectionDomain().getCodeSource();
+        File jarFile2 = null;
+        try {
+            jarFile2 = new File(codeSource.getLocation().toURI().getPath());
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(AbbozzaInstaller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String jarDir = jarFile2.getParentFile().getPath();        
+        File file = new File(jarDir, "Abbozza.jar");
+        // File file = new File(System.getProperty("user.dir"), "Abbozza.jar");
         // System.out.println(file.getAbsolutePath());
         if (file.exists()) {
             // System.out.println("gefunden");
@@ -283,7 +295,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
                     Files.move(jar.toPath(), backup.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 }
                 jar.createNewFile();
-                // JOptionPane.showMessageDialog(null, "Kopiere " + file.toPath() + " nach " + jar.toPath());
+                JOptionPane.showMessageDialog(null, "Kopiere " + file.toPath() + " nach " + jar.toPath());
                 Files.copy(file.toPath(), jar.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 
                 // Install libraries
