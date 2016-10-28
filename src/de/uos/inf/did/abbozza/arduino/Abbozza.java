@@ -186,7 +186,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
             editor.getSketchController().build(false, false);
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.done_compiling"));
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
-        } catch (IOException | RunnerException  | PreferencesMapException e) {
+        } catch (Exception e) {
             e.printStackTrace(System.out);
             editor.statusError(e);
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
@@ -209,14 +209,19 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
         monitorHandler.suspend();
 
-        // try {
-        // editor.getSketch().save();
-        editor.handleExport(false);
-        // } catch (IOException ex) {
-        // }
+        AbbozzaLogger.out("Setting code ...", 4);
+        toolSetCode(code);        
 
-        AbbozzaLogger.out("Hier",4);
-        
+        try {
+            editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.compiling"));
+            editor.handleExport(false);
+            editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.done_compiling"));
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            editor.statusError(e);
+            AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
+        }
+    
         Thread[] threads2 = new Thread[group.activeCount()];
         group.enumerate(threads2, false);
 

@@ -68,8 +68,7 @@ public class CheckHandler extends AbstractHandler {
         String response;
         boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
         PreferencesData.setBoolean("editor.save_on_verify", false);
-        
-        _abbozzaServer.toolSetCode(code);
+
         // Editor editor = _abbozza.getEditor();
         // editor.getSketch().getCurrentCode().setProgram(code);
         // _abbozza.setEditorText(code);

@@ -130,7 +130,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                 return "Select executable files";
             }
         });
-        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             file = chooser.getSelectedFile();
         } else {
             return null;
@@ -144,6 +144,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
     public String chooseTaskPath() {
         File file;
         JFileChooser chooser = new JFileChooser(AbbozzaServer.getConfig().getTaskPath());
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setFileFilter(new FileFilter() {
             @Override
             public boolean accept(File f) {
@@ -155,7 +156,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                 return "Select readable directory";
             }
         });
-        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             file = chooser.getSelectedFile();
         } else {
             return null;

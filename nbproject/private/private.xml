@@ -19,11 +19,11 @@
             <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/TaskHint.js</file>
         </group>
         <group>
-            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/TaskHintIcon.js</file>
-            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/AbbozzaBubble.js</file>
-            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/arduino_internal.html</file>
-            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/arduino.html</file>
-            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/TaskHint.js</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/AbbozzaServer.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/arduino/Abbozza.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/UploadHandler.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/CheckHandler.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
         </group>
         <group name="NetBeansProjects">
             <file>file:/home/michael/Projekte/abbozza/lib/arduino.html</file>
