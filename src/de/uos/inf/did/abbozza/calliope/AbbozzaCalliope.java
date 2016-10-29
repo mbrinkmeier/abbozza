@@ -63,6 +63,7 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
     @Override
     public String compileCode(String code) {
         System.out.println(code);
+        return "";
         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

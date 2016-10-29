@@ -408,7 +408,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                         config.set(dialog.getConfiguration());
                         AbbozzaLocale.setLocale(config.getLocale());
                         config.write();
-                        String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/abbozza.html";
+                        String cmd = config.getBrowserPath() + " http://localhost:" + serverPort + "/" + system + ".html";
                         try {
                             AbbozzaLogger.out("Starting browser " + cmd);
                             runtime.exec(cmd);
