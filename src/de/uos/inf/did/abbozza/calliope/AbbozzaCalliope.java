@@ -24,6 +24,13 @@ package de.uos.inf.did.abbozza.calliope;
 
 import com.sun.net.httpserver.HttpHandler;
 import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.calliope.handler.BoardHandler;
+import java.io.IOException;
+import javax.swing.SwingUtilities;
+import org.python.core.PyCode;
+import org.python.core.PyObject;
+import org.python.core.PyString;
+import org.python.util.PythonInterpreter;
 
 /**
  *
@@ -42,7 +49,8 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
 
     @Override
     public void registerSystemHandlers() {
-        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        httpServer.createContext("/abbozza/board", new BoardHandler(this, false));
+        httpServer.createContext("/abbozza/queryboard", new BoardHandler(this, true));
     }
 
     @Override
@@ -69,6 +77,36 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
 
     @Override
     public String uploadCode(String code) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String pathToBoard = "./calliope.hex";
+        System.out.println("Compile ...");
+        try {
+            final String script = new String(this.jarHandler.getBytes("/uflash/uflash.py"));
+            final PythonInterpreter interpreter = new PythonInterpreter();
+            System.out.println("compiling script ...");
+            // SwingUtilities.invokeAndWait( new Runnable() {
+            //    @Override
+            //    public void run() {
+                    interpreter.exec(script);
+                    System.out.println("... script compiled");
+                    PyObject hexlify = interpreter.get("hexlify");
+                    PyObject runtime = interpreter.get("_RUNTIME");
+                    PyObject embedHex = interpreter.get("embed_hex");
+                    PyObject saveHex = interpreter.get("save_hex");
+                    System.out.println("Calling ... " + hexlify);
+                    PyObject hexcode = hexlify.__call__(new PyString(code));
+                    PyObject[] args = new PyObject[2];
+                    args[0] = runtime;
+                    args[1] = hexcode;
+                    PyObject finalcode = embedHex.__call__(args);
+                    PyObject result = saveHex.__call__(finalcode,new PyString(pathToBoard));
+            //    }
+            // });
+            System.out.println("... end");            
+        } catch (Exception ex) {
+            ex.printStackTrace(System.err);
+            return "Error";
+        }
+        return "";
+        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
