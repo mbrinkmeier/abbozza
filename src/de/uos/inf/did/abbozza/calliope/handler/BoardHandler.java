@@ -31,10 +31,15 @@ import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.BoardListEntry;
 import de.uos.inf.did.abbozza.calliope.AbbozzaCalliope;
 import de.uos.inf.did.abbozza.handler.AbstractHandler;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
+import org.python.core.PyObject;
+import org.python.util.PythonInterpreter;
 import processing.app.Base;
 import processing.app.BaseNoGui;
 import processing.app.debug.TargetBoard;
@@ -48,95 +53,24 @@ import processing.app.debug.TargetPlatform;
 public class BoardHandler extends AbstractHandler {
 
     private boolean _query;
+    private PythonInterpreter _interpreter;
 
     public BoardHandler(AbbozzaCalliope abbozza, boolean query) {
         super(abbozza);
         this._query = query;
     }
 
+    
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-        sendResponse(exchg, 200, "text/plain", "found");
-        // connectToBoard(exchg, this._query);
+        PyObject findMicrobit = _interpreter.get("find_microbit");
+        PyObject path = findMicrobit.__call__();
+        if ( path == null ) {
+            sendResponse(exchg, 400, "text/plain", "");                        
+        } else {
+            ((AbbozzaCalliope) _abbozzaServer).setBoardPath(path.asString());
+            sendResponse(exchg, 200, "text/plain", path.asString());            
+        }
     }
     
-
-    public boolean connectToBoard(HttpExchange exchg, boolean query) {
-        String port = null;
-        String board = null;
-        List<BoardPort> ports = Base.getDiscoveryManager().discovery();
-        for (int i = 0; i < ports.size(); i++) {
-            AbbozzaLogger.out("port " + ports.get(i).getAddress() + " " + ports.get(i).getLabel() + " " + ports.get(i).getBoardName(), AbbozzaLogger.INFO);
-            if (ports.get(i).getBoardName() != null) {
-                port = ports.get(i).getAddress();
-                board = ports.get(i).getBoardName();
-                AbbozzaLogger.out("Found '" + board + "' on " + port);
-
-                BaseNoGui.selectSerialPort(port);
-
-                TargetPlatform platform = BaseNoGui.getTargetPlatform();
-                for (TargetBoard targetBoard : platform.getBoards().values()) {
-                    AbbozzaLogger.out(">> " + targetBoard.getName() + " == " + board);
-                    if (targetBoard.getName().equals(board)) {
-                        BaseNoGui.selectBoard(targetBoard);
-                    }
-                }
-
-                Base.INSTANCE.onBoardOrPortChange();
-            }
-        }
-
-        TargetBoard targetBoard = BaseNoGui.getTargetBoard();
-        TargetPlatform platform = BaseNoGui.getTargetPlatform();
-        AbbozzaLogger.out("targetBoard: " + targetBoard.getId(), AbbozzaLogger.INFO);
-
-        try {
-            if (board != null) {
-                AbbozzaLogger.out("board found " + targetBoard.getId() + " " + targetBoard.getName() + " " + port, AbbozzaLogger.INFO);
-                sendResponse(exchg, 200, "text/plain", targetBoard.getId() + "|" + targetBoard.getName() + "|" + port);
-                return true;
-            } else {
-                AbbozzaLogger.out("no board found", AbbozzaLogger.INFO);
-
-                if (query == false) {
-                    AbbozzaLogger.out("IDE set to : " + targetBoard.getId() + " " + targetBoard.getName() + " " + port, AbbozzaLogger.INFO);
-                    sendResponse(exchg, 201, "text/plain", targetBoard.getId() + "|" + targetBoard.getName() + "|" + port);
-                    return false;
-                } else {
-                    // Cycle through all packages
-                    Vector<BoardListEntry> boards = new Vector<BoardListEntry>();
-
-                    for (TargetPackage targetPackage : BaseNoGui.packages.values()) {
-                        // For every package cycle through all platform
-                        for (TargetPlatform targetPlatform : targetPackage.platforms()) {
-
-                            // Add a title for each platform
-                            String platformLabel = targetPlatform.getPreferences().get("name");
-                            if (platformLabel != null && !targetPlatform.getBoards().isEmpty()) {
-
-                                for (TargetBoard tboard : targetPlatform.getBoards().values()) {
-                                    boards.add(new BoardListEntry(tboard));
-                                }
-                            }
-                        }
-                    }
-                    BoardListEntry result = (BoardListEntry) JOptionPane.showInputDialog(null, AbbozzaLocale.entry("msg.select_board"), AbbozzaLocale.entry("msg.no_board"), JOptionPane.PLAIN_MESSAGE, null, boards.toArray(), BaseNoGui.getTargetBoard());
-                    if (result != null) {
-                        AbbozzaLogger.out("selected : " + result.getId(), AbbozzaLogger.INFO);
-                        sendResponse(exchg, 201, "text/plain", result.getId() + "|" + result.getName() + "|???");
-                        BaseNoGui.selectBoard(result.getBoard());
-                        Base.INSTANCE.onBoardOrPortChange();
-                    } else {
-                        AbbozzaLogger.out("IDE set to : " + targetBoard.getId() + " " + targetBoard.getName() + " " + port, AbbozzaLogger.INFO);
-                        sendResponse(exchg, 201, "text/plain", targetBoard.getId() + "|" + targetBoard.getName() + "|" + port);
-                        return false;
-                    }
-                    return false;
-                }
-            }
-        } catch (IOException ex) {
-            return false;
-        }
-    }
-
 }

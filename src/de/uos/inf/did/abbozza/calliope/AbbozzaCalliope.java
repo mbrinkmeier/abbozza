@@ -26,6 +26,8 @@ import com.sun.net.httpserver.HttpHandler;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.calliope.handler.BoardHandler;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import org.python.core.PyCode;
 import org.python.core.PyObject;
@@ -38,15 +40,36 @@ import org.python.util.PythonInterpreter;
  */
 public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
     
+    private PythonInterpreter _interpreter;
+    private String _pathToBoard;
     
     public static void main (String args[]) {
         AbbozzaCalliope abbozza = new AbbozzaCalliope();
         abbozza.init("calliope");
         
         abbozza.startServer();
-        abbozza.startBrowser("calliope.html");
+        abbozza.startBrowser("calliope.html");        
     }
 
+    public void init(String system) {
+        super.init(system);
+        
+        try {
+            String uflashScript = new String(this.jarHandler.getBytes("/uflash/uflash.py"));
+            _interpreter = new PythonInterpreter();
+            _interpreter.exec(uflashScript);
+            PyObject findMicrobit = _interpreter.get("find_microbit");
+            PyObject path = findMicrobit.__call__();
+            _pathToBoard = path.asString();
+        } catch (IOException ex) {
+            Logger.getLogger(AbbozzaCalliope.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+        
+    public void setBoardPath(String path) {
+        _pathToBoard = path;
+    }
+    
     @Override
     public void registerSystemHandlers() {
         httpServer.createContext("/abbozza/board", new BoardHandler(this, false));
@@ -77,31 +100,18 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
 
     @Override
     public String uploadCode(String code) {
-        String pathToBoard = "./calliope.hex";
         System.out.println("Compile ...");
         try {
-            final String script = new String(this.jarHandler.getBytes("/uflash/uflash.py"));
-            final PythonInterpreter interpreter = new PythonInterpreter();
-            System.out.println("compiling script ...");
-            // SwingUtilities.invokeAndWait( new Runnable() {
-            //    @Override
-            //    public void run() {
-                    interpreter.exec(script);
-                    System.out.println("... script compiled");
-                    PyObject hexlify = interpreter.get("hexlify");
-                    PyObject runtime = interpreter.get("_RUNTIME");
-                    PyObject embedHex = interpreter.get("embed_hex");
-                    PyObject saveHex = interpreter.get("save_hex");
-                    System.out.println("Calling ... " + hexlify);
-                    PyObject hexcode = hexlify.__call__(new PyString(code));
-                    PyObject[] args = new PyObject[2];
-                    args[0] = runtime;
-                    args[1] = hexcode;
-                    PyObject finalcode = embedHex.__call__(args);
-                    PyObject result = saveHex.__call__(finalcode,new PyString(pathToBoard));
-            //    }
-            // });
-            System.out.println("... end");            
+            PyObject hexlify = _interpreter.get("hexlify");
+            PyObject runtime = _interpreter.get("_RUNTIME");
+            PyObject embedHex = _interpreter.get("embed_hex");
+            PyObject saveHex = _interpreter.get("save_hex");
+            PyObject hexcode = hexlify.__call__(new PyString(code));
+            PyObject[] args = new PyObject[2];
+            args[0] = runtime;
+            args[1] = hexcode;
+            PyObject finalcode = embedHex.__call__(args);
+            PyObject result = saveHex.__call__(finalcode,new PyString(_pathToBoard));
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
             return "Error";
