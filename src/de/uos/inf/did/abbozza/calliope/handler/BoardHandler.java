@@ -63,14 +63,15 @@ public class BoardHandler extends AbstractHandler {
     
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-        PyObject findMicrobit = _interpreter.get("find_microbit");
-        PyObject path = findMicrobit.__call__();
-        if ( path == null ) {
-            sendResponse(exchg, 400, "text/plain", "");                        
-        } else {
-            ((AbbozzaCalliope) _abbozzaServer).setBoardPath(path.asString());
-            sendResponse(exchg, 200, "text/plain", path.asString());            
-        }
+        //PyObject findMicrobit = _interpreter.get("find_microbit");
+        //PyObject path = findMicrobit.__call__();
+        //if ( path == null ) {
+        //    sendResponse(exchg, 400, "text/plain", "");                        
+        //} else {
+        //    ((AbbozzaCalliope) _abbozzaServer).setBoardPath(path.asString());
+        //    sendResponse(exchg, 200, "text/plain", path.asString());            
+        //}
+        sendResponse(exchg, 200, "text/plain", "");
     }
     
 }
