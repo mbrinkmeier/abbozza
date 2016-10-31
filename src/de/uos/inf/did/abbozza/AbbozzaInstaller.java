@@ -61,7 +61,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         File aD = new File(abbozzaDir);
 
         if (aD.exists()) {
-            int result = JOptionPane.showConfirmDialog(null,
+            int result = JOptionPane.showConfirmDialog(this,
                     "abbozza! scheint bereits installiert zu sein.\n Mit der Installation fortfahren? \n (Version " + Abbozza.VERSION + ")",
                     "abbozza! bereits installiert", JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.NO_OPTION) {

@@ -111,7 +111,7 @@ public class AbbozzaConfig {
             config_locale = System.getProperty("user.language") + "_" + System.getProperty("user.country");
             config_updateUrl = "http://inf-didaktik.rz.uos.de/abbozza/current/";
             config_update = false;
-            config_taskPath = configPath;
+            config_taskPath = System.getProperty("user.home");
             config_tasksEditable = true;
             storeProperties(config);
             setDefaultOptions();
