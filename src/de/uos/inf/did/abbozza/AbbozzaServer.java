@@ -167,12 +167,6 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
     
     public void findJarsAndDirs(JarDirHandler jarHandler) {
-        // System.out.println(sketchbookPath);
-        // System.out.println(configPath);
-        // System.out.println(globalJarPath);
-        // System.out.println(localJarPath);
-        // System.out.flush();
-        
         jarHandler.clear();
         jarHandler.addDir(localJarPath + "files", "Local directory");
         jarHandler.addJar(localJarPath + "Abbozza.jar", "Local jar");

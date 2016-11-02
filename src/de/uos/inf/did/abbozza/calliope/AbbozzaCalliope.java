@@ -23,6 +23,7 @@
 package de.uos.inf.did.abbozza.calliope;
 
 import com.sun.net.httpserver.HttpHandler;
+import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.calliope.handler.BoardHandler;
 import java.io.File;
@@ -33,7 +34,9 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileFilter;
 import org.python.core.PyCode;
 import org.python.core.PyObject;
 import org.python.core.PyString;
@@ -47,7 +50,7 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
 
     private int _SCRIPT_ADDR = 0x3e000; 
     // private PythonInterpreter _interpreter;
-    private String _pathToBoard = "/home/michael/calliope.hex";
+    private String _pathToBoard = "";
     
     public static void main (String args[]) {
         AbbozzaCalliope abbozza = new AbbozzaCalliope();
@@ -57,25 +60,51 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
         abbozza.startBrowser("calliope.html");        
     }
 
+    
     public void init(String system) {
         super.init(system);
-        
-        // try {
-            // String uflashScript = new String(this.jarHandler.getBytes("/uflash/uflash.py"));
-            // _interpreter = new PythonInterpreter();
-            // _interpreter.exec(uflashScript);
-            // PyObject findMicrobit = _interpreter.get("find_microbit");
-            // PyObject path = findMicrobit.__call__();
-            // _pathToBoard = path.asString();
-        // } catch (IOException ex) {
-        //     Logger.getLogger(AbbozzaCalliope.class.getName()).log(Level.SEVERE, null, ex);
-        // }
+    
+        setPathToBoard(this.config.getOptionStr("pathToBoard"));        
     }
         
-    public void setBoardPath(String path) {
+    
+    public void setPathToBoard(String path) {
         _pathToBoard = path;
+        if (_pathToBoard != null) {
+            this.config.setOptionStr("pathToBoard", _pathToBoard);
+        }
     }
     
+    
+    public String  getPathToBoard() {
+        return _pathToBoard;
+    }
+    
+    public File queryPathToBoard(String path) {
+        File selectedDir = null;
+        JFileChooser chooser = new JFileChooser();
+        if ( path != null) {
+            chooser.setCurrentDirectory(new File(path));
+        }
+        chooser.setDialogTitle(AbbozzaLocale.entry("gui.CalliopePath"));
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory();
+            }
+
+            @Override
+            public String getDescription() {
+                return "Select readable directory";
+            }
+        });
+        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            selectedDir = chooser.getSelectedFile();
+        }
+        return selectedDir;
+    }
+
     @Override
     public void registerSystemHandlers() {
         httpServer.createContext("/abbozza/board", new BoardHandler(this, false));

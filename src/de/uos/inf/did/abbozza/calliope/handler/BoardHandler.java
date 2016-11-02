@@ -1,24 +1,23 @@
 /**
- * @license
- * abbozza!
+ * @license abbozza!
  *
  * Copyright 2015 Michael Brinkmeier ( michael.brinkmeier@uni-osnabrueck.de )
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 /**
- * @fileoverview ...
- * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
+ * @fileoverview ... @author michael.brinkmeier@uni-osnabrueck.de (Michael
+ * Brinkmeier)
  */
 package de.uos.inf.did.abbozza.calliope.handler;
 
@@ -37,7 +36,9 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Vector;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
 import processing.app.Base;
@@ -60,18 +61,28 @@ public class BoardHandler extends AbstractHandler {
         this._query = query;
     }
 
-    
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-        //PyObject findMicrobit = _interpreter.get("find_microbit");
-        //PyObject path = findMicrobit.__call__();
-        //if ( path == null ) {
-        //    sendResponse(exchg, 400, "text/plain", "");                        
-        //} else {
-        //    ((AbbozzaCalliope) _abbozzaServer).setBoardPath(path.asString());
-        //    sendResponse(exchg, 200, "text/plain", path.asString());            
-        //}
-        sendResponse(exchg, 200, "text/plain", "");
+        AbbozzaCalliope server = (AbbozzaCalliope) _abbozzaServer;
+        String path = server.getPathToBoard();
+        File dir;
+        
+        if (path != null ) {
+            dir = new File(path);
+        } else {
+            dir = new File("");
+        }
+
+        if ( this._query ) {
+            dir = server.queryPathToBoard(path);
+            server.setPathToBoard(dir.getCanonicalPath());
+        }
+        
+        if ( !dir.exists() || !dir.isDirectory() || !dir.canWrite() ) {
+            sendResponse(exchg, 201, "text/plain", "calliope not found");            
+        } else {
+            sendResponse(exchg, 200, "text/plain", "calliope found");
+        }
     }
-    
+
 }
