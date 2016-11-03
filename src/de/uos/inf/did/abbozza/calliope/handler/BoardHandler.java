@@ -40,6 +40,8 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
@@ -90,6 +92,7 @@ public class BoardHandler extends AbstractHandler {
         if ( !dir.exists() || !dir.isDirectory() || !dir.canWrite() ) {
             sendResponse(exchg, 201, "text/plain", "Board not found");            
         } else {
+            server.setPathToBoard(dir.getCanonicalPath());
             sendResponse(exchg, 200, "text/plain", path);
         }
     }
@@ -100,11 +103,14 @@ public class BoardHandler extends AbstractHandler {
         if ( os.contains("win") ) {        
             File[] roots = File.listRoots();
             for (int i = 0; i < roots.length; i++) {
+                try {
                 String volume = FileSystemView.getFileSystemView().getSystemDisplayName(roots[i]);
-                if ( volume.contains("MINI") || volume.contains("MICROBIT")) {
-                    volume = volume.split(" ")[2];
-                    AbbozzaLogger.out("Board found at " + volume, AbbozzaLogger.INFO);
-                    return volume;
+                    if ( volume.contains("MINI") || volume.contains("MICROBIT")) {
+                        AbbozzaLogger.out("Board found at " + roots[i].getCanonicalPath(), AbbozzaLogger.INFO);
+                        return roots[i].getCanonicalPath();
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(BoardHandler.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             return "";

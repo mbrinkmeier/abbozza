@@ -24,6 +24,7 @@ package de.uos.inf.did.abbozza.calliope;
 
 import com.sun.net.httpserver.HttpHandler;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
+import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.calliope.handler.BoardHandler;
 import java.io.File;
@@ -73,6 +74,7 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
         if (_pathToBoard != null) {
             this.config.setOptionStr("pathToBoard", _pathToBoard);
         }
+        AbbozzaLogger.out("Path to board set to " + path,4);
     }
     
     
@@ -155,11 +157,11 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
         //    return "Error";
         // }
         
-        System.out.println(java);
+        AbbozzaLogger.out("Writing hex code to " + _pathToBoard + "abbozza.hex",4);
         
         if ( java != "" ) {
                 try {
-                    PrintWriter out = new PrintWriter(_pathToBoard);
+                    PrintWriter out = new PrintWriter(_pathToBoard + "abbozza.hex");
                     out.write(java);
                     out.flush();
                     out.close();

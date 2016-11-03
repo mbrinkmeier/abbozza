@@ -204,6 +204,9 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         //     ioe.printStackTrace(System.err);
         // }
 
+        boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
+        PreferencesData.setBoolean("editor.save_on_verify", false);
+
         ThreadGroup group = Thread.currentThread().getThreadGroup();
         Thread[] threads = new Thread[group.activeCount()];
         group.enumerate(threads, false);
@@ -246,6 +249,8 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         // Wait for the termination of the export thread
         while ((last != null) && (last.isAlive())) {}
         
+        PreferencesData.setBoolean("editor.save_on_verify", flag);
+
         return logger.toString();
     }
     

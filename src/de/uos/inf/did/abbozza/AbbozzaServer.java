@@ -147,7 +147,10 @@ public abstract class AbbozzaServer implements HttpHandler {
         sketchbookPath = System.getProperty("user.home") + "/";
         configPath = System.getProperty("user.home") + "/.abbozza/" + system + "/abbozza.cfg";
         localJarPath = System.getProperty("user.home") + "/.abbozza/";
-        globalJarPath = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        URL url = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation();
+        int  p = url.getPath().lastIndexOf("/");
+        globalJarPath = url.getPath().substring(0, p+1);
+        // globalJarPath = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation().getPath();
     }
 
     public String getSketchbookPath() {

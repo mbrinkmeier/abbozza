@@ -69,8 +69,8 @@ public class UploadHandler extends AbstractHandler {
      public String uploadCode(String code) {     
         _abbozzaServer.logger.reset();
         String response;
-        boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
-        PreferencesData.setBoolean("editor.save_on_verify", false);
+        // boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
+        // PreferencesData.setBoolean("editor.save_on_verify", false);
         
         // Editor editor = _abbozzaServer.getEditor();
         // editor.getSketch().getCurrentCode().setProgram(code);
@@ -134,7 +134,6 @@ public class UploadHandler extends AbstractHandler {
 //
 //        response = _abbozzaServer.logger.toString();
 
-        PreferencesData.setBoolean("editor.save_on_verify", flag);
         return response;
     }   
      
