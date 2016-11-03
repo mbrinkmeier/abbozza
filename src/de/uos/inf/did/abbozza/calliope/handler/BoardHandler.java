@@ -43,6 +43,7 @@ import java.util.Vector;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileSystemView;
 import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
 import processing.app.Base;
@@ -97,6 +98,16 @@ public class BoardHandler extends AbstractHandler {
     private String findBoard() {
         String os = System.getProperty("os.name").toLowerCase();
         if ( os.contains("win") ) {        
+            File[] roots = File.listRoots();
+            for (int i = 0; i < roots.length; i++) {
+                String volume = FileSystemView.getFileSystemView().getSystemDisplayName(roots[i]);
+                if ( volume.contains("MINI") || volume.contains("MICROBIT")) {
+                    volume = volume.split(" ")[2];
+                    AbbozzaLogger.out("Board found at " + volume, AbbozzaLogger.INFO);
+                    return volume;
+                }
+            }
+            return "";
         } else if ( os.contains("mac") ) {
         } else if ( os.contains("linux") ) {
             try {
