@@ -70,8 +70,6 @@ public class BoardHandler extends AbstractHandler {
         AbbozzaCalliope server = (AbbozzaCalliope) _abbozzaServer;
         String path = this.findBoard();
         File dir;
-
-        AbbozzaLogger.err("after findBoard: " + path);
         
         if (path != null ) {
             dir = new File(path);
@@ -81,11 +79,15 @@ public class BoardHandler extends AbstractHandler {
 
         if ( this._query ) {
             dir = server.queryPathToBoard(path);
-            server.setPathToBoard(dir.getCanonicalPath());
+            if ( dir != null ) {
+                server.setPathToBoard(dir.getCanonicalPath());
+            } else {
+                sendResponse(exchg, 201, "text/plain", "Query aborted");                            
+            }
         }
         
         if ( !dir.exists() || !dir.isDirectory() || !dir.canWrite() ) {
-            sendResponse(exchg, 201, "text/plain", "calliope not found");            
+            sendResponse(exchg, 201, "text/plain", "Board not found");            
         } else {
             sendResponse(exchg, 200, "text/plain", path);
         }
@@ -106,7 +108,8 @@ public class BoardHandler extends AbstractHandler {
                 while(volumes.ready()) {
                     volume = volumes.readLine();
                     if ( volume.contains("MINI") || volume.contains("MICROBIT")) {
-                        AbbozzaLogger.err("in findBoard: " + volume);
+                        volume = volume.split(" ")[2];
+                        AbbozzaLogger.out("Board found at " + volume, AbbozzaLogger.INFO);
                         return volume;
                     }
                  }

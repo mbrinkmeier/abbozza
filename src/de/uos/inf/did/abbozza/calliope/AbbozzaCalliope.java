@@ -101,6 +101,7 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
         });
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             selectedDir = chooser.getSelectedFile();
+        } else {
         }
         return selectedDir;
     }
