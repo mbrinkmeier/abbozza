@@ -30,8 +30,12 @@ import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.BoardListEntry;
 import de.uos.inf.did.abbozza.calliope.AbbozzaCalliope;
 import de.uos.inf.did.abbozza.handler.AbstractHandler;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.List;
@@ -64,8 +68,10 @@ public class BoardHandler extends AbstractHandler {
     @Override
     public void handle(HttpExchange exchg) throws IOException {
         AbbozzaCalliope server = (AbbozzaCalliope) _abbozzaServer;
-        String path = server.getPathToBoard();
+        String path = this.findBoard();
         File dir;
+
+        AbbozzaLogger.err("after findBoard: " + path);
         
         if (path != null ) {
             dir = new File(path);
@@ -81,8 +87,37 @@ public class BoardHandler extends AbstractHandler {
         if ( !dir.exists() || !dir.isDirectory() || !dir.canWrite() ) {
             sendResponse(exchg, 201, "text/plain", "calliope not found");            
         } else {
-            sendResponse(exchg, 200, "text/plain", "calliope found");
+            sendResponse(exchg, 200, "text/plain", path);
         }
     }
 
+    
+    private String findBoard() {
+        String os = System.getProperty("os.name").toLowerCase();
+        if ( os.contains("win") ) {        
+        } else if ( os.contains("mac") ) {
+        } else if ( os.contains("linux") ) {
+            try {
+                Process process = Runtime.getRuntime().exec("mount");
+                process.waitFor();
+                InputStreamReader reader = new InputStreamReader(process.getInputStream());
+                BufferedReader volumes = new BufferedReader(reader);
+                String volume;
+                while(volumes.ready()) {
+                    volume = volumes.readLine();
+                    if ( volume.contains("MINI") || volume.contains("MICROBIT")) {
+                        AbbozzaLogger.err("in findBoard: " + volume);
+                        return volume;
+                    }
+                 }
+                 return "";
+            } catch (Exception ex) {
+                return "";
+            }
+        } else {
+            
+        }
+        return "";
+    } 
+   
 }
