@@ -441,6 +441,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
     
     // @TODO Change the path
+    /*
     public byte[] getLocaleBytes(String locale) throws IOException {
         AbbozzaLogger.out("Loading locale " + locale);
         if (jarHandler != null) {
@@ -453,6 +454,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         AbbozzaLogger.out("Could not find /js/languages/" + locale + ".xml", AbbozzaLogger.ERROR);
         return null;
     }
+    */
     
     // @TODO change path
     public Vector getLocales() {
