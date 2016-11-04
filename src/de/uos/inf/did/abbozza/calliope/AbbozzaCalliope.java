@@ -27,15 +27,22 @@ import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.calliope.handler.BoardHandler;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Toolkit;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import org.python.core.PyCode;
@@ -70,7 +77,12 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
         
         // Open Frame
         frame = new AbbozzaCalliopeFrame();
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
+        int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
+        frame.setLocation(x, y);
         frame.setVisible(true);
+        frame.setState(JFrame.ICONIFIED);
     }
         
     
@@ -136,32 +148,14 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
 
     @Override
     public String compileCode(String code) {
-        System.out.println(code);
+        AbbozzaLogger.out("Code generated",4);
+        this.frame.setCode(code);
         return "";
-        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String uploadCode(String code) {
-        // System.out.println("Compile ...");
-        // try {
-            // PyObject hexlify = _interpreter.get("hexlify");
-            // PyObject runtime = _interpreter.get("_RUNTIME");
-            // PyObject embedHex = _interpreter.get("embed_hex");
-            // PyObject saveHex = _interpreter.get("save_hex");
-            // PyObject hexcode = hexlify.__call__(new PyString(code));
-            // PyObject[] args = new PyObject[2];
-            // args[0] = runtime;
-            // args[1] = hexcode;
-            // PyObject finalcode = embedHex.__call__(args);
-            // String hexi = hexlify(code);
-            String java = embed(hexlify(code));
-            // PyObject result = saveHex.__call__(finalcode,new PyString(_pathToBoard));
-        // } catch (Exception ex) {
-            // ex.printStackTrace(System.err);
-        //    return "Error";
-        // }
-        
+        String java = embed(hexlify(code));
         AbbozzaLogger.out("Writing hex code to " + _pathToBoard + "abbozza.hex",4);
         
         if ( java != "" ) {
@@ -240,17 +234,4 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
         runtime = runtime.replace("######", hexcode);
         return runtime;
     }
-/*        
-    embed_hex(runtime_hex, python_hex=None):
-
-    py_list = python_hex.split()
-    runtime_list = runtime_hex.split()
-    embedded_list = []
-    # The embedded list should be the original runtime with the Python based
-    # hex embedded two lines from the end.
-    embedded_list.extend(runtime_list[:-2])
-    embedded_list.extend(py_list)
-    embedded_list.extend(runtime_list[-2:])
-    return '\n'.join(embedded_list) + '\n'
-*/        
 }

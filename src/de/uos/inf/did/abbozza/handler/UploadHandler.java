@@ -67,72 +67,13 @@ public class UploadHandler extends AbstractHandler {
     }
 
      public String uploadCode(String code) {     
-        _abbozzaServer.logger.reset();
-        String response;
-        // boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
-        // PreferencesData.setBoolean("editor.save_on_verify", false);
-        
-        // Editor editor = _abbozzaServer.getEditor();
-        // editor.getSketch().getCurrentCode().setProgram(code);
-        // _abbozzaServer.setEditorText(code);                
-        // editor.getSketch().getCurrentCode().setModified(true);
-           
-        
-        /*
-         PreferencesData.setBoolean("editor.save_on_verify", false);
+         AbbozzaLogger.resetErr();
 
-         editor.getSketch().getCurrentCode().setProgram(code);
-         setEditorText(code);
-
-         editor.getSketch().getCurrentCode().setModified(true);
-         */
+         String response;
 
         response = _abbozzaServer.uploadCode(code);
-//        try {
-//            editor.getSketch().prepare();
-//        } catch (IOException ioe) {
-//            ioe.printStackTrace(System.err);
-//        }
-//
-//        ThreadGroup group = Thread.currentThread().getThreadGroup();
-//        Thread[] threads = new Thread[group.activeCount()];
-//        group.enumerate(threads, false);
-//
-//        _abbozzaServer.monitorHandler.suspend();
-//
-//        // try {
-//        // editor.getSketch().save();
-//        editor.handleExport(false);
-//        // } catch (IOException ex) {
-//        // }
-//
-//        AbbozzaLogger.out("Hier",4);
-//        
-//        Thread[] threads2 = new Thread[group.activeCount()];
-//        group.enumerate(threads2, false);
-//
-//        // Find the exporting thread
-//        Thread last = null;
-//        int j;
-//
-//        int i = threads2.length - 1;
-//        while ((i >= 0) && (last == null)) {
-//
-//            j = threads.length - 1;
-//            while ((j >= 0) && (threads[j] != threads2[i])) {
-//                j--;
-//            }
-//
-//            if (j < 0) {
-//                last = threads2[i];
-//            }
-//            i--;
-//        }
-//        
-//        // Wait for the termination of the export thread
-//        while ((last != null) && (last.isAlive())) {}
-//
-//        response = _abbozzaServer.logger.toString();
+
+        response = AbbozzaLogger.getErr();
 
         return response;
     }   

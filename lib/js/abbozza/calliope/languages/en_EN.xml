@@ -1,0 +1,11 @@
+<language id="en_EN">
+    <blocks>
+        <msg id="block.MAIN">Main program</msg> 
+    </blocks>
+    <gui>
+        <msg id="gui.quit">Quit</msg>
+        <msg id="gui.clear">Clear messages</msg>
+        <msg id="gui.console">Messages</msg>
+        <msg id="gui.sourceCode">Source code</msg>
+    </gui>
+</language> 

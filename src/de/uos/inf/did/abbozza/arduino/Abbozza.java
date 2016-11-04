@@ -176,6 +176,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
     @Override
     public String compileCode(String code) {
+        
         toolSetCode(code);        
 
         // Compile sketch                
@@ -193,16 +194,13 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
         }
         
-        return logger.toString();
+        
+        // return logger.toString();
+        return "";
     }
 
     @Override
     public String uploadCode(String code) {
-        // try {
-        //     editor.getSketch().prepare();
-        // } catch (IOException ioe) {
-        //     ioe.printStackTrace(System.err);
-        // }
 
         boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
         PreferencesData.setBoolean("editor.save_on_verify", false);
@@ -251,7 +249,8 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         
         PreferencesData.setBoolean("editor.save_on_verify", flag);
 
-        return logger.toString();
+        // return logger.toString();
+        return "";
     }
     
 }

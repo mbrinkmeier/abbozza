@@ -21,7 +21,12 @@
  */
 package de.uos.inf.did.abbozza;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -39,6 +44,24 @@ public class AbbozzaLogger {
     
     static private Vector<AbbozzaLoggerListener> _listeners = new Vector<AbbozzaLoggerListener>();
 
+    static private ByteArrayOutputStream errorLogger = new ByteArrayOutputStream();
+
+    
+    public static void init() {
+        System.setErr(new PrintStream(errorLogger));
+    }
+    
+    
+    public static void resetErr() {
+        errorLogger.reset();
+    }
+    
+    public static String getErr() {
+        String result = errorLogger.toString();
+        errorLogger.reset();
+        return result;
+    }
+    
     public static void addListener(AbbozzaLoggerListener listener) {
         if ( !_listeners.contains(listener) ) {
             _listeners.add(listener);

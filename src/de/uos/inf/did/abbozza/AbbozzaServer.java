@@ -37,15 +37,18 @@ import de.uos.inf.did.abbozza.handler.TaskHandler;
 import de.uos.inf.did.abbozza.handler.UploadHandler;
 import de.uos.inf.did.abbozza.handler.VersionHandler;
 import java.awt.Desktop;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -93,7 +96,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     protected JarDirHandler jarHandler;
     protected AbbozzaConfig config = null;
     private boolean isStarted = false;      // true if the server was started
-    public ByteArrayOutputStream logger;
+    // public ByteArrayOutputStream logger;
     private DuplexPrintStream errStream;
     private DuplexPrintStream outStream;
     protected HttpServer httpServer;
@@ -104,6 +107,9 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     
     public void init(String system) {
+        
+        AbbozzaLogger.init();
+        
         this.system = system;
 
         // If there is already an Abbozza instance, silently die
@@ -145,9 +151,9 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
     
     
-    public ByteArrayOutputStream getConsoleStream() {
-        return logger;
-    }
+    // public ByteArrayOutputStream getConsoleStream() {
+    //     return logger;
+    // }
 
 
     public void setPaths() {
@@ -176,11 +182,15 @@ public abstract class AbbozzaServer implements HttpHandler {
         return localJarPath;
     }
     
+    public String getSystem() {
+        return this.system;
+    }
+    
     public void findJarsAndDirs(JarDirHandler jarHandler) {
         jarHandler.clear();
-        jarHandler.addDir(localJarPath + "files", "Local directory");
+        jarHandler.addDir(localJarPath, "Local directory");
         jarHandler.addJar(localJarPath + "Abbozza.jar", "Local jar");
-        jarHandler.addDir(globalJarPath + "files", "Global directory");
+        jarHandler.addDir(globalJarPath, "Global directory");
         jarHandler.addJar(globalJarPath + "Abbozza.jar", "Global jar");
     }
 
@@ -328,15 +338,13 @@ public abstract class AbbozzaServer implements HttpHandler {
             this.isStarted = true;
 
             // Start ErrorMonitor
-            logger = new ByteArrayOutputStream();
-            outStream = new DuplexPrintStream(logger,System.out);
-            errStream = new DuplexPrintStream(logger, System.err);
-            System.setErr(errStream);
-            System.setOut(outStream);
-            
+            // logger = new ByteArrayOutputStream();
+            // outStream = new DuplexPrintStream(logger,System.out);
+            // errStream = new DuplexPrintStream(logger,System.err);
+            // System.setErr(new PrintStream(logger));
+            // System.setOut(new PrintStream(logger));
 
             AbbozzaLogger.out("Duplexer Started ... ");
-
             AbbozzaLogger.out("Starting ... ");
 
             serverPort = config.getServerPort();

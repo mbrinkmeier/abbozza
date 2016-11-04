@@ -33,8 +33,7 @@ public class DuplexPrintStream extends PrintStream {
 	private PrintStream slave;
 	
 	public DuplexPrintStream(OutputStream master, PrintStream slave) {
-		super(master);
-		
+		super(master);		
 		this.slave = slave;
 	}
 	@Override
@@ -51,6 +50,7 @@ public class DuplexPrintStream extends PrintStream {
 
 	@Override
 	public boolean checkError() {
+		// return ( super.checkError());
 		return (slave.checkError() || super.checkError());
 	}
 

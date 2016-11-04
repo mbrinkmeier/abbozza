@@ -41,6 +41,11 @@ public class AbbozzaLocale {
     public static void setLocale(String loc) {
         entries = new Properties();
         locale = loc;
+        
+        addLocaleXml("/js/languages/" + locale + ".xml");
+        addLocaleXml("/js/abbozza/" +  AbbozzaServer.getInstance().getSystem() + "/languages/" + locale + ".xml");
+        
+        /*
         Document localeXml;
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -64,8 +69,38 @@ public class AbbozzaLocale {
             ex.printStackTrace();
             AbbozzaLogger.out("loading of locale failed", AbbozzaLogger.ERROR);
         }
+        */
     }
 
+    public static void addLocaleXml(String path) {
+        Document localeXml;
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+
+        if ( AbbozzaServer.getInstance().jarHandler == null ) return;
+        
+        try {
+            AbbozzaLogger.out("Loading locale from " + path,4);
+            InputStream stream = AbbozzaServer.getInstance().jarHandler.getInputStream(path);
+            builder = factory.newDocumentBuilder();
+            StringBuilder xmlStringBuilder = new StringBuilder();
+            localeXml = builder.parse(stream);
+            
+            NodeList nodes = localeXml.getElementsByTagName("msg");
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Node node = nodes.item(i);
+                String key = node.getAttributes().getNamedItem("id").getNodeValue();
+                String entry = node.getTextContent();
+                entries.setProperty(key, entry);
+                AbbozzaLogger.out(key + " -> " + entry);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(AbbozzaLocale.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
     public static String getLocale() {
         return locale;
     }

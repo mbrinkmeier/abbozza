@@ -69,8 +69,9 @@ public class AbbozzaCalliopeFrame  extends javax.swing.JFrame implements Abbozza
         consoleArea = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        quitItem = new javax.swing.JMenuItem();
         clearItem = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        quitItem = new javax.swing.JMenuItem();
 
         menu1.setLabel("File");
         menuBar1.add(menu1);
@@ -103,6 +104,15 @@ public class AbbozzaCalliopeFrame  extends javax.swing.JFrame implements Abbozza
 
         jMenu1.setText("abbozza!");
 
+        clearItem.setText(AbbozzaLocale.entry("gui.clear"));
+        clearItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(clearItem);
+        jMenu1.add(jSeparator1);
+
         quitItem.setText(AbbozzaLocale.entry("gui.quit")
         );
         quitItem.addActionListener(new java.awt.event.ActionListener() {
@@ -111,14 +121,6 @@ public class AbbozzaCalliopeFrame  extends javax.swing.JFrame implements Abbozza
             }
         });
         jMenu1.add(quitItem);
-
-        clearItem.setText(AbbozzaLocale.entry("gui.clear"));
-        clearItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                clearItemActionPerformed(evt);
-            }
-        });
-        jMenu1.add(clearItem);
 
         jMenuBar1.add(jMenu1);
 
@@ -157,6 +159,7 @@ public class AbbozzaCalliopeFrame  extends javax.swing.JFrame implements Abbozza
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private java.awt.Menu menu1;
     private java.awt.Menu menu2;
@@ -171,5 +174,9 @@ public class AbbozzaCalliopeFrame  extends javax.swing.JFrame implements Abbozza
     @Override
     public void logged(String msg) {
         this.consoleArea.append(msg + "\n");
+    }
+    
+    public void setCode(String code) {
+        this.sourceArea.setText(code);
     }
 }
