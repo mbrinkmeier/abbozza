@@ -94,7 +94,8 @@ public abstract class AbbozzaServer implements HttpHandler {
     protected AbbozzaConfig config = null;
     private boolean isStarted = false;      // true if the server was started
     public ByteArrayOutputStream logger;
-    private DuplexPrintStream duplexer;
+    private DuplexPrintStream errStream;
+    private DuplexPrintStream outStream;
     protected HttpServer httpServer;
     private int serverPort;
     public MonitorHandler monitorHandler;
@@ -109,7 +110,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         if (instance != null) {
             return;
         }
-
+        
         // Set static instance
         instance = this;
 
@@ -142,6 +143,12 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
 
     }
+    
+    
+    public ByteArrayOutputStream getConsoleStream() {
+        return logger;
+    }
+
 
     public void setPaths() {
         sketchbookPath = System.getProperty("user.home") + "/";
@@ -322,8 +329,11 @@ public abstract class AbbozzaServer implements HttpHandler {
 
             // Start ErrorMonitor
             logger = new ByteArrayOutputStream();
-            duplexer = new DuplexPrintStream(logger, System.err);
-            System.setErr(duplexer);
+            outStream = new DuplexPrintStream(logger,System.out);
+            errStream = new DuplexPrintStream(logger, System.err);
+            System.setErr(errStream);
+            System.setOut(outStream);
+            
 
             AbbozzaLogger.out("Duplexer Started ... ");
 

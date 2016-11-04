@@ -50,8 +50,9 @@ import org.python.util.PythonInterpreter;
 public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
 
     private int _SCRIPT_ADDR = 0x3e000; 
-    // private PythonInterpreter _interpreter;
     private String _pathToBoard = "";
+    private AbbozzaCalliopeFrame frame;
+
     
     public static void main (String args[]) {
         AbbozzaCalliope abbozza = new AbbozzaCalliope();
@@ -66,6 +67,10 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
         super.init(system);
     
         setPathToBoard(this.config.getOptionStr("pathToBoard"));        
+        
+        // Open Frame
+        frame = new AbbozzaCalliopeFrame();
+        frame.setVisible(true);
     }
         
     
