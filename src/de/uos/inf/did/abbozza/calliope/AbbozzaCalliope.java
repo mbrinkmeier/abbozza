@@ -155,12 +155,13 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
 
     @Override
     public String uploadCode(String code) {
+        this.frame.setCode(code);        
         String java = embed(hexlify(code));
-        AbbozzaLogger.out("Writing hex code to " + _pathToBoard + "abbozza.hex",4);
+        AbbozzaLogger.out("Writing hex code to " + _pathToBoard + "/abbozza.hex",4);
         
         if ( java != "" ) {
                 try {
-                    PrintWriter out = new PrintWriter(_pathToBoard + "abbozza.hex");
+                    PrintWriter out = new PrintWriter(_pathToBoard + "/abbozza.hex");
                     out.write(java);
                     out.flush();
                     out.close();
@@ -176,14 +177,21 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
     
     private String hexlify(String code) {
         if ( code == null || code == "" ) return "";
-        
+            
         // Correct the line ends from MacOS and Windows is neccessary
         code.replace("\r\n","\n");
         code.replace("\r","\n");
         
-        ByteBuffer bytes = ByteBuffer.allocate(4);
+        ByteBuffer bytes = ByteBuffer.allocate(2);
         bytes.putShort((short) code.length());
-        String data =  "MP" + ((char) bytes.get(1)) + ((char) bytes.get(0)) + code;
+        
+        bytes.put(0, (byte) (code.length() % 256));
+        bytes.put(1, (byte) ((code.length() & 0x0000ff00) / 256));
+        
+        String len = String.format("%x", new BigInteger(1,bytes.array())).toUpperCase();
+        while (len.length() < 4) len = "0" +len;
+
+        String data =  "MP##" + code;
         // padding
         while ( data.length() % 16 != 0 ) {
             data = data + ((char) 0);
@@ -194,30 +202,44 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
         String chunk = "";
         String hexline = "";
         int checksum;
-        for ( int chunkPos = 0; chunkPos < data.length(); chunkPos = chunkPos+16 ) {
+        bytes = ByteBuffer.allocate(4);
+        for (int chunkPos = 0; chunkPos < data.length(); chunkPos = chunkPos+16 ) {
             chunk = data.substring(chunkPos, chunkPos+16 < data.length() ? chunkPos+16 : data.length() );
             bytes.clear();
             bytes.put(0,(byte) (chunk.length() % 256));
             bytes.putShort(1,(short) addr);
             bytes.put(3,(byte) 0);
 
-            hexline = String.format("%x", new BigInteger(1, bytes.array())).toUpperCase() 
-                    + String.format("%x", new BigInteger(1, chunk.getBytes())).toUpperCase();
+            byte[] ch = chunk.getBytes();
+            if (chunkPos == 0) {
+                ch[2] = (byte) (code.length() % 256);
+                ch[3] = (byte) ((code.length() & 0x0000ff00) / 256);
+                // hexline = hexline.replaceFirst("4D502323","4D50" + len);
+            }            
+
+            String second = String.format("%x", new BigInteger(1,ch)).toUpperCase();
+            while (second.length() < 32 ) second = "0" + second;
+            
+            hexline = String.format("%x", new BigInteger(1,bytes.array())).toUpperCase() 
+                    + second; // String.format("%x", new BigInteger(1, chunk.getBytes())).toUpperCase();
+            
             checksum = 0;
             byte[] by = bytes.array();
             for (int i = 0; i < by.length; i++) {
                 checksum += by[i];
             }
-            by = chunk.getBytes();
-            for (int i = 0; i < by.length; i++) {
-                checksum += by[i];
+            for (int i = 0; i < ch.length; i++) {
+                checksum += ch[i];
             }            
             byte[] by2 = new byte[1];
             by2[0] = (byte) ((-checksum) & 0xff);
-            hexline = ":" + hexline + String.format("%x", new BigInteger(1, by2)).toUpperCase();
+            String check = String.format("%x", new BigInteger(1,by2)).toUpperCase();
+            while (check.length() < 2) check = "0" +check;
+            hexline = ":" + hexline + check;
             output = output + "\n" + hexline;
             addr += 16;
         }
+        output = output.replace("####", len);
         return output;
     }
 

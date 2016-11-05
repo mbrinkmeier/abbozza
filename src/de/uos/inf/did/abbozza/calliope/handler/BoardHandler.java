@@ -32,6 +32,7 @@ import de.uos.inf.did.abbozza.calliope.AbbozzaCalliope;
 import de.uos.inf.did.abbozza.handler.AbstractHandler;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -80,7 +81,7 @@ public class BoardHandler extends AbstractHandler {
             dir = new File("");
         }
 
-        if ( this._query ) {
+        if ( path == "" && this._query ) {
             dir = server.queryPathToBoard(path);
             if ( dir != null ) {
                 server.setPathToBoard(dir.getCanonicalPath());
@@ -104,7 +105,7 @@ public class BoardHandler extends AbstractHandler {
             File[] roots = File.listRoots();
             for (int i = 0; i < roots.length; i++) {
                 try {
-                String volume = FileSystemView.getFileSystemView().getSystemDisplayName(roots[i]);
+                    String volume = FileSystemView.getFileSystemView().getSystemDisplayName(roots[i]);
                     if ( volume.contains("MINI") || volume.contains("MICROBIT")) {
                         AbbozzaLogger.out("Board found at " + roots[i].getCanonicalPath(), AbbozzaLogger.INFO);
                         return roots[i].getCanonicalPath();
@@ -129,13 +130,15 @@ public class BoardHandler extends AbstractHandler {
                         AbbozzaLogger.out("Board found at " + volume, AbbozzaLogger.INFO);
                         return volume;
                     }
-                 }
-                 return "";
+                }
+                volumes.close();
+                AbbozzaLogger.out("No board found",4);
             } catch (Exception ex) {
+                AbbozzaLogger.err(ex.getMessage());
                 return "";
             }
         } else {
-            
+            AbbozzaLogger.err("Operating system " + os + " not supported");
         }
         return "";
     } 

@@ -9,7 +9,6 @@
         <category name="Schleifen" id="cat.LOOPS">
             <block type="loop_endless"></block>
             <block type="loop_while"></block>
-            <block type="loop_do_while"></block>
             <block type="loop_fixed"></block>
             <block type="loop_count"></block>
             <block type="loop_break"></block>
@@ -53,44 +52,13 @@
 	    
         <category name="Text" id="cat.TEXT">
             <block type="text_const"></block>
+            <block type="text_as_string"></block>
             <block type="text_charat"></block>
             <block type="text_concat"></block>
         </category>
 
         <category name="Ein- und Ausgabe" id="cat.INOUT">
-            <block type="inout_pin"></block>
-            <block type="inout_pinmode">
-                <value name="PIN">
-                    <block type="inout_pin"></block>
-                </value>
-            </block>
-            <block type="inout_level"></block>
-            <block type="inout_digital_read">
-                <value name="PIN">
-                    <block type="inout_pin"></block>
-                </value>
-            </block>
-            <block type="inout_digital_write">
-                <value name="PIN">
-                    <block type="inout_pin"></block>
-                </value>
-                <value name="LEVEL">
-                    <block type="inout_level"></block>
-                </value>
-            </block>
-            <block type="inout_analog_read">
-                <value name="PIN">
-                    <block type="inout_pin"></block>
-                </value>
-            </block>
-            <block type="inout_analog_write">
-                <value name="PIN">
-                    <block type="inout_pin"></block>
-                </value>
-                <value name="VALUE">
-                    <block type="math_number"></block>
-                </value>
-            </block>
+            <block type="display_scroll"></block>
         </category>
 
         <category name="Sensoren" id="cat.DEVIN">
