@@ -33,7 +33,7 @@
         <msg id="Image.SURPRISED">Überrascht</msg>
         <msg id="Image.SILLY">Verrückt</msg>
         <msg id="Image.FABULOUS">Fabelhaft</msg>
-        <msg id="Image.MEH">Meh</msg>
+        <msg id="Image.MEH">Naja!</msg>
         <msg id="Image.YES">Ja</msg>
         <msg id="Image.NO">Nein</msg>
         <msg id="Image.CLOCK12">12 Uhr</msg>
@@ -73,7 +73,7 @@
         <msg id="Image.PACMAN">Pacman</msg>
         <msg id="Image.TARGET">Ziel</msg>
         <msg id="Image.TSHIRT">T-Shirt</msg>
-        <msg id="Image.ROLLERSKATE">Rollerskate</msg>
+        <msg id="Image.ROLLERSKATE">Rollschuh</msg>
         <msg id="Image.DUCK">Ente</msg>
         <msg id="Image.HOUSE">Haus</msg>
         <msg id="Image.TORTOISE">Schildkröte</msg>
