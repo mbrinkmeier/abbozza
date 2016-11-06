@@ -77,26 +77,28 @@
             <block type="display_on"></block>
             <block type="display_off"></block>
             <block type="display_is_on"></block>
+            <block type="dev_button_pressed"></block>
+            <block type="dev_button_was_pressed"></block>
+            <block type="dev_button_get_presses"></block>
         </category>
 
-        <category name="Sensoren" id="cat.DEVIN">
+        <category  id="cat.DEVIN">
+            <block type="dev_button_pressed"></block>
+            <block type="dev_button_was_pressed"></block>
+            <block type="dev_button_get_presses"></block>
+            <block type="dev_accel_get"></block>
+            <block type="dev_accel_gesture"></block>
+            <block type="dev_accel_is_gesture"></block>
+            <block type="dev_accel_was_gesture"></block>
+            <block type="dev_gesture"></block>
         </category>
-
+        
         <category name="Aktuatoren" id="cat.DEVOUT">
         </category>
 	    
         <category id="cat.SERIAL">
         </category>
 	            
-        <!-- category name="Interrupts" id="cat.INT">
-            <block type="int_interrupts"></block>
-            <block type="int_no_interrupts"></block>
-            <block type="int_attach"></block>
-        </category -->
-                
-        <!--category name="Test" id="cat.TEST">
-            <block type="test"></block>
-        </category-->
     </feature>
 		
     <feature id="feat.FUNC">
@@ -139,36 +141,9 @@
                 
     <feature id="feat.DEVICES">
         <category name="Aktuatoren" id="cat.DEVOUT">
-            <block type="dev_led"></block>
-            <block type="dev_led_on"></block>
-            <block type="dev_servo"></block>
-            <block type="dev_servo_set">
-                <value name="VALUE">
-                    <block type="math_number"></block>
-                </value>
-            </block>
-            <!-- block type="dev_motor"></block>            
-            <block type="dev_motor_dir"></block>            
-            <block type="dev_motor_speed"></block-->            
         </category> 		
         <category name="Sensoren" id="cat.DEVIN">
-            <block type="dev_button"></block>
-            <block type="dev_button_state"></block>
-            <block type="dev_poti"></block>
-            <block type="dev_poti_state"></block>
-            <block type="dev_servo_read"></block>
-            <block type="dev_irreceiver"></block>
-            <block type="dev_irreceiver_state"></block>
-            <block type="dev_ir_dist"></block>
-            <block type="dev_ir_read"></block>
-            <block type="dev_ir_read_dist"></block>
         </category> 		
     </feature>
-
-    <!-- feature id="feat.TEACHER">
-        <category name="Lehrer" id="cat.TEACHER">
-            <block type="teacher_text"></block>
-        </category>
-    </feature -->
     
 </features>

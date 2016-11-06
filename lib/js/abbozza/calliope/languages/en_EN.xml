@@ -11,9 +11,35 @@
         <msg id="block.displayOn">Switch display on</msg>
         <msg id="block.displayOff">Switch dsplay off</msg>
         <msg id="block.displayIsOn">Is display on?</msg>
+
+        <msg id="dev.BUTTON_A">Button A</msg>
+        <msg id="dev.BUTTON_B">Button B</msg>        
+        <msg id="dev.WAS_PRESSED">was pressed</msg>        
+        <msg id="dev.GET_PRESSES">Number of presses of</msg>        
+
+        <msg id="dev.ACCEL_GET">Acceleration</msg>
+        <msg id="dev.ACCEL_X">left-right</msg>
+        <msg id="dev.ACCEL_Y">forward-backward</msg>
+        <msg id="dev.ACCEL_Z">up-down</msg>
+        <msg id="dev.GESTURE">Gesture</msg>        
+        <msg id="dev.ACCEL_GESTURE">Last gesture</msg>
+        <msg id="dev.ACCEL_IS_GESTURE">Current gesture is</msg>
+        <msg id="dev.ACCEL_WAS_GESTURE">Last gesture was</msg>
+        <msg id="dev.UP">Up</msg>
+        <msg id="dev.DOWN">Down</msg>
+        <msg id="dev.LEFT">Left</msg>
+        <msg id="dev.RIGHT">Right</msg>
+        <msg id="dev.FACE_UP">Face up</msg>
+        <msg id="dev.FACE_DOWN">Face down</msg>
+        <msg id="dev.FREEFALL">Free fall</msg>
+        <msg id="dev.3G">3G</msg>
+        <msg id="dev.6G">6G</msg>
+        <msg id="dev.8G">8G</msg>
+        <msg id="dev.SHAKE">Shake</msg>
     </blocks>
     <cat>
         <msg id="cat.DISPLAY">Display</msg>
+        <msg id="cat.BUTTONS">Buttons</msg>
     </cat>
     <gui>
         <msg id="gui.quit">Quit</msg>

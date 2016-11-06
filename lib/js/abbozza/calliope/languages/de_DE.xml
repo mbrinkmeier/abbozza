@@ -11,9 +11,35 @@
         <msg id="block.displayOn">Schalte Anzeige aus</msg>
         <msg id="block.displayOff">Schalte Anzeige an</msg>
         <msg id="block.displayIsOn">Ist Anzeige an?</msg>
+        
+        <msg id="dev.BUTTON_A">Knopf A</msg>
+        <msg id="dev.BUTTON_B">Knopf B</msg>
+        <msg id="dev.WAS_PRESSED">wurde gedrückt</msg>        
+        <msg id="dev.GET_PRESSES">Anzahl der Drücker von</msg>        
+        
+        <msg id="dev.ACCEL_GET">Beschleunigung</msg>
+        <msg id="dev.ACCEL_X">links-rechts</msg>
+        <msg id="dev.ACCEL_Y">vor-zurück</msg>
+        <msg id="dev.ACCEL_Z">hoch-runter</msg>
+        <msg id="dev.GESTURE">Geste</msg>
+        <msg id="dev.ACCEL_GESTURE">Letzte Geste</msg>
+        <msg id="dev.ACCEL_IS_GESTURE">Aktuelle Geste ist</msg>
+        <msg id="dev.ACCEL_WAS_GESTURE">Letzte Geste war</msg>
+        <msg id="dev.UP">hoch</msg>
+        <msg id="dev.DOWN">runter</msg>
+        <msg id="dev.LEFT">links</msg>
+        <msg id="dev.RIGHT">rechts</msg>
+        <msg id="dev.FACE_UP">nach oben gedreht</msg>
+        <msg id="dev.FACE_DOWN">nach unten gedreht</msg>
+        <msg id="dev.FREEFALL">Freier Fall</msg>
+        <msg id="dev.3G">3G</msg>
+        <msg id="dev.6G">6G</msg>
+        <msg id="dev.8G">8G</msg>
+        <msg id="dev.SHAKE">Geschüttelt</msg>
     </blocks>
     <cat>
         <msg id="cat.DISPLAY">Anzeige</msg>
+        <msg id="cat.BUTTONS">Knöpfe</msg>
     </cat>
     <gui>
         <msg id="gui.quit">Beenden</msg>
