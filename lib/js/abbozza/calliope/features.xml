@@ -57,8 +57,26 @@
             <block type="text_concat"></block>
         </category>
 
-        <category name="Ein- und Ausgabe" id="cat.INOUT">
+        <category name="Display" id="cat.DISPLAY">
             <block type="display_scroll"></block>
+            <block type="display_show_internal_image"></block>
+            <block type="display_show_image"></block>
+            <block type="display_set_pixel">
+                <value name="COL">
+                    <block type="display_coord"></block>
+                </value>
+                <value name="ROW">
+                    <block type="display_coord"></block>
+                </value>
+                <value name="COLOR">
+                    <block type="display_color"></block>
+                </value>
+            </block>
+            <block type="display_get_pixel"></block>
+            <block type="display_clear"></block>
+            <block type="display_on"></block>
+            <block type="display_off"></block>
+            <block type="display_is_on"></block>
         </category>
 
         <category name="Sensoren" id="cat.DEVIN">
