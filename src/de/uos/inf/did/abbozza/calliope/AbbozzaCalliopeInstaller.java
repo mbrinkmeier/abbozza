@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.uos.inf.did.abbozza;
+package de.uos.inf.did.abbozza.calliope;
 
+import de.uos.inf.did.abbozza.arduino.*;
 import de.uos.inf.did.abbozza.arduino.Abbozza;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -30,92 +31,43 @@ import javax.swing.filechooser.FileFilter;
  *
  * @author michael
  */
-public class AbbozzaInstaller extends javax.swing.JFrame {
+public class AbbozzaCalliopeInstaller extends javax.swing.JFrame {
 
     // private String toolsDir;
     private String abbozzaDir;
     public Properties prefs;
-    private String sketchbookDir;
+    private String installDir;
 
     /**
      * Creates new form AbbozzaInstaller
      */
-    public AbbozzaInstaller() {
-        prefs = getPreferences();
-
+    public AbbozzaCalliopeInstaller() {
         initComponents();
-        this.setTitle("abbozza! installer");
+        
+        this.setTitle("abbozza! Calliope Installer");
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (screen.width - getWidth()) / 2;
         int y = (screen.height - getHeight()) / 2;
         setLocation(x, y);
 
-        // System.out.println("abbozza! " + Abbozza.VERSION);
-
-        if ( prefs.getProperty("sketchbook.path") != null ) {
-            abbozzaDir = prefs.getProperty("sketchbook.path") + "/tools/Abbozza/";
-        } else {
-            abbozzaDir = sketchbookDir + "/tools/Abbozza/";
-        }
+        abbozzaDir = System.getProperty("user.home") + "/.abbozza/calliope";
         File aD = new File(abbozzaDir);
 
         if (aD.exists()) {
             int result = JOptionPane.showConfirmDialog(this,
-                    "abbozza! scheint bereits installiert zu sein.\n Mit der Installation fortfahren? \n (Version " + Abbozza.VERSION + ")",
-                    "abbozza! bereits installiert", JOptionPane.YES_NO_OPTION);
+                    "abbozza! Calliope scheint bereits installiert zu sein.\n Mit der Installation fortfahren? \n (Version " + Abbozza.VERSION + ")",
+                    "abbozza! Calliope bereits installiert", JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.NO_OPTION) {
                 System.exit(1);
             }
-            File prefFile = new File(abbozzaDir+"Abbozza.cfg");
+            File prefFile = new File(abbozzaDir+"/abbozza.cfg");
             Properties config = new Properties();
             try {
                 config.load(new FileInputStream(prefFile));
                 browserField.setText(config.getProperty("browserPath"));
             } catch (Exception e) {}
         }
-    }
-
-    public Properties getPreferences() {
-
-        String osName = System.getProperty("os.name");
-        String userDir = System.getProperty("user.home");
-        String prefName = userDir;
-        
-        if (osName.indexOf("Linux") != -1) {
-            sketchbookDir = prefName + "/Arduino/";
-            prefName = prefName + "/.arduino15/preferences.txt";
-        } else if (osName.indexOf("Mac") != -1) {
-            sketchbookDir = prefName + "/Arduino/";
-            prefName = prefName + "/Library/Arduino/preferences.txt";
-        } else if (osName.indexOf("Windows") != -1) {
-            sketchbookDir = prefName + "/Documents/Arduino/";
-           prefName = prefName + "/Documents/Arduino/preferences.txt";
-        } else {
-            sketchbookDir = prefName + "/AppData/Roaming/Arduino/";
-           prefName = prefName + "/AppData/Roaming/Arduino/preferences.txt";
-        }
-
-        // System.out.println(prefName);
-        
-        Properties prefs = new Properties();
-
-        try {
-            prefs.load(new FileInputStream(new File(prefName)));
-//        } catch (FileNotFoundException e) {
-//            JOptionPane.showMessageDialog(null, "Arduino scheint nicht installiert zu sein.",
-//                    "abbozza! Installationsfehler ", JOptionPane.ERROR_MESSAGE);
-        } catch (IOException e) {
-            // JOptionPane.showMessageDialog(null, prefName + " kann nicht gefunden werden.",
-            //        "abbozza! Installationsfehler ", JOptionPane.ERROR_MESSAGE);
-        }
-
-        if ( (prefs != null) && (prefs.getProperty("sketchbook.path") != null) ) {
-            sketchbookDir = (new File(prefs.getProperty("sketchbook.path"))).getAbsolutePath();
-        }
-        // System.out.println(sketchbookDir);
-        
-        return prefs;
     }
 
     /**
@@ -130,11 +82,12 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
 
         logoPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         mainPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
-        sketchbookField = new javax.swing.JTextField();
+        installField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         sketchbookButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -151,14 +104,18 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/uos/inf/did/abbozza/img/abbozza200.png"))); // NOI18N
         jLabel1.setToolTipText("abbozza! logo");
-        logoPanel.add(jLabel1, java.awt.BorderLayout.CENTER);
+        logoPanel.add(jLabel1, java.awt.BorderLayout.LINE_START);
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/uos/inf/did/abbozza/img/calliope_logo_small.png"))); // NOI18N
+        logoPanel.add(jLabel5, java.awt.BorderLayout.EAST);
 
         jLabel4.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText(Abbozza.VERSION);
         jLabel4.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel4.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         jLabel4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        logoPanel.add(jLabel4, java.awt.BorderLayout.LINE_END);
+        logoPanel.add(jLabel4, java.awt.BorderLayout.PAGE_START);
 
         getContentPane().add(logoPanel, java.awt.BorderLayout.PAGE_START);
         logoPanel.getAccessibleContext().setAccessibleName("logoPanel");
@@ -166,13 +123,13 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
 
         mainPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 15, 5));
         java.awt.GridBagLayout mainPanelLayout = new java.awt.GridBagLayout();
-        mainPanelLayout.columnWidths = new int[] {350, 50};
+        mainPanelLayout.columnWidths = new int[] {430, 50};
         mainPanelLayout.rowHeights = new int[] {180, 15, 30, 30, 30, 30};
         mainPanel.setLayout(mainPanelLayout);
 
         jTextPane1.setEditable(false);
         jTextPane1.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
-        jTextPane1.setText("\nHerzlich Willkommen!\n\nabbozza! erfordert Arduino 1.6.12 oder höher.\n(https://www.arduino.cc/en/Main/Software)\n\nAußerdem benötigt abbozza! einen JavaScript-fähigen Browser.\nVorzugsweise Google Chrome, da er im Zusammenhang mit abbozza!\nam besten getestet ist.\n\nVielen Dank, dass Sie abbozza! benutzen!\n\nDas abbozza! Team\n");
+        jTextPane1.setText("\nHerzlich Willkommen!\n\nabbozza! Calliope erfordert Java 1.7 oder höher.\n\nAußerdem benötigt abbozza! Calliope einen JavaScript-fähigen Browser.\nVorzugsweise Google Chrome, da er am besten getestet worden ist.\n\nVielen Dank, dass Sie abbozza! Calliope benutzen!\n\nDas abbozza! Team\n");
         jTextPane1.setFocusable(false);
         jScrollPane1.setViewportView(jTextPane1);
 
@@ -183,18 +140,18 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         mainPanel.add(jScrollPane1, gridBagConstraints);
 
-        sketchbookField.setText(sketchbookDir);
-        sketchbookField.setToolTipText("Das Sketchbook-Verzeichnis");
-        sketchbookField.addActionListener(new java.awt.event.ActionListener() {
+        installField.setText(System.getProperty("user.home")+"/abbozza");
+        installField.setToolTipText("Das Sketchbook-Verzeichnis");
+        installField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sketchbookFieldActionPerformed(evt);
+                installFieldActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        mainPanel.add(sketchbookField, gridBagConstraints);
+        mainPanel.add(installField, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         jLabel2.setText("Das Sketchbook-Verzeichnis für die Installation:");
@@ -205,11 +162,12 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
         mainPanel.add(jLabel2, gridBagConstraints);
+        jLabel2.getAccessibleContext().setAccessibleName("Das Zielverzeichnis für die Installation:");
 
         sketchbookButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/uos/inf/did/abbozza/img/directory24.png"))); // NOI18N
         sketchbookButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sketchbookButtonActionPerformed(evt);
+                installDirButtonActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -274,26 +232,27 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void installButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_installButtonActionPerformed
-        File sketchbookDir = new File(sketchbookField.getText());
+        File installDir = new File(installField.getText());
         File browserFile = new File(browserField.getText());
+        // Find Jar for installation
         File file = new File(System.getProperty("user.dir"), "Abbozza.jar");
-        // System.out.println(file.getAbsolutePath());
         if (file.exists()) {
-            // System.out.println("gefunden");
-            abbozzaDir = sketchbookDir.getAbsolutePath() + "/tools/Abbozza/tool/";
+            // Create abbozza Dir
+            abbozzaDir = installDir.getAbsolutePath();
             File abzDir = new File(abbozzaDir);
             abzDir.mkdirs();
-            File jar = new File(abbozzaDir + "Abbozza.jar");
-            File backup = new File(abbozzaDir + "Abbozza_" + System.currentTimeMillis() + ".jar_");
+            // Copy jar file to install dir
+            File jar = new File(abbozzaDir + "/Abbozza.jar");
+            File backup = new File(abbozzaDir + "/Abbozza_" + System.currentTimeMillis() + ".jar_");
             try {
                 if (jar.exists()) {
                     Files.move(jar.toPath(), backup.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 }
                 jar.createNewFile();
-                // JOptionPane.showMessageDialog(null, "Kopiere " + file.toPath() + " nach " + jar.toPath());
                 Files.copy(file.toPath(), jar.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 
-                // Install libraries
+                // Extract scripts
+                /*
                 JarFile jarFile = new JarFile(jar);
                 File libDir = new File(sketchbookDir + "/libraries/Abbozza/");
                 libDir.mkdirs();
@@ -305,9 +264,12 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
                 entry = jarFile.getJarEntry("libraries/Abbozza/abbozza.cpp");
                 target = new File(sketchbookDir + "/libraries/Abbozza/abbozza.cpp");
                 Files.copy(jarFile.getInputStream(entry),target.toPath(),StandardCopyOption.REPLACE_EXISTING);
+                */
                 
                 // Standardkonfiguration
-                File prefFile = new File(sketchbookDir.getAbsolutePath() + "/tools/Abbozza/Abbozza.cfg");
+                File prefFile = new File(System.getProperty("user.home")+"/.abbozza/calliope/");
+                prefFile.mkdirs();                
+                prefFile = new File(System.getProperty("user.home")+"/.abbozza/calliope/abbozza.cfg"); 
                 prefFile.createNewFile();
 		Properties config = new Properties();
 
@@ -316,13 +278,12 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
 
                 config.store(new FileOutputStream(prefFile), "abbozza! preferences");
     
-                JOptionPane.showMessageDialog(this, "Die Installation war erfolgreich!","abbozza! installiert",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Die Installation war erfolgreich!","abbozza! Calliope installiert",JOptionPane.INFORMATION_MESSAGE);
                 this.setVisible(false);
                 System.exit(0);
             } catch (IOException e1) {
-                JOptionPane.showMessageDialog(this,"Bei der Installation trat ein Fehler auf!\n" + e1.getLocalizedMessage(),"abbozza! Fehler",JOptionPane.ERROR_MESSAGE);
-                // System.out.println(file.toPath());
-                // System.out.println(jar.toPath());
+                JOptionPane.showMessageDialog(this,"Bei der Installation trat ein Fehler auf!\n" 
+                        + e1.getLocalizedMessage(),"abbozza! Fehler",JOptionPane.ERROR_MESSAGE);
                 this.setVisible(false);
                 System.exit(1);
             }
@@ -333,14 +294,14 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_installButtonActionPerformed
 
-    private void sketchbookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sketchbookButtonActionPerformed
-        JFileChooser chooser = new JFileChooser(sketchbookField.getText());
+    private void installDirButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_installDirButtonActionPerformed
+        JFileChooser chooser = new JFileChooser(installField.getText());
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int returnVal = chooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            sketchbookField.setText(chooser.getSelectedFile().getAbsolutePath());
+            installField.setText(chooser.getSelectedFile().getAbsolutePath());
         }
-    }//GEN-LAST:event_sketchbookButtonActionPerformed
+    }//GEN-LAST:event_installDirButtonActionPerformed
 
     private void browserButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browserButtonActionPerformed
         JFileChooser chooser = new JFileChooser(browserField.getText());
@@ -364,9 +325,9 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_browserButtonActionPerformed
 
-    private void sketchbookFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sketchbookFieldActionPerformed
+    private void installFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_installFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_sketchbookFieldActionPerformed
+    }//GEN-LAST:event_installFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -385,20 +346,23 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AbbozzaInstaller.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AbbozzaCalliopeInstaller.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AbbozzaInstaller.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AbbozzaCalliopeInstaller.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AbbozzaInstaller.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AbbozzaCalliopeInstaller.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AbbozzaInstaller.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AbbozzaCalliopeInstaller.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AbbozzaInstaller().setVisible(true);
+                new AbbozzaCalliopeInstaller().setVisible(true);
             }
         });
     }
@@ -409,15 +373,16 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton installButton;
+    private javax.swing.JTextField installField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JPanel logoPanel;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JButton sketchbookButton;
-    private javax.swing.JTextField sketchbookField;
     // End of variables declaration//GEN-END:variables
 }

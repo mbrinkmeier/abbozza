@@ -93,7 +93,6 @@ public class AbbozzaLocale {
                 String key = node.getAttributes().getNamedItem("id").getNodeValue();
                 String entry = node.getTextContent();
                 entries.setProperty(key, entry);
-                AbbozzaLogger.out(key + " -> " + entry);
             }
         } catch (Exception ex) {
             Logger.getLogger(AbbozzaLocale.class.getName()).log(Level.SEVERE, null, ex);
