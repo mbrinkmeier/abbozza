@@ -105,29 +105,40 @@ public abstract class AbbozzaServer implements HttpHandler {
     private File lastSketchFile = null;
 
 
-    
+    /**
+     * The system independent initialization of the server
+     * 
+     * @param system 
+     */
     public void init(String system) {
-        
-        AbbozzaLogger.init();
-        
-        this.system = system;
-
         // If there is already an Abbozza instance, silently die
         if (instance != null) {
             return;
         }
         
+        // Set the system name
+        this.system = system;
+        
+        // Initialize the logger
+        AbbozzaLogger.init();
+        AbbozzaLogger.setLevel(AbbozzaLogger.ALL);
+                
         // Set static instance
         instance = this;
-
+        
+        AbbozzaLogger.out("Setting paths");
         setPaths();
 
         // Find Jars
         jarHandler = new JarDirHandler();
         findJarsAndDirs(jarHandler);
 
-        // Load Configuration from preferences in local directory
+        /**
+         * Read the configuration from <user.home>/.abbozza/<system>/abbozza.cfg
+         */
+        configPath = System.getProperty("user.home") + "/.abbozza/" + this.system + "/abbozza.cfg";
         config = new AbbozzaConfig(configPath);
+        
         AbbozzaLocale.setLocale(config.getLocale());
 
         AbbozzaLogger.out("Version " + VERSION, AbbozzaLogger.INFO);
@@ -150,16 +161,14 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     }
     
-    
-    // public ByteArrayOutputStream getConsoleStream() {
-    //     return logger;
-    // }
-
 
     public void setPaths() {
+        // Sketchbook is in <user.home>
         sketchbookPath = System.getProperty("user.home") + "/";
-        configPath = System.getProperty("user.home") + "/.abbozza/" + system + "/abbozza.cfg";
-        localJarPath = System.getProperty("user.home") + "/.abbozza/";
+        // Configuration can be found in <user.home>/.abbozza/<system>/abbozza.cfg
+        // configPath = System.getProperty("user.home") + "/.abbozza/" + system + "/abbozza.cfg";
+        // Local Jar file is found in the current directory
+        localJarPath = System.getProperty("user.dir");
         URL url = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation();
         int  p = url.getPath().lastIndexOf("/");
         globalJarPath = url.getPath().substring(0, p+1);
@@ -189,9 +198,9 @@ public abstract class AbbozzaServer implements HttpHandler {
     public void findJarsAndDirs(JarDirHandler jarHandler) {
         jarHandler.clear();
         jarHandler.addDir(localJarPath, "Local directory");
-        jarHandler.addJar(localJarPath + "Abbozza.jar", "Local jar");
+        jarHandler.addJar(localJarPath + "/Abbozza.jar", "Local jar");
         jarHandler.addDir(globalJarPath, "Global directory");
-        jarHandler.addJar(globalJarPath + "Abbozza.jar", "Global jar");
+        jarHandler.addJar(globalJarPath + "/Abbozza.jar", "Global jar");
     }
 
     
@@ -257,8 +266,10 @@ public abstract class AbbozzaServer implements HttpHandler {
     public abstract String compileCode(String code);
     public abstract String uploadCode(String code);
     
+    
+    
     public void checkForUpdate(boolean reportNoUpdate) {
-
+        // TODO !!!
         String updateUrl = AbbozzaServer.getConfig().getUpdateUrl();
         String version = "";
 
@@ -337,15 +348,8 @@ public abstract class AbbozzaServer implements HttpHandler {
 
             this.isStarted = true;
 
-            // Start ErrorMonitor
-            // logger = new ByteArrayOutputStream();
-            // outStream = new DuplexPrintStream(logger,System.out);
-            // errStream = new DuplexPrintStream(logger,System.err);
-            // System.setErr(new PrintStream(logger));
-            // System.setOut(new PrintStream(logger));
-
-            AbbozzaLogger.out("Duplexer Started ... ");
-            AbbozzaLogger.out("Starting ... ");
+            AbbozzaLogger.out("Duplexer Started ... ",4);
+            AbbozzaLogger.out("Starting ... ",4);
 
             serverPort = config.getServerPort();
             while (httpServer == null) {
@@ -362,7 +366,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                 }
             }
 
-            AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_started", Integer.toString(config.getServerPort())));
+            AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_started", Integer.toString(config.getServerPort())),4);
 
             String url = "http://localhost:" + config.getServerPort() + "/" + system + ".html";
             AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_reachable", url));

@@ -5,6 +5,7 @@
  */
 package de.uos.inf.did.abbozza.calliope;
 
+import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.arduino.*;
 import de.uos.inf.did.abbozza.arduino.Abbozza;
 import java.awt.Dimension;
@@ -14,6 +15,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -278,15 +281,40 @@ public class AbbozzaCalliopeInstaller extends javax.swing.JFrame {
 
                 config.store(new FileOutputStream(prefFile), "abbozza! preferences");
     
-                JOptionPane.showMessageDialog(this, "Die Installation war erfolgreich!","abbozza! Calliope installiert",JOptionPane.INFORMATION_MESSAGE);
-                this.setVisible(false);
-                System.exit(0);
+            // Create Script
             } catch (IOException e1) {
                 JOptionPane.showMessageDialog(this,"Bei der Installation trat ein Fehler auf!\n" 
                         + e1.getLocalizedMessage(),"abbozza! Fehler",JOptionPane.ERROR_MESSAGE);
                 this.setVisible(false);
                 System.exit(1);
             }
+
+            try {
+                File scriptFile;
+                String osname = System.getProperty("os.name");
+                if ( osname.contains("Linux")) {
+                    AbbozzaLogger.out("Writing " + abbozzaDir + "/abbozzaCalliope.sh",AbbozzaLogger.INFO);
+                    scriptFile = new File(abbozzaDir + "/abbozzaCalliope.sh");
+                    scriptFile.createNewFile();
+                    PrintWriter writer = new PrintWriter(scriptFile);
+                    writer.println("cd " + abbozzaDir);
+                    writer.println("java -jar Abbozza.jar calliope");
+                    scriptFile.setExecutable(true);
+                    writer.flush();
+                    writer.close();
+                } else if ( osname.contains("win")) {
+                    scriptFile = new File(abbozzaDir + "/abbozzaCalliope.bat");                    
+                }
+                    
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Das Start-Skript konnte nicht geschrieben werden","Fehler bei der Installation",JOptionPane.INFORMATION_MESSAGE);
+                this.setVisible(false);
+                System.exit(1);    
+            }
+                
+            JOptionPane.showMessageDialog(this, "Die Installation war erfolgreich!","abbozza! Calliope installiert",JOptionPane.INFORMATION_MESSAGE);
+            this.setVisible(false);
+            System.exit(0);
         } else {
             JOptionPane.showMessageDialog(this, "Abbozza.jar nicht gefunden!", "abbozza! Installationsfehler ",
                     JOptionPane.ERROR_MESSAGE);

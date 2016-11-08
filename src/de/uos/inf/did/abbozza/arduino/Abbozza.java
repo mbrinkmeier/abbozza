@@ -94,7 +94,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
     @Override
     public void setPaths() {
         sketchbookPath = PreferencesData.get("sketchbook.path");
-        configPath = sketchbookPath + "/tools/Abbozza/Abbozza.cfg";
+        // configPath = sketchbookPath + "/tools/Abbozza/Abbozza.cfg";
         localJarPath = sketchbookPath + "/tools/Abbozza/tool/";
         globalJarPath = PreferencesData.get("runtime.ide.path") + "/";
         runtimePath = globalJarPath;

@@ -5,6 +5,7 @@
  */
 package de.uos.inf.did.abbozza.arduino;
 
+import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.arduino.Abbozza;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -41,8 +42,10 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
      * Creates new form AbbozzaInstaller
      */
     public AbbozzaInstaller() {
+        // Read the arduino preferences
         prefs = getPreferences();
 
+        // Initialize the frame
         initComponents();
         this.setTitle("abbozza! installer");
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -51,14 +54,16 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         int y = (screen.height - getHeight()) / 2;
         setLocation(x, y);
 
-        // System.out.println("abbozza! " + Abbozza.VERSION);
+        AbbozzaLogger.init();
+        AbbozzaLogger.setLevel(AbbozzaLogger.ALL);
 
-        if ( prefs.getProperty("sketchbook.path") != null ) {
+        // Find the sketchbook path
+        if (prefs.getProperty("sketchbook.path") != null) {
             abbozzaDir = prefs.getProperty("sketchbook.path") + "/tools/Abbozza/";
         } else {
             abbozzaDir = sketchbookDir + "/tools/Abbozza/";
         }
-        File aD = new File(abbozzaDir);
+        File aD = new File(abbozzaDir+"tool/Abbozza.jar");
 
         if (aD.exists()) {
             int result = JOptionPane.showConfirmDialog(this,
@@ -67,12 +72,14 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
             if (result == JOptionPane.NO_OPTION) {
                 System.exit(1);
             }
-            File prefFile = new File(abbozzaDir+"Abbozza.cfg");
+            // Write initial configuration file
+            File prefFile = new File(System.getProperty("user.home") + "/.abbozza/arduino/abbozza.cfg");
             Properties config = new Properties();
             try {
                 config.load(new FileInputStream(prefFile));
                 browserField.setText(config.getProperty("browserPath"));
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
     }
 
@@ -81,7 +88,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         String osName = System.getProperty("os.name");
         String userDir = System.getProperty("user.home");
         String prefName = userDir;
-        
+
         if (osName.indexOf("Linux") != -1) {
             sketchbookDir = prefName + "/Arduino/";
             prefName = prefName + "/.arduino15/preferences.txt";
@@ -90,14 +97,13 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
             prefName = prefName + "/Library/Arduino/preferences.txt";
         } else if (osName.indexOf("Windows") != -1) {
             sketchbookDir = prefName + "/Documents/Arduino/";
-           prefName = prefName + "/Documents/Arduino/preferences.txt";
+            prefName = prefName + "/Documents/Arduino/preferences.txt";
         } else {
             sketchbookDir = prefName + "/AppData/Roaming/Arduino/";
-           prefName = prefName + "/AppData/Roaming/Arduino/preferences.txt";
+            prefName = prefName + "/AppData/Roaming/Arduino/preferences.txt";
         }
 
         // System.out.println(prefName);
-        
         Properties prefs = new Properties();
 
         try {
@@ -110,11 +116,11 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
             //        "abbozza! Installationsfehler ", JOptionPane.ERROR_MESSAGE);
         }
 
-        if ( (prefs != null) && (prefs.getProperty("sketchbook.path") != null) ) {
+        if ((prefs != null) && (prefs.getProperty("sketchbook.path") != null)) {
             sketchbookDir = (new File(prefs.getProperty("sketchbook.path"))).getAbsolutePath();
         }
         // System.out.println(sketchbookDir);
-        
+
         return prefs;
     }
 
@@ -277,9 +283,14 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         File sketchbookDir = new File(sketchbookField.getText());
         File browserFile = new File(browserField.getText());
         File file = new File(System.getProperty("user.dir"), "Abbozza.jar");
-        // System.out.println(file.getAbsolutePath());
         if (file.exists()) {
-            // System.out.println("gefunden");
+            try {
+                AbbozzaLogger.out("Jar found at " + file.getCanonicalPath(), AbbozzaLogger.ALL);
+            } catch (IOException ex) {
+               JOptionPane.showMessageDialog(this, System.getProperty("user.dir")+"/Abbozza.jar nicht gefunden!", "abbozza! Fehler", JOptionPane.ERROR_MESSAGE);
+               this.setVisible(false);
+               System.exit(1);
+            }
             abbozzaDir = sketchbookDir.getAbsolutePath() + "/tools/Abbozza/tool/";
             File abzDir = new File(abbozzaDir);
             abzDir.mkdirs();
@@ -292,40 +303,51 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
                 jar.createNewFile();
                 // JOptionPane.showMessageDialog(null, "Kopiere " + file.toPath() + " nach " + jar.toPath());
                 Files.copy(file.toPath(), jar.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                
+            } catch (IOException ex) {
+               JOptionPane.showMessageDialog(this, "Konnte " + jar.toPath() + " nicht nach " + backup.toPath() + " sichern!", "abbozza! Fehler", JOptionPane.ERROR_MESSAGE);
+               this.setVisible(false);
+               System.exit(1);
+            }
+            /*
+            try {
                 // Install libraries
                 JarFile jarFile = new JarFile(jar);
                 File libDir = new File(sketchbookDir + "/libraries/Abbozza/");
                 libDir.mkdirs();
-                
+
                 JarEntry entry = jarFile.getJarEntry("libraries/Abbozza/abbozza.h");
                 File target = new File(sketchbookDir + "/libraries/Abbozza/abbozza.h");
-                Files.copy(jarFile.getInputStream(entry), target.toPath(),StandardCopyOption.REPLACE_EXISTING);
-                
+                Files.copy(jarFile.getInputStream(entry), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
                 entry = jarFile.getJarEntry("libraries/Abbozza/abbozza.cpp");
                 target = new File(sketchbookDir + "/libraries/Abbozza/abbozza.cpp");
-                Files.copy(jarFile.getInputStream(entry),target.toPath(),StandardCopyOption.REPLACE_EXISTING);
-                
-                // Standardkonfiguration
-                File prefFile = new File(sketchbookDir.getAbsolutePath() + "/tools/Abbozza/Abbozza.cfg");
+                Files.copy(jarFile.getInputStream(entry), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } (catch IOException ex) {
+                    
+            }
+            */
+            
+            // Create configuration file
+            try {
+                File prefFile = new File(System.getProperty("user.home") + "/.abbozza/arduino/abbozza.cfg");
+                prefFile.getParentFile().mkdirs();
                 prefFile.createNewFile();
-		Properties config = new Properties();
+                Properties config = new Properties();
 
-                config.setProperty("freshInstall","true");
+                config.setProperty("freshInstall", "true");
                 config.setProperty("browserPath", browserField.getText());
 
                 config.store(new FileOutputStream(prefFile), "abbozza! preferences");
-    
-                JOptionPane.showMessageDialog(this, "Die Installation war erfolgreich!","abbozza! installiert",JOptionPane.INFORMATION_MESSAGE);
-                this.setVisible(false);
-                System.exit(0);
-            } catch (IOException e1) {
-                JOptionPane.showMessageDialog(this,"Bei der Installation trat ein Fehler auf!\n" + e1.getLocalizedMessage(),"abbozza! Fehler",JOptionPane.ERROR_MESSAGE);
-                // System.out.println(file.toPath());
-                // System.out.println(jar.toPath());
-                this.setVisible(false);
-                System.exit(1);
+            } catch (IOException ex) {
+               JOptionPane.showMessageDialog(this, System.getProperty("user.home") + "/.abbozza/arduino/abbozza.cfg konnte nicht angelegt werden!\n" +
+                       ex.getLocalizedMessage(), "abbozza! Fehler", JOptionPane.ERROR_MESSAGE);
+               this.setVisible(false);
+               System.exit(1);         
             }
+                        
+            JOptionPane.showMessageDialog(this, "Die Installation war erfolgreich!", "abbozza! installiert", JOptionPane.INFORMATION_MESSAGE);
+            this.setVisible(false);
+            System.exit(0);
         } else {
             JOptionPane.showMessageDialog(this, "Abbozza.jar nicht gefunden!", "abbozza! Installationsfehler ",
                     JOptionPane.ERROR_MESSAGE);

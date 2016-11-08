@@ -42,7 +42,7 @@ public class AbbozzaConfig {
 
     // General configuration
     private int config_serverPort = 54242;
-    private boolean config_autoStart = false;
+    private boolean config_autoStart = true;
     private boolean config_browserStart = true;
     private String config_browserPath = "";
     private String config_locale = "de_DE";
@@ -52,7 +52,7 @@ public class AbbozzaConfig {
     private boolean config_tasksEditable = true;
     
     /**
-     *  Reads the configuration from the given path
+     *  Reads the configuration from the given path.
      */
     public AbbozzaConfig(String path) {
         configPath = path;
@@ -69,16 +69,20 @@ public class AbbozzaConfig {
     
     
     /**
-     * This method reads the configuration from the file
+     * This method reads the configuration from the file.
+     * If the file does not exist, set the default configuration and write it.
      */
     public void read() {
         if ( configPath == null ) return;
         File prefFile = new File(configPath);
         config = new Properties();
         try {
+            // Load the configuration
+            AbbozzaLogger.out("Reading config from " + configPath, AbbozzaLogger.ALL);
             config.load(new FileInputStream(prefFile));
             set(config);    
         } catch (IOException ex) {
+            // Create a new configuration file
             AbbozzaLogger.err("Configuration file " + configPath + " not found! Creating one!");
             setDefault("");
             write();
@@ -92,20 +96,20 @@ public class AbbozzaConfig {
      */
     public void setDefault(String browserPath) {    
         // Check for Abbozza.cfg in global dir
-        String runtimePath = AbbozzaServer.getInstance().getGlobalJarPath();
-        if (configPath == null) configPath = AbbozzaServer.getInstance().getConfigPath();
-        File defaultFile = new File(runtimePath + "/" + AbbozzaServer.getInstance().system + "/abbozza.cfg");
+        // String runtimePath = AbbozzaServer.getInstance().getGlobalJarPath();
+        // if (configPath == null) configPath = AbbozzaServer.getInstance().getConfigPath();
+        // File defaultFile = new File(runtimePath + "/" + AbbozzaServer.getInstance().system + "/abbozza.cfg");
         config = new Properties();
-        try {
-            config.load(new FileInputStream(defaultFile));
-            AbbozzaLogger.out("Reading default configuration from " + defaultFile.getAbsolutePath(),AbbozzaLogger.INFO);
-            set(config);        
-            write();
-        } catch (IOException ex) {
-            AbbozzaLogger.out("Setting internal default configuration.",AbbozzaLogger.INFO);
+        // try {
+        //     config.load(new FileInputStream(defaultFile));
+        //     AbbozzaLogger.out("Reading default configuration from " + defaultFile.getAbsolutePath(),AbbozzaLogger.INFO);
+        //     set(config);        
+        //     write();
+        /// } catch (IOException ex) {
+            AbbozzaLogger.out("Setting internal default configuration",AbbozzaLogger.INFO);
             config.remove("freshInstall");
             config_serverPort = 54242;
-            config_autoStart = false;
+            config_autoStart = true;
             config_browserStart = true;
             config_browserPath = browserPath;
             config_locale = System.getProperty("user.language") + "_" + System.getProperty("user.country");
@@ -122,8 +126,9 @@ public class AbbozzaConfig {
             // setOption("multArrays", true);
             // setOption("devices", true);
             // setOptionInt("loglevel",AbbozzaLogger.NONE);
-            AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
-        }        
+            AbbozzaLogger.setLevel(AbbozzaLogger.ALL);
+            AbbozzaLogger.out("Default configuration set",AbbozzaLogger.INFO);
+        // }        
     }
     
         
@@ -155,7 +160,9 @@ public class AbbozzaConfig {
     public void set(Properties properties) {
         
         if ("true".equals(properties.get("freshInstall"))) {
+            AbbozzaLogger.out("Setting default configuration after fresh install",AbbozzaLogger.ALL);
             setDefault(properties.getProperty("browserPath"));
+            write();
             return;
         }        
 
@@ -178,7 +185,7 @@ public class AbbozzaConfig {
         }
         config_tasksEditable = "true".equals(properties.getProperty("tasksEditable","true"));
         if (properties.getProperty("loglevel") != null) {
-            AbbozzaLogger.setLevel(Integer.parseInt(properties.getProperty("loglevel","0")));
+            AbbozzaLogger.setLevel(Integer.parseInt(properties.getProperty("loglevel","4")));
         } else {
             AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
         }
@@ -195,6 +202,7 @@ public class AbbozzaConfig {
             prefFile.getParentFile().mkdirs();
             prefFile.createNewFile();
             Properties props = get();
+            AbbozzaLogger.out("Configuration written to " + configPath,AbbozzaLogger.INFO);
             props.store(new FileOutputStream(prefFile), "abbozza! preferences (" + AbbozzaServer.getInstance().system + ")");
             
         } catch (IOException ex) {

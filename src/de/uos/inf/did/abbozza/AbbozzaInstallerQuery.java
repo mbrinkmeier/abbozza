@@ -23,6 +23,7 @@ package de.uos.inf.did.abbozza;
 
 import de.uos.inf.did.abbozza.arduino.AbbozzaInstaller;
 import de.uos.inf.did.abbozza.arduino.Abbozza;
+import de.uos.inf.did.abbozza.calliope.AbbozzaCalliope;
 import de.uos.inf.did.abbozza.calliope.AbbozzaCalliopeInstaller;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -41,12 +42,12 @@ public class AbbozzaInstallerQuery extends javax.swing.JDialog {
         super(parent, modal);
 
         initComponents();
-        
+
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (screen.width - getWidth()) / 2;
         int y = (screen.height - getHeight()) / 2;
-        setLocation(x, y);        
+        setLocation(x, y);
     }
 
     /**
@@ -143,7 +144,7 @@ public class AbbozzaInstallerQuery extends javax.swing.JDialog {
             public void run() {
                 new AbbozzaCalliopeInstaller().setVisible(true);
             }
-        });        
+        });
     }//GEN-LAST:event_installCalliope
 
     private void installArduino(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_installArduino
@@ -185,20 +186,30 @@ public class AbbozzaInstallerQuery extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(AbbozzaInstallerQuery.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        if (args.length == 0) {
+            /* Create and display the dialog */
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    AbbozzaInstallerQuery dialog = new AbbozzaInstallerQuery(new javax.swing.JFrame(), true);
+                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                        @Override
+                        public void windowClosing(java.awt.event.WindowEvent e) {
+                            System.exit(0);
+                        }
+                    });
+                    dialog.setVisible(true);
+                }
+            });
+        } else {
+            String cmd = args[0];
+            if (cmd.equals("calliope")) {
+                AbbozzaCalliope abbozza = new AbbozzaCalliope();
+                abbozza.init("calliope");
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                AbbozzaInstallerQuery dialog = new AbbozzaInstallerQuery(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+                abbozza.startServer();
+                abbozza.startBrowser("calliope.html");
             }
-        });
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
