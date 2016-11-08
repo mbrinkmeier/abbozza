@@ -207,7 +207,7 @@ public class AbbozzaInstallerQuery extends javax.swing.JDialog {
                 abbozza.init("calliope");
 
                 abbozza.startServer();
-                abbozza.startBrowser("calliope.html");
+                // abbozza.startBrowser("calliope.html");
             }
         }
     }
