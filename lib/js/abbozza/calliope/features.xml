@@ -108,26 +108,10 @@
 	
     <feature id="feat.SERIAL">
         <category id="cat.SERIAL">
-            <block type="serial_println"></block>
-            <block type="serial_readln"></block>
-            <block type="serial_available"></block>
-            <!--block type="serial_write_byte"></block -->
-            <block type="serial_table"></block>
-            <block type="dev_serial"></block>
-            <block type="dev_serial_write">
-                <value name="VALUE">
-                    <block type="math_number"></block>
-                </value>
-            </block>
-            <block type="dev_serial_read"></block>
-            <block type="dev_serial_available"></block>
         </category>
     </feature>
         
     <feature id="feat.SERIALRATE">
-        <category id="cat.SERIAL">
-            <!-- block type="serial_begin_rate"></block -->
-        </category>
     </feature>
 
     <feature id="feat.MISC">

@@ -47,6 +47,7 @@
         <msg id="gui.clear">Lösche Meldungen</msg>        
         <msg id="gui.console">Meldungen</msg>
         <msg id="gui.sourceCode">Quelltext</msg>
+        <msg id="gui.startBrowser">Starte Browser</msg>
     </gui>
     <image>
         <msg id="Image.HEART">Herz</msg>
