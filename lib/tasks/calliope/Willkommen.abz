@@ -1,0 +1,36 @@
+<xml xmlns="http://www.w3.org/1999/xhtml"><block deletable="false" id="main" inline="false" type="main" x="100" y="20"><mutation><title>&lt;title&gt;</title><symbols/></mutation><statement name="STATEMENTS"><block id="?gq*[63UMxJ[kt.8i?8A" type="loop_endless"><statement name="STATEMENTS"><block id="ghVS-l[A%r#s)y-_GuY:" type="display_scroll"><value name="TEXT"><block id="e|7416W/?h+W50y07ILL" type="text_const"><field name="CONTENT">Hallo! Ich bin Calliope Mini!</field><data>text</data></block></value></block></statement></block></statement></block><description/><options apply="no" protected="no">{option.operations=true,option.colorDefault=true,option.multArrays=true,option.devices=true,option.pathToBoard=K:\,option.localVars=true,option.linArrays=false,option.serial=true,option.colorType=false,option.colorCategory=false,option.noArrays=false}</options><task height="412" width="612">&lt;page&gt;
+   &lt;h1&gt;Willkommen bei abbozza! Calliope&lt;/h1&gt;
+   &lt;p&gt;
+      Mit diesem Programm kannst du deinen Calliope Mini auf einfache Art
+      programmieren. Du musst nur die richtigen Blöcke in der richtigen
+      Art miteinander kombinieren und schon mach dein Calliope was Du möchtest!
+   &lt;/p&gt;
+   &lt;p&gt;
+      Als Beispiel siehst du hier ein Programm, dass immer wieder den Text
+      &lt;tt&gt;Hallo! Ich bin Calliope Mini!&lt;/tt&gt; durchlaufen lässt.
+   &lt;/p&gt;
+   &lt;p&gt;
+      Um dein Programm auf dem Calliope auszuprobieren muss du ihn an deinen
+      Computer anschließen und den Knpf &lt;img width="20px" src="img/upload.png"&gt;
+      drücken.
+   &lt;/p&gt;
+   &lt;abbozza-hint block="text" width="150" height="75" dx="45" dy="60"&gt;
+      Du kannst auch einen anderen Text ausprobieren!
+   &lt;/abbozza-hint&gt;
+   &lt;p&gt;
+       Wenn du wissen willst, was &lt;b&gt;abbozza!&lt;/b&gt; heißt, musst Du nur auf der
+       zweiten Seite nachsehen.
+   &lt;/p&gt;
+&lt;/page&gt;
+&lt;page&gt;
+   &lt;p&gt;
+      &lt;b&gt;abbozza!&lt;/b&gt; ist Italienisch und heißt: &lt;b&gt;Entwirf!&lt;/b&gt;
+   &lt;/p&gt;
+   &lt;p&gt;
+      Wir wünschen dir viel Spass beim Entwerfen eigener Programme!
+   &lt;/p&gt;
+   &lt;p&gt;
+      Wenn du noch ein Beispiel sehen willst, folge einfach diesem
+      &lt;a href="?task/Beispiel.abz"&gt;Link&lt;/a&gt;.
+   &lt;/p&gt;
+&lt;/page&gt;</task></xml>

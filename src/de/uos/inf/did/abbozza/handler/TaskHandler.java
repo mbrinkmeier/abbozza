@@ -57,8 +57,9 @@ public class TaskHandler extends AbstractHandler {
                 
         if (bytearray == null) {
             AbbozzaLogger.out("TaskHandler: " + taskPath + path + " not found! Looking in jars!", AbbozzaLogger.INFO);
+            AbbozzaLogger.out("TaskHandler: Looking for " + "/tasks/" + AbbozzaServer.getInstance().getSystem() + path, AbbozzaLogger.INFO);
             // String result = "abbozza! : " + path + " not found in task directory! Looking in jars.";
-            bytearray = this._jarHandler.getBytes("/tasks" + path);
+            bytearray = this._jarHandler.getBytes("/tasks/" + AbbozzaServer.getInstance().getSystem() + path);
         }
         
         if (bytearray == null) {        
@@ -91,7 +92,7 @@ public class TaskHandler extends AbstractHandler {
             responseHeaders.set("Content-Type", "text/text");            
         }
 
-        // AbbozzaLogger.out(new String(bytearray),AbbozzaLogger.ALL);
+        // AbbozzaLogger.out(new String(bytearray),AbbozzaLogger.INFO);
         // ok, we are ready to send the response.
         exchg.sendResponseHeaders(200, bytearray.length);
         os.write(bytearray, 0, bytearray.length);

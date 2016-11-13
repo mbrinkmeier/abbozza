@@ -77,9 +77,6 @@
             <block type="display_on"></block>
             <block type="display_off"></block>
             <block type="display_is_on"></block>
-            <block type="dev_button_pressed"></block>
-            <block type="dev_button_was_pressed"></block>
-            <block type="dev_button_get_presses"></block>
         </category>
 
         <category  id="cat.DEVIN">

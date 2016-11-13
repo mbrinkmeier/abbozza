@@ -11,6 +11,7 @@
         <msg id="block.displayOn">Schalte Anzeige aus</msg>
         <msg id="block.displayOff">Schalte Anzeige an</msg>
         <msg id="block.displayIsOn">Ist Anzeige an?</msg>
+        <msg id="block.asString"></msg>
         
         <msg id="dev.BUTTON_A">Knopf A</msg>
         <msg id="dev.BUTTON_B">Knopf B</msg>

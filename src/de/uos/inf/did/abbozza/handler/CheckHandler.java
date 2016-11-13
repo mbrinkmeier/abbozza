@@ -66,12 +66,8 @@ public class CheckHandler extends AbstractHandler {
         AbbozzaLogger.resetErr();
         
         String response;
-        boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
-        PreferencesData.setBoolean("editor.save_on_verify", false);
-
 
         response = _abbozzaServer.compileCode(code);
-        PreferencesData.setBoolean("editor.save_on_verify", flag);
         response = AbbozzaLogger.getErr();
         
         return response;

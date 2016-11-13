@@ -302,12 +302,19 @@ public class AbbozzaCalliopeInstaller extends javax.swing.JFrame {
                     scriptFile.setExecutable(true);
                     writer.flush();
                     writer.close();
-                } else if ( osname.contains("win")) {
-                    scriptFile = new File(abbozzaDir + "/abbozzaCalliope.bat");                    
+                } else if ( osname.contains("Win")) {
+                    scriptFile = new File(abbozzaDir + "\\abbozzaCalliope.bat");                    
+                    scriptFile.createNewFile();
+                    PrintWriter writer = new PrintWriter(scriptFile);
+                    writer.println("cd " + abbozzaDir);
+                    writer.println("java -jar Abbozza.jar calliope");
+                    scriptFile.setExecutable(true);
+                    writer.flush();
+                    writer.close();
                 }
                     
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Das Start-Skript konnte nicht geschrieben werden","Fehler bei der Installation",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Das Start-Skript konnte nicht geschrieben werden: " + abbozzaDir + "\\abbozzaCalliope.bat","Fehler bei der Installation",JOptionPane.INFORMATION_MESSAGE);
                 this.setVisible(false);
                 System.exit(1);    
             }
