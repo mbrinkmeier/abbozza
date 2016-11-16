@@ -55,7 +55,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         setLocation(x, y);
 
         AbbozzaLogger.init();
-        AbbozzaLogger.setLevel(AbbozzaLogger.ALL);
+        AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
 
         // Find the sketchbook path
         if (prefs.getProperty("sketchbook.path") != null) {
@@ -285,7 +285,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         File file = new File(System.getProperty("user.dir"), "Abbozza.jar");
         if (file.exists()) {
             try {
-                AbbozzaLogger.out("Jar found at " + file.getCanonicalPath(), AbbozzaLogger.ALL);
+                AbbozzaLogger.out("Jar found at " + file.getCanonicalPath(), AbbozzaLogger.DEBUG);
             } catch (IOException ex) {
                JOptionPane.showMessageDialog(this, System.getProperty("user.dir")+"/Abbozza.jar nicht gefunden!", "abbozza! Fehler", JOptionPane.ERROR_MESSAGE);
                this.setVisible(false);

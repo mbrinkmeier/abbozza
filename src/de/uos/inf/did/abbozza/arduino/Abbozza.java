@@ -49,7 +49,9 @@ import de.uos.inf.did.abbozza.handler.TaskHandler;
 import de.uos.inf.did.abbozza.handler.UploadHandler;
 import de.uos.inf.did.abbozza.handler.VersionHandler;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -179,24 +181,38 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         
         toolSetCode(code);        
 
+        // Redirect error stream
+        PrintStream origErr = System.err;
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        PrintStream newErr = new PrintStream(buffer);
+        System.setErr(newErr);
+            
         // Compile sketch                
-        try {
+        try {            
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.compiling"), AbbozzaLogger.INFO);
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.compiling"));
-            //editor.getSketch().prepare();
-            // editor.getSketch().build(false, false);
+        
             editor.getSketchController().build(false, false);
+            
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.done_compiling"));
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+            // e.printStackTrace(System.out);
             editor.statusError(e);
-            AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
+            editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.error_compiling"));
+            AbbozzaLogger.out(AbbozzaLocale.entry("msg.error_compiling"), AbbozzaLogger.INFO);
         }
         
-        
-        // return logger.toString();
-        return "";
+
+        // Reset error stream
+        newErr.flush();            
+        System.setErr(origErr);
+  
+        // Fetch response
+        String errMsg = buffer.toString();
+        System.err.println(errMsg);
+                
+        return errMsg;
     }
 
     @Override
@@ -210,17 +226,22 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         group.enumerate(threads, false);
 
         monitorHandler.suspend();
-
+        
         toolSetCode(code);        
 
+        // Redirect error stream
+        PrintStream origErr = System.err;
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        PrintStream newErr = new PrintStream(buffer);
+        System.setErr(newErr);
+        
         try {
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.compiling"));
             editor.handleExport(false);
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.done_compiling"));
         } catch (Exception e) {
-            e.printStackTrace(System.out);
             editor.statusError(e);
-            AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
+            AbbozzaLogger.out(AbbozzaLocale.entry("msg.error_compiling"), AbbozzaLogger.INFO);
         }
     
         Thread[] threads2 = new Thread[group.activeCount()];
@@ -249,8 +270,15 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         
         PreferencesData.setBoolean("editor.save_on_verify", flag);
 
-        // return logger.toString();
-        return "";
+        // Reset error stream
+        newErr.flush();            
+        System.setErr(origErr);
+  
+        // Fetch response
+        String errMsg = buffer.toString();
+        System.err.println(errMsg);
+                
+        return errMsg;
     }
     
 }

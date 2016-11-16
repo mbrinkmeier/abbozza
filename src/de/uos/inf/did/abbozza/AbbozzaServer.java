@@ -121,7 +121,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         
         // Initialize the logger
         AbbozzaLogger.init();
-        AbbozzaLogger.setLevel(AbbozzaLogger.ALL);
+        AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
                 
         // Set static instance
         instance = this;

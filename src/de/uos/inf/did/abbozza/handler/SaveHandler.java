@@ -172,7 +172,7 @@ public class SaveHandler extends AbstractHandler {
                 _abbozzaServer.setLastSketchFile(file);
             }
         } catch (Exception ex) {
-            AbbozzaLogger.out(ex.toString(), AbbozzaLogger.ALL);
+            AbbozzaLogger.out(ex.toString(), AbbozzaLogger.DEBUG);
         }
         _abbozzaServer.toolIconify();
     }

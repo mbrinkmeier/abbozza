@@ -38,7 +38,7 @@ public class AbbozzaLogger {
     static public final int ERROR = 1;
     static public final int WARNING = 2;
     static public final int INFO = 3;
-    static public final int ALL = 4;
+    static public final int DEBUG = 4;
 
     static private int level;
     

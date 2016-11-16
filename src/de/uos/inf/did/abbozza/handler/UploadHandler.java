@@ -72,8 +72,8 @@ public class UploadHandler extends AbstractHandler {
          String response;
 
         response = _abbozzaServer.uploadCode(code);
-
-        response = AbbozzaLogger.getErr();
+        
+        // response = AbbozzaLogger.getErr();
 
         return response;
     }   

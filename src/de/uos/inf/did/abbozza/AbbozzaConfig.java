@@ -78,7 +78,7 @@ public class AbbozzaConfig {
         config = new Properties();
         try {
             // Load the configuration
-            AbbozzaLogger.out("Reading config from " + configPath, AbbozzaLogger.ALL);
+            AbbozzaLogger.out("Reading config from " + configPath, AbbozzaLogger.DEBUG);
             config.load(new FileInputStream(prefFile));
             set(config);    
         } catch (IOException ex) {
@@ -126,7 +126,7 @@ public class AbbozzaConfig {
             // setOption("multArrays", true);
             // setOption("devices", true);
             // setOptionInt("loglevel",AbbozzaLogger.NONE);
-            AbbozzaLogger.setLevel(AbbozzaLogger.ALL);
+            AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
             AbbozzaLogger.out("Default configuration set",AbbozzaLogger.INFO);
         // }        
     }
@@ -160,7 +160,7 @@ public class AbbozzaConfig {
     public void set(Properties properties) {
         
         if ("true".equals(properties.get("freshInstall"))) {
-            AbbozzaLogger.out("Setting default configuration after fresh install",AbbozzaLogger.ALL);
+            AbbozzaLogger.out("Setting default configuration after fresh install",AbbozzaLogger.DEBUG);
             setDefault(properties.getProperty("browserPath"));
             write();
             return;

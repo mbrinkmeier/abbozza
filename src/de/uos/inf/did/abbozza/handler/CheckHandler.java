@@ -27,8 +27,11 @@ import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.StringWriter;
 import processing.app.PreferencesData;
 
 /**
@@ -68,7 +71,9 @@ public class CheckHandler extends AbstractHandler {
         String response;
 
         response = _abbozzaServer.compileCode(code);
-        response = AbbozzaLogger.getErr();
+        // response = AbbozzaLogger.getErr();
+
+        // AbbozzaLogger.out("compile response: " + response,AbbozzaLogger.ALL);
         
         return response;
     }
