@@ -156,9 +156,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
     @Override
     public void toolSetCode(String code) {
-        // editor.getSketch().getCurrentCode().setProgram(code);
         setEditorText(code);
-        // editor.getSketch().getCurrentCode().setModified(true);        
     }
 
     private void setEditorText(final String code) {
@@ -166,7 +164,6 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
                     editor.getCurrentTab().setText(code);
-                    // editor.setText(code);
                 }
             });
         } catch (InterruptedException ex) {
