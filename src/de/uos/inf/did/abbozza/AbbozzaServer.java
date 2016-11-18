@@ -277,6 +277,8 @@ public abstract class AbbozzaServer implements HttpHandler {
         int minor;
         int rev;
 
+        
+        // Retrieve the update version from <updateUrl>/VERSION
         try {
             URL url = new URL(updateUrl + "VERSION");
             BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -291,10 +293,10 @@ public abstract class AbbozzaServer implements HttpHandler {
             AbbozzaLogger.out("Could not check update version", AbbozzaLogger.INFO);
             return;
         }
-
         AbbozzaLogger.out("Checking for update at " + updateUrl, AbbozzaLogger.INFO);
         AbbozzaLogger.out("Update version " + major + "." + minor + "." + rev, AbbozzaLogger.INFO);
 
+        // Checking version of update
         if ((major > VER_MAJOR)
                 || ((major == VER_MAJOR) && (minor > VER_MINOR))
                 || ((major == VER_MAJOR) && (minor == VER_MINOR) && (rev > VER_REV))) {
@@ -307,23 +309,25 @@ public abstract class AbbozzaServer implements HttpHandler {
             try {
                 // Rename current jar
                 // AbbozzaLogger.out(this.getSketchbookPath(),AbbozzaLogger.ALL);
-                File cur = new File(this.getSketchbookPath() + "/tools/Abbozza/tool/Abbozza.jar");
+                URL curUrl = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation();
+                File cur = new File(curUrl.toURI());
+                AbbozzaLogger.out("Current jar found at " + cur.getAbsolutePath(),AbbozzaLogger.INFO);
                 SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
                 String today = format.format(new Date());
-                File dir = new File(this.getSketchbookPath() + "/tools/Abbozza/tool/old");
+                File dir = new File(cur.getParentFile().getAbsolutePath());
                 if (!dir.exists()) {
                     AbbozzaLogger.out("Creating directory " + dir.getPath(), AbbozzaLogger.INFO);
                     dir.mkdir();
                 }
                 AbbozzaLogger.out("Moving old version to " + dir.getPath() + "/Abbozza." + today + ".jar", AbbozzaLogger.INFO);
-                cur.renameTo(new File(this.getSketchbookPath() + "/tools/Abbozza/tool/old/Abbozza." + today + ".jar"));
+                cur.renameTo(new File(dir.getPath() + "/Abbozza." + today + ".jar"));
                 AbbozzaLogger.out("Downloading version " + version, AbbozzaLogger.INFO);
                 url = new URL(updateUrl + "Abbozza.jar");
                 URLConnection conn = url.openConnection();
                 byte buffer[] = new byte[4096];
                 int n = -1;
                 InputStream ir = conn.getInputStream();
-                FileOutputStream ow = new FileOutputStream(new File(this.getSketchbookPath() + "/tools/Abbozza/tool/Abbozza.jar"));
+                FileOutputStream ow = new FileOutputStream(new File(curUrl.toURI()));
                 while ((n = ir.read(buffer)) != -1) {
                     ow.write(buffer, 0, n);
                 }

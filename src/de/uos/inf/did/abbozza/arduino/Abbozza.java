@@ -64,6 +64,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import processing.app.BaseNoGui;
 import processing.app.debug.RunnerException;
 import processing.app.helpers.PreferencesMapException;
 
@@ -72,12 +73,24 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
     public static Color COLOR = new Color(91, 103, 165);
     private static int counter;
 
+    private int arduino_major;
+    private int arduino_minor;
+    private int arduino_rev;
+
     private Editor editor;
 
     public String runtimePath;
 
     @Override
-    public void init(Editor editor) {
+    public void init(Editor editor) {        
+        String version = BaseNoGui.VERSION_NAME;
+        int pos = version.indexOf('.');
+        arduino_major = Integer.parseInt(version.substring(0, pos));
+        int pos2 = version.indexOf('.', pos + 1);
+        arduino_minor = Integer.parseInt(version.substring(pos + 1, pos2));
+        arduino_rev = Integer.parseInt(version.substring(pos2 + 1));
+        AbbozzaLogger.out("Found arduino version " + arduino_major + "." +arduino_minor + "." + arduino_rev,AbbozzaLogger.INFO);
+        
         this.editor = editor;
         super.init("arduino");        
     }
@@ -87,10 +100,12 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         // Do not start a second Abbozza instance!
         if (Abbozza.getInstance() != this) {
             return;
-        }
+        }        
 
         startServer();
         startBrowser("arduino.html");
+
+        
     }
 
     @Override
@@ -161,11 +176,13 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
     private void setEditorText(final String code) {
         try {
+            System.out.println("hier");
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
                     editor.getCurrentTab().setText(code);
                 }
             });
+            System.out.println("da");
         } catch (InterruptedException ex) {
             Logger.getLogger(Abbozza.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvocationTargetException ex) {
@@ -173,6 +190,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         }
     }
 
+    
     @Override
     public String compileCode(String code) {
         
