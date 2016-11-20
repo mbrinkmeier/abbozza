@@ -63,6 +63,10 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         this.setLocation(x, y);
         
         loadConfiguration();
+
+        // browserPathField.setText("open");
+        browserPathField.setEnabled(false);
+        browserButton.setEnabled(false);
         
         if (showServer) {
             jTabbedPane1.setSelectedComponent(serverPanel);
@@ -551,10 +555,6 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
     public DefaultTreeModel buildOptionTree() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(AbbozzaLocale.entry("gui.options"));
         optionTree = new DefaultTreeModel(root);
-
-        /**
-         * ToDo: Parse the Tree in options.xml
-         */
         
         // Read DOM from options.xml
         Document optionXml = AbbozzaServer.getInstance().getOptionTree();
@@ -568,45 +568,6 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
             }
         }
 
-        /*
-         * End of parsing
-        */
-
-        /*
-        DefaultMutableTreeNode blocks = new DefaultMutableTreeNode(AbbozzaLocale.entry("gui.blocks"));
-        DefaultMutableTreeNode code = new DefaultMutableTreeNode(AbbozzaLocale.entry("gui.code"));
-
-        DefaultMutableTreeNode misc = new DefaultMutableTreeNode(AbbozzaLocale.entry("gui.misc"));
-
-        option_operations = new CheckBoxNode(config,"operations", AbbozzaLocale.entry("gui.operations"));
-        blocks.add(new DefaultMutableTreeNode(option_operations));
-
-        option_localVars = new CheckBoxNode(config,"localVars", AbbozzaLocale.entry("gui.local_variables"));
-        blocks.add(new DefaultMutableTreeNode(option_localVars));
-
-        option_serial = new CheckBoxNode(config,"serial", AbbozzaLocale.entry("gui.serial_communication"));
-        blocks.add(new DefaultMutableTreeNode(option_serial));
-
-        // option_serialRate = new  CheckBoxNode("serialRate", "Serielle Kommunikation mit Rate");
-        // blocks.add(new DefaultMutableTreeNode(option_serialRate));
-        DefaultMutableTreeNode arrs = new DefaultMutableTreeNode(AbbozzaLocale.entry("gui.arrays"));
-
-        option_noArrays = new RadioButtonNode(config,"noArrays", AbbozzaLocale.entry("gui.no_arrays"));
-        option_oneArray = new RadioButtonNode(config,"linArrays", AbbozzaLocale.entry("gui.lin_arrays"));
-        option_multiArrray = new RadioButtonNode(config,"multArrays", AbbozzaLocale.entry("gui.mult_arrays"));
-        
-        arrs.add(new DefaultMutableTreeNode(option_noArrays));
-        arrs.add(new DefaultMutableTreeNode(option_oneArray));
-        arrs.add(new DefaultMutableTreeNode(option_multiArrray));
-
-        blocks.add(arrs);
-
-        root.add(blocks);
-        root.add(code);
-        root.add(misc);
-        */
-        
-        // featureTree.setCellEditor(new FeatureCellEditor(featureTree));
         featureTree.setModel(optionTree);
         for (int row = 0; row < featureTree.getRowCount(); row++ )
             featureTree.expandRow(row);
@@ -616,7 +577,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
 
     public void storeOptions() {
         // Iterate through optionTree
-        // JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("gui.option_info"));
+
         DefaultMutableTreeNode node;
         Vector<DefaultMutableTreeNode> queue = new Vector<DefaultMutableTreeNode>();
         queue.addElement((DefaultMutableTreeNode) optionTree.getRoot());

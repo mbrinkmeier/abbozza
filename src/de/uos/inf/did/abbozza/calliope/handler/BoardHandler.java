@@ -15,93 +15,118 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 /**
- * @fileoverview ... @author michael.brinkmeier@uni-osnabrueck.de (Michael
- * Brinkmeier)
+ * @fileoverview  * Ths class handles the board request
+ * It detects a mounted Calliope Mini or micro:bit board
+ * 
+ * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
  */
+
 package de.uos.inf.did.abbozza.calliope.handler;
 
-import de.uos.inf.did.abbozza.arduino.handler.*;
-import cc.arduino.packages.BoardPort;
 import com.sun.net.httpserver.HttpExchange;
-import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
-import de.uos.inf.did.abbozza.BoardListEntry;
 import de.uos.inf.did.abbozza.calliope.AbbozzaCalliope;
 import de.uos.inf.did.abbozza.handler.AbstractHandler;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
-import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
-import processing.app.Base;
-import processing.app.BaseNoGui;
-import processing.app.debug.TargetBoard;
-import processing.app.debug.TargetPackage;
-import processing.app.debug.TargetPlatform;
 
-/**
- *
- * @author michael
- */
+
 public class BoardHandler extends AbstractHandler {
 
     private boolean _query;
     private PythonInterpreter _interpreter;
 
+    /**
+     * Initialize the board request handler
+     * 
+     * @param abbozza
+     * @param query This flag indicates wether the user should be asked for the
+     *              path to the board if it is not found.
+     */
     public BoardHandler(AbbozzaCalliope abbozza, boolean query) {
         super(abbozza);
         this._query = query;
     }
 
+    /**
+     * Handle a request
+     * 
+     * @param exchg The HttoExchange object representing the request and the
+     *              response
+     * @throws IOException 
+     */
     @Override
     public void handle(HttpExchange exchg) throws IOException {
         AbbozzaCalliope server = (AbbozzaCalliope) _abbozzaServer;
-        String path = this.findBoard();
+        
+        // Get the set path
+        String path = server.getPathToBoard();
+        // Get the board if possible
+        String board = this.findBoard();
+        
+        /**
+         * 
+         */
         File dir;
         
-        if (path != null ) {
-            dir = new File(path);
+        AbbozzaLogger.out("Board requested at '" + path + "'", AbbozzaLogger.DEBUG);
+        
+        if ( board != null ) {
+            dir = new File( board );
         } else {
             dir = new File("");
         }
 
-        if ( path == "" && this._query ) {
-            dir = server.queryPathToBoard(path);
+        // If no board was found, ask the user, is required
+        if ( board == "" && this._query ) {
+            AbbozzaLogger.out("User is queried for path to store hex", AbbozzaLogger.DEBUG);
+            // Give the old path as default
+            dir = queryPathToBoard(path);
             if ( dir != null ) {
                 server.setPathToBoard(dir.getCanonicalPath());
+                AbbozzaLogger.out("Path set to " + dir.getCanonicalPath(), AbbozzaLogger.DEBUG);
             } else {
                 sendResponse(exchg, 201, "text/plain", "Query aborted");                            
             }
         }
         
         if ( !dir.exists() || !dir.isDirectory() || !dir.canWrite() ) {
-            sendResponse(exchg, 201, "text/plain", "Board not found");            
+            // If no board was found, send the path known to the server
+            if (path == null) {
+                AbbozzaLogger.out("Board not found. No alternative path given.", AbbozzaLogger.DEBUG);
+                sendResponse(exchg, 201, "text/plain", "");                            
+            } else {
+                AbbozzaLogger.out("Board not found. Using given path " + path , AbbozzaLogger.DEBUG);
+                sendResponse(exchg, 200, "text/plain", path);            
+            }
         } else {
-            server.setPathToBoard(dir.getCanonicalPath());
-            sendResponse(exchg, 200, "text/plain", path);
+            // If board was found, use it
+            AbbozzaLogger.out("Board found at : " + dir.getCanonicalPath(), AbbozzaLogger.DEBUG);
+            sendResponse(exchg, 200, "text/plain", dir.getCanonicalPath());
         }
     }
 
-    
+    /**
+     * This method tries to detect a connected CalliopeMINI or the micro:bit
+     * 
+     * @return The path to the board  as string or an empty string
+     */
+
     private String findBoard() {
         String os = System.getProperty("os.name").toLowerCase();
-        if ( os.contains("win") ) {        
+        if ( os.contains("win") ) {       
+            // In windows system the drives are scanned for their volume name
             File[] roots = File.listRoots();
             for (int i = 0; i < roots.length; i++) {
                 try {
@@ -115,9 +140,10 @@ public class BoardHandler extends AbstractHandler {
                 }
             }
             return "";
-        } else if ( os.contains("mac") ) {
-        } else if ( os.contains("linux") ) {
+        } else if ( os.contains("linux") || os.contains("mac") ) {
             try {
+                // In posix systems (linux and Mac OsX) the system command 'mount' 
+                // is used to detect the volume
                 Process process = Runtime.getRuntime().exec("mount");
                 process.waitFor();
                 InputStreamReader reader = new InputStreamReader(process.getInputStream());
@@ -138,9 +164,42 @@ public class BoardHandler extends AbstractHandler {
                 return "";
             }
         } else {
+            // Currently no other system is supported
             AbbozzaLogger.err("Operating system " + os + " not supported");
         }
         return "";
     } 
-   
+
+    /**
+     * This method queries the user for the bpath to the board.
+     * 
+     * @param path The current path
+     * @return The new path
+     */
+        public File queryPathToBoard(String path) {
+        File selectedDir = null;
+        JFileChooser chooser = new JFileChooser();
+        if ( path != null) {
+            chooser.setCurrentDirectory(new File(path));
+        }
+        chooser.setDialogTitle(AbbozzaLocale.entry("gui.CalliopePath"));
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory();
+            }
+
+            @Override
+            public String getDescription() {
+                return "Select readable directory";
+            }
+        });
+        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            selectedDir = chooser.getSelectedFile();
+        } else {
+        }
+        return selectedDir;
+    }
+
 }

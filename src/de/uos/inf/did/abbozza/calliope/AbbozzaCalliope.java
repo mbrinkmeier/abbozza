@@ -99,32 +99,6 @@ public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
         return _pathToBoard;
     }
     
-    public File queryPathToBoard(String path) {
-        File selectedDir = null;
-        JFileChooser chooser = new JFileChooser();
-        if ( path != null) {
-            chooser.setCurrentDirectory(new File(path));
-        }
-        chooser.setDialogTitle(AbbozzaLocale.entry("gui.CalliopePath"));
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File f) {
-                return f.isDirectory();
-            }
-
-            @Override
-            public String getDescription() {
-                return "Select readable directory";
-            }
-        });
-        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            selectedDir = chooser.getSelectedFile();
-        } else {
-        }
-        return selectedDir;
-    }
-
     @Override
     public void registerSystemHandlers() {
         httpServer.createContext("/abbozza/board", new BoardHandler(this, false));

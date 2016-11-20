@@ -105,7 +105,7 @@ public class BoardHandler extends AbstractHandler {
                     Vector<BoardListEntry> boards = new Vector<BoardListEntry>();
 
                     for (TargetPackage targetPackage : BaseNoGui.packages.values()) {
-                        // For every package cycle through all platform
+                        // For every package cycle through all platforms
                         for (TargetPlatform targetPlatform : targetPackage.platforms()) {
 
                             // Add a title for each platform

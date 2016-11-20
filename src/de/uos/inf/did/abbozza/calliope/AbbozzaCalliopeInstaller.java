@@ -47,6 +47,14 @@ public class AbbozzaCalliopeInstaller extends javax.swing.JFrame {
     public AbbozzaCalliopeInstaller() {
         initComponents();
         
+        String osname = System.getProperty("os.name").toLowerCase();
+        if ( osname.contains("mac") ) {
+            // OsX only requires the command 'open'
+            browserField.setText("open");
+            browserField.setEnabled(false);
+            browserButton.setEnabled(false);
+        }
+
         this.setTitle("abbozza! Calliope Installer");
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -283,26 +291,28 @@ public class AbbozzaCalliopeInstaller extends javax.swing.JFrame {
     
             // Create Script
             } catch (IOException e1) {
-                JOptionPane.showMessageDialog(this,"Bei der Installation trat ein Fehler auf!\n" 
-                        + e1.getLocalizedMessage(),"abbozza! Fehler",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,"Error during installation of abbozza!\n" 
+                        + e1.getLocalizedMessage(),"abbozza! Error",JOptionPane.ERROR_MESSAGE);
                 this.setVisible(false);
                 System.exit(1);
             }
 
             try {
                 File scriptFile;
-                String osname = System.getProperty("os.name");
-                if ( osname.contains("Linux")) {
+                String osname = System.getProperty("os.name").toLowerCase();
+                if ( osname.contains("linux") || osname.contains("mac") ) {
+                    // The script for Linux and Mac OsX are identical
                     AbbozzaLogger.out("Writing " + abbozzaDir + "/abbozzaCalliope.sh",AbbozzaLogger.INFO);
                     scriptFile = new File(abbozzaDir + "/abbozzaCalliope.sh");
                     scriptFile.createNewFile();
                     PrintWriter writer = new PrintWriter(scriptFile);
+                    writer.println("#!/bin/sh " + abbozzaDir);
                     writer.println("cd " + abbozzaDir);
                     writer.println("java -jar Abbozza.jar calliope");
                     scriptFile.setExecutable(true);
                     writer.flush();
                     writer.close();
-                } else if ( osname.contains("Win")) {
+                } else if ( osname.contains("win")) {
                     scriptFile = new File(abbozzaDir + "\\abbozzaCalliope.bat");                    
                     scriptFile.createNewFile();
                     PrintWriter writer = new PrintWriter(scriptFile);
