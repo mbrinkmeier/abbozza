@@ -54,6 +54,14 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
         int y = (screen.height - getHeight()) / 2;
         setLocation(x, y);
 
+        String osname = System.getProperty("os.name").toLowerCase();
+        if ( osname.contains("mac") ) {
+            // OsX only requires the command 'open'
+            browserField.setText("open");
+            browserField.setEnabled(false);
+            browserButton.setEnabled(false);
+        }
+
         AbbozzaLogger.init();
         AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
 
@@ -93,7 +101,7 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
             sketchbookDir = prefName + "/Arduino/";
             prefName = prefName + "/.arduino15/preferences.txt";
         } else if (osName.indexOf("Mac") != -1) {
-            sketchbookDir = prefName + "/Arduino/";
+            sketchbookDir = prefName + "/Documents/Arduino/";
             prefName = prefName + "/Library/Arduino/preferences.txt";
         } else if (osName.indexOf("Windows") != -1) {
             sketchbookDir = prefName + "/Documents/Arduino/";

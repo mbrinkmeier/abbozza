@@ -306,7 +306,7 @@ public class AbbozzaCalliopeInstaller extends javax.swing.JFrame {
                     scriptFile = new File(abbozzaDir + "/abbozzaCalliope.sh");
                     scriptFile.createNewFile();
                     PrintWriter writer = new PrintWriter(scriptFile);
-                    writer.println("#!/bin/sh " + abbozzaDir);
+                    writer.println("#!/bin/sh ");
                     writer.println("cd " + abbozzaDir);
                     writer.println("java -jar Abbozza.jar calliope");
                     scriptFile.setExecutable(true);
