@@ -25,7 +25,7 @@ package de.uos.inf.did.abbozza.handler;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import de.uos.inf.did.abbozza.Abbozza;
+import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -35,10 +35,10 @@ import java.io.OutputStream;
  */
 public abstract class AbstractHandler implements HttpHandler {
 
-    protected Abbozza _abbozza;
+    protected AbbozzaServer _abbozzaServer;
     
-    public AbstractHandler(Abbozza abbozza) {
-        this._abbozza = abbozza;
+    public AbstractHandler(AbbozzaServer abbozza) {
+        this._abbozzaServer = abbozza;
     }
     
     public void sendResponse(HttpExchange exchg, int code, String type, String response) throws IOException {

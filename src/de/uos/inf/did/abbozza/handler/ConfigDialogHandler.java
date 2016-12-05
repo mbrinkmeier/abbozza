@@ -23,11 +23,12 @@
 package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import de.uos.inf.did.abbozza.Abbozza;
+import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaConfig;
 import de.uos.inf.did.abbozza.AbbozzaConfigDialog;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.IOException;
 import java.util.Properties;
 import javax.swing.JFrame;
@@ -39,14 +40,14 @@ import processing.app.Editor;
  */
 public class ConfigDialogHandler extends AbstractHandler {
 
-    public ConfigDialogHandler(Abbozza abbozza) {
+    public ConfigDialogHandler(AbbozzaServer abbozza) {
         super(abbozza);
     }
 
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-        if ( this._abbozza.openConfigDialog() == 0 ) {
-            sendResponse(exchg, 200, "text/plain", this._abbozza.getConfiguration().get().toString());
+        if ( this._abbozzaServer.openConfigDialog() == 0 ) {
+            sendResponse(exchg, 200, "text/plain", this._abbozzaServer.getConfiguration().get().toString());
         } else {
            sendResponse(exchg, 440, "text/plain", ""); 
         }

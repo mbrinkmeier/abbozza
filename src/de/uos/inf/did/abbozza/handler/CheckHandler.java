@@ -23,17 +23,16 @@
 package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import de.uos.inf.did.abbozza.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import processing.app.Editor;
+import java.io.PrintStream;
+import java.io.StringWriter;
 import processing.app.PreferencesData;
-import processing.app.debug.RunnerException;
-import processing.app.helpers.PreferencesMapException;
 
 /**
  *
@@ -41,7 +40,7 @@ import processing.app.helpers.PreferencesMapException;
  */
 public class CheckHandler extends AbstractHandler {
 
-    public CheckHandler(Abbozza abbozza) {
+    public CheckHandler(AbbozzaServer abbozza) {
         super(abbozza);
     }
 
@@ -66,38 +65,15 @@ public class CheckHandler extends AbstractHandler {
     }
     
     
-    public String setCode(String code) {     
-        _abbozza.logger.reset();
+    public String setCode(String code) { 
+        AbbozzaLogger.resetErr();
         
         String response;
-        boolean flag = PreferencesData.getBoolean("editor.save_on_verify");
-        PreferencesData.setBoolean("editor.save_on_verify", false);
-        
-        Editor editor = _abbozza.getEditor();
-        // editor.getSketch().getCurrentCode().setProgram(code);
-        _abbozza.setEditorText(code);
-        // editor.getCurrentTab().setText(code);
-       
-        // editor.getSketch().getCurrentCode().setModified(true);
-       
-        
-        // Compile sketch                
-        try {
-            AbbozzaLogger.out(AbbozzaLocale.entry("msg.compiling"), AbbozzaLogger.INFO);
-            editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.compiling"));
-            // editor.getSketch().prepare();
-            editor.getSketchController().build(false, false);
-            editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.done_compiling"));
-            AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
-        } catch (IOException | RunnerException  | PreferencesMapException e) {
-            e.printStackTrace(System.out);
-            editor.statusError(e);
-            AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
-        }
-        
-        response = _abbozza.logger.toString();
-        
-        PreferencesData.setBoolean("editor.save_on_verify", flag);
+
+        response = _abbozzaServer.compileCode(code);
+        // response = AbbozzaLogger.getErr();
+
+        // AbbozzaLogger.out("compile response: " + response,AbbozzaLogger.ALL);
         
         return response;
     }

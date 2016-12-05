@@ -22,9 +22,8 @@
 package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import de.uos.inf.did.abbozza.Abbozza;
-import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.arduino.Abbozza;
+import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.BufferedReader;
@@ -33,7 +32,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -42,7 +40,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class LoadHandler extends AbstractHandler {
 
-    public LoadHandler(Abbozza abbozza) {
+    public LoadHandler(AbbozzaServer abbozza) {
         super(abbozza);
     }
 
@@ -58,9 +56,9 @@ public class LoadHandler extends AbstractHandler {
 
     public String loadSketch() throws IOException {
         String result = "";
-        File lastSketchFile = _abbozza.getLastSketchFile();
+        File lastSketchFile = _abbozzaServer.getLastSketchFile();
         BufferedReader reader;
-        String path = ((lastSketchFile != null) ? lastSketchFile.getAbsolutePath() : _abbozza.getSketchbookPath());
+        String path = ((lastSketchFile != null) ? lastSketchFile.getAbsolutePath() : _abbozzaServer.getSketchbookPath());
         JFileChooser chooser = new JFileChooser(path) {
             protected JDialog createDialog(Component parent)
                     throws HeadlessException {
@@ -91,12 +89,11 @@ public class LoadHandler extends AbstractHandler {
             if (panel.applyOptions()) {
                 Abbozza.getConfig().apply(panel.getOptions());
             }
-            _abbozza.setLastSketchFile(file);
+            _abbozzaServer.setLastSketchFile(file);
         } else {
             throw new IOException();
         }
-        _abbozza.getEditor().setState(JFrame.ICONIFIED);
-        _abbozza.getEditor().setExtendedState(JFrame.ICONIFIED);
+        _abbozzaServer.toolIconify();
         return result;
     }
 

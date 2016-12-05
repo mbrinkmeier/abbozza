@@ -23,8 +23,8 @@ package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import de.uos.inf.did.abbozza.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,23 +37,34 @@ import java.io.OutputStream;
  */
 public class TaskHandler extends AbstractHandler {
     
-    public TaskHandler(Abbozza abbozza) {
+    private JarDirHandler _jarHandler;
+    
+    public TaskHandler(AbbozzaServer abbozza, JarDirHandler jarHandler) {
         super(abbozza);
+        this._jarHandler = jarHandler;
     }
 
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-        String taskPath = this._abbozza.getConfiguration().getTaskPath();
+        String taskPath = this._abbozzaServer.getConfiguration().getTaskPath();
         
         String path = exchg.getRequestURI().getPath();
-        path = path.substring(6);
+        path = path.substring(5);
         AbbozzaLogger.out("TaskHandler: " + taskPath + path + " requested", AbbozzaLogger.INFO);
         OutputStream os = exchg.getResponseBody();
         
         byte[] bytearray = getBytes(taskPath + path);
                 
         if (bytearray == null) {
-            String result = "abbozza! : " + path + " nicht gefunden!";
+            AbbozzaLogger.out("TaskHandler: " + taskPath + path + " not found! Looking in jars!", AbbozzaLogger.INFO);
+            AbbozzaLogger.out("TaskHandler: Looking for " + "/tasks/" + AbbozzaServer.getInstance().getSystem() + path, AbbozzaLogger.INFO);
+            // String result = "abbozza! : " + path + " not found in task directory! Looking in jars.";
+            bytearray = this._jarHandler.getBytes("/tasks/" + AbbozzaServer.getInstance().getSystem() + path);
+        }
+        
+        if (bytearray == null) {        
+            AbbozzaLogger.out("TaskHandler: tasks" + path + " not found!", AbbozzaLogger.INFO);
+            String result = "abbozza! : " + path + " not found!";
             // System.out.println(result);
 
             exchg.sendResponseHeaders(400, result.length());
@@ -63,9 +74,25 @@ public class TaskHandler extends AbstractHandler {
         }
 
         Headers responseHeaders = exchg.getResponseHeaders();
-        responseHeaders.set("Content-Type", "text/xml");
+        if (path.endsWith(".css")) {
+            responseHeaders.set("Content-Type", "text/css");
+        } else if (path.endsWith(".js")) {
+            responseHeaders.set("Content-Type", "text/javascript");
+        } else if (path.endsWith(".xml")) {
+            responseHeaders.set("Content-Type", "text/xml");
+        } else if (path.endsWith(".svg")) {
+            responseHeaders.set("Content-Type", "image/svg+xml");            
+        } else if (path.endsWith(".abz")) {
+            responseHeaders.set("Content-Type", "text/xml");            
+        } else if (path.endsWith(".png")) {
+            responseHeaders.set("Content-Type", "image/png");
+        } else if (path.endsWith(".html")) {
+            responseHeaders.set("Content-Type", "text/html");
+        } else {
+            responseHeaders.set("Content-Type", "text/text");            
+        }
 
-        AbbozzaLogger.out(new String(bytearray),AbbozzaLogger.ALL);
+        // AbbozzaLogger.out(new String(bytearray),AbbozzaLogger.INFO);
         // ok, we are ready to send the response.
         exchg.sendResponseHeaders(200, bytearray.length);
         os.write(bytearray, 0, bytearray.length);
@@ -79,7 +106,7 @@ public class TaskHandler extends AbstractHandler {
             return null;
         }
         
-        String taskPath = this._abbozza.getConfiguration().getTaskPath();
+        String taskPath = this._abbozzaServer.getConfiguration().getTaskPath();
         if (!file.getCanonicalPath().startsWith(taskPath)) {
             return null;
         }

@@ -1,0 +1,117 @@
+<language id="de_DE">
+    <blocks>
+        <msg id="block.MAIN">Hauptprogramm</msg> 
+        <msg id="block.led">Led Zeile: # Spalte: #</msg>
+        <msg id="block.scroll">Laufschrift</msg>
+        <msg id="block.displayImage">Stelle Bild dar</msg>
+        <msg id="block.displayMatrix">Stelle Bild dar</msg>
+        <msg id="block.setPixel">Setze Pixel in Spalte # und Zeile # auf</msg>
+        <msg id="block.getPixel">Farbe in Spalte # und Zeile</msg>
+        <msg id="block.displayClear">Lösche Anzeige</msg>
+        <msg id="block.displayOn">Schalte Anzeige aus</msg>
+        <msg id="block.displayOff">Schalte Anzeige an</msg>
+        <msg id="block.displayIsOn">Ist Anzeige an?</msg>
+        <msg id="block.asString"></msg>
+        
+        <msg id="dev.BUTTON_A">Knopf A</msg>
+        <msg id="dev.BUTTON_B">Knopf B</msg>
+        <msg id="dev.WAS_PRESSED">wurde gedrückt</msg>        
+        <msg id="dev.GET_PRESSES">Anzahl der Drücker von</msg>        
+        
+        <msg id="dev.ACCEL_GET">Beschleunigung</msg>
+        <msg id="dev.ACCEL_X">links-rechts</msg>
+        <msg id="dev.ACCEL_Y">vor-zurück</msg>
+        <msg id="dev.ACCEL_Z">hoch-runter</msg>
+        <msg id="dev.GESTURE">Geste</msg>
+        <msg id="dev.ACCEL_GESTURE">Letzte Geste</msg>
+        <msg id="dev.ACCEL_IS_GESTURE">Aktuelle Geste ist</msg>
+        <msg id="dev.ACCEL_WAS_GESTURE">Letzte Geste war</msg>
+        <msg id="dev.UP">hoch</msg>
+        <msg id="dev.DOWN">runter</msg>
+        <msg id="dev.LEFT">links</msg>
+        <msg id="dev.RIGHT">rechts</msg>
+        <msg id="dev.FACE_UP">nach oben gedreht</msg>
+        <msg id="dev.FACE_DOWN">nach unten gedreht</msg>
+        <msg id="dev.FREEFALL">Freier Fall</msg>
+        <msg id="dev.3G">3G</msg>
+        <msg id="dev.6G">6G</msg>
+        <msg id="dev.8G">8G</msg>
+        <msg id="dev.SHAKE">Geschüttelt</msg>
+    </blocks>
+    <cat>
+        <msg id="cat.DISPLAY">Anzeige</msg>
+        <msg id="cat.BUTTONS">Knöpfe</msg>
+    </cat>
+    <gui>
+        <msg id="gui.quit">Beenden</msg>
+        <msg id="gui.clear">Lösche Meldungen</msg>        
+        <msg id="gui.console">Meldungen</msg>
+        <msg id="gui.sourceCode">Quelltext</msg>
+        <msg id="gui.startBrowser">Starte Browser</msg>
+    </gui>
+    <image>
+        <msg id="Image.HEART">Herz</msg>
+        <msg id="Image.HEART_SMALL">kleines Herz</msg>
+        <msg id="Image.HAPPY">Glücklich</msg>
+        <msg id="Image.SMILE">Lachen</msg>
+        <msg id="Image.SAD">Traurig</msg>
+        <msg id="Image.CONFUSED">Verwirrt</msg>
+        <msg id="Image.ANGRY">Wütend</msg>
+        <msg id="Image.ASLEEP">Schlafend</msg>
+        <msg id="Image.SURPRISED">Überrascht</msg>
+        <msg id="Image.SILLY">Verrückt</msg>
+        <msg id="Image.FABULOUS">Fabelhaft</msg>
+        <msg id="Image.MEH">Naja!</msg>
+        <msg id="Image.YES">Ja</msg>
+        <msg id="Image.NO">Nein</msg>
+        <msg id="Image.CLOCK12">12 Uhr</msg>
+        <msg id="Image.CLOCK11">11 Uhr</msg>
+        <msg id="Image.CLOCK10">10 Uhr</msg>
+        <msg id="Image.CLOCK9">9 Uhr</msg>
+        <msg id="Image.CLOCK8">8 Uhr</msg>
+        <msg id="Image.CLOCK7">7 Uhr</msg>
+        <msg id="Image.CLOCK6">6 Uhr</msg>
+        <msg id="Image.CLOCK5">5 Uhr</msg>
+        <msg id="Image.CLOCK4">4 Uhr</msg>
+        <msg id="Image.CLOCK3">3 Uhr</msg>
+        <msg id="Image.CLOCK2">2 Uhr</msg>
+        <msg id="Image.CLOCK1">1 Uhr</msg>
+        <msg id="Image.ARROW_N">Norden</msg>
+        <msg id="Image.ARROW_NE">Nord-Osten</msg>
+        <msg id="Image.ARROW_E">Osten</msg>
+        <msg id="Image.ARROW_SE">Süd-Osten</msg>
+        <msg id="Image.ARROW_S">Süden</msg>
+        <msg id="Image.ARROW_SW">Süd-Westen</msg>
+        <msg id="Image.ARROW_W">Westen</msg>
+        <msg id="Image.ARROW_NW">Nord-Westen</msg>
+        <msg id="Image.TRIANGLE">Dreieck</msg>
+        <msg id="Image.TRIANGLE_LEFT">Dreieck (links)</msg>
+        <msg id="Image.CHESSBOARD">Schachbrett</msg>
+        <msg id="Image.DIAMOND">Diamant</msg>
+        <msg id="Image.DIAMOND_SMALL">kleiner Diamant</msg>
+        <msg id="Image.SQUARE">Quadrat</msg>
+        <msg id="Image.SQUARE_SMALL">kleines Quadrat</msg>
+        <msg id="Image.RABBIT">Hase</msg>
+        <msg id="Image.COW">Kuh</msg>
+        <msg id="Image.MUSIC_CROTCHET">Viertel-Note</msg>
+        <msg id="Image.MUSIC_QUAVER">Achtel-Note</msg>
+        <msg id="Image.MUSIC_QUAVERS">zwei Achtel-Noten</msg>
+        <msg id="Image.PITCHFORK">Heugabel</msg>
+        <msg id="Image.XMAS">Weihnachten</msg>
+        <msg id="Image.PACMAN">Pacman</msg>
+        <msg id="Image.TARGET">Ziel</msg>
+        <msg id="Image.TSHIRT">T-Shirt</msg>
+        <msg id="Image.ROLLERSKATE">Rollschuh</msg>
+        <msg id="Image.DUCK">Ente</msg>
+        <msg id="Image.HOUSE">Haus</msg>
+        <msg id="Image.TORTOISE">Schildkröte</msg>
+        <msg id="Image.BUTTERFLY">Schmetterling</msg>
+        <msg id="Image.STICKFIGURE">Strichmännchen</msg>
+        <msg id="Image.GHOST">Geist</msg>
+        <msg id="Image.SWORD">Schwert</msg>
+        <msg id="Image.GIRAFFE">Giraffe</msg>
+        <msg id="Image.SKULL">Schädel</msg>
+        <msg id="Image.UMBRELLA">Schirm</msg>
+        <msg id="Image.SNAKE">Schlange</msg>
+    </image>
+</language>    

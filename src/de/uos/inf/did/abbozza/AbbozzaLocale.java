@@ -38,21 +38,39 @@ public class AbbozzaLocale {
     private static String locale;
     private static Properties entries;
 
+    /**
+     * Set the current locale and reads it from the xml-files
+     * 
+     * @param loc 
+     */
     public static void setLocale(String loc) {
         entries = new Properties();
         locale = loc;
+        
+        addLocaleXml("/js/languages/" + locale + ".xml");
+        addLocaleXml("/js/abbozza/" +  AbbozzaServer.getInstance().getSystem() + "/languages/" + locale + ".xml");        
+    }
+
+    /**
+     * Adds the entries of a given locale-xml file
+     * 
+     * @param path 
+     */
+    public static void addLocaleXml(String path) {
         Document localeXml;
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
+
+        if ( AbbozzaServer.getInstance().jarHandler == null ) return;
+        
         try {
+            AbbozzaLogger.out("Loading locale from " + path,4);
+            InputStream stream = AbbozzaServer.getInstance().jarHandler.getInputStream(path);
             builder = factory.newDocumentBuilder();
             StringBuilder xmlStringBuilder = new StringBuilder();
-            byte[] bytes = Abbozza.getInstance().getLocaleBytes(loc);
-
-            ByteArrayInputStream input = new ByteArrayInputStream(bytes);
-            localeXml = builder.parse(input);
-
+            localeXml = builder.parse(stream);
+            
             NodeList nodes = localeXml.getElementsByTagName("msg");
             for (int i = 0; i < nodes.getLength(); i++) {
                 Node node = nodes.item(i);
@@ -61,19 +79,37 @@ public class AbbozzaLocale {
                 entries.setProperty(key, entry);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
-            AbbozzaLogger.out("loading of locale failed", AbbozzaLogger.ERROR);
+            Logger.getLogger(AbbozzaLocale.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    /**
+     * gets the current locale
+     * 
+     * @return 
+     */
     public static String getLocale() {
         return locale;
     }
 
+    /**
+     * Returns an entry of the current locale
+     * 
+     * @param key
+     * @return 
+     */
     public static String entry(String key) {
         return entries.getProperty(key, key);
     }
 
+    /**
+     * Returns an entry of the current locale and replaces a '#' by the
+     * given string.
+     * 
+     * @param key The key of the entry
+     * @param value The replacement for '#' in the found string
+     * @return 
+     */
     public static String entry(String key, String value) {
         String res = entries.getProperty(key, key);
         res = res.replace("#", value);

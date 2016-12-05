@@ -8,9 +8,9 @@ package de.uos.inf.did.abbozza.handler;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import de.uos.inf.did.abbozza.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,10 +37,10 @@ public class JarDirHandler implements HttpHandler {
     public void addDir(String path, String name) {
         File file = new File(path);
         if (!file.exists()) {
-            AbbozzaLogger.out(file.getAbsolutePath() + " not found");
+            AbbozzaLogger.err("JarHandler: " + name + " : " + file.getAbsolutePath() + " not found");
             file = null;
         } else {
-            AbbozzaLogger.out(name + " : " + file.getAbsolutePath());
+            AbbozzaLogger.out("JarHandler: " + name + " : " + file.getAbsolutePath(),AbbozzaLogger.INFO);
             return;
         }
         entries.add(file);
@@ -56,9 +56,9 @@ public class JarDirHandler implements HttpHandler {
         JarFile file;
         try {
             file = new JarFile(path);
-            AbbozzaLogger.out(name + " : " + file.getName());
+            AbbozzaLogger.out("JarHandler: " + name + " : " + file.getName(),AbbozzaLogger.INFO);
         } catch (IOException e) {
-            AbbozzaLogger.out(name + " not found");
+            AbbozzaLogger.err("JarHandler: " + name + " not found (" + path + ")");
             return;
         }        
         entries.add(file);
@@ -98,6 +98,16 @@ public class JarDirHandler implements HttpHandler {
             responseHeaders.set("Content-Type", "text/javascript");
         } else if (path.endsWith(".xml")) {
             responseHeaders.set("Content-Type", "text/xml");
+        } else if (path.endsWith(".svg")) {
+            responseHeaders.set("Content-Type", "image/svg+xml");            
+        } else if (path.endsWith(".abz")) {
+            responseHeaders.set("Content-Type", "text/xml");            
+        } else if (path.endsWith(".png")) {
+            responseHeaders.set("Content-Type", "image/png");
+        } else if (path.endsWith(".html")) {
+            responseHeaders.set("Content-Type", "text/html");
+        } else {
+            responseHeaders.set("Content-Type", "text/text");            
         }
 
         // ok, we are ready to send the response.
@@ -107,6 +117,7 @@ public class JarDirHandler implements HttpHandler {
     }
 
     public byte[] getBytes(String path) throws IOException {
+        AbbozzaLogger.out("JarHandler: Reading " + path, AbbozzaLogger.INFO);
         byte[] bytearray = null;
         int tries = 0;
 
@@ -124,7 +135,7 @@ public class JarDirHandler implements HttpHandler {
 
             if (bytearray == null) {
                 tries++;
-                Abbozza.getInstance().findJarsAndDirs(this);
+                AbbozzaServer.getInstance().findJarsAndDirs(this);
             }
         }
 
@@ -140,6 +151,12 @@ public class JarDirHandler implements HttpHandler {
         if (!file.exists()) {
             return null;
         }
+        
+        // Check if the requested file is below the given directory
+        if (!file.getCanonicalPath().startsWith(webDir.getCanonicalPath())) {
+            return null;
+        }
+
         FileInputStream fis = new FileInputStream(file);
 
         byte[] bytearray = new byte[(int) file.length()];
@@ -181,5 +198,64 @@ public class JarDirHandler implements HttpHandler {
         return null;
     }
     
+    
+    public InputStream getInputStream(String path) throws IOException {
+        AbbozzaLogger.out("JarHandler: Reading " + path, AbbozzaLogger.INFO);
+        InputStream stream = null;
+        int tries = 0;
+
+        while ((tries < 3) && (stream == null)) {
+
+            Enumeration<Object> it = entries.elements();
+            while (it.hasMoreElements() && (stream == null)) {
+                Object entry = it.nextElement();
+                if (entry instanceof JarFile) {
+                    stream = getInputStreamFromJar((JarFile) entry, path);
+                } else if (entry instanceof File) {
+                    stream = getInputStreamFromDir((File) entry, path);
+                }
+            }
+
+            if (stream == null) {
+                tries++;
+                AbbozzaServer.getInstance().findJarsAndDirs(this);
+            }
+        }
+
+        if (stream == null) {
+            AbbozzaLogger.out(AbbozzaLocale.entry("msg.not_found",path),AbbozzaLogger.ERROR);
+        }
+        return stream;        
+    }
+
+
+    public InputStream getInputStreamFromDir(File webDir, String path) throws IOException {
+        File file = new File(webDir + path);
+        if (!file.exists()) {
+            return null;
+        }
+        
+        // Check if the requested file is below the given directory
+        if (!file.getCanonicalPath().startsWith(webDir.getCanonicalPath())) {
+            return null;
+        }
+
+        FileInputStream fis = new FileInputStream(file);
+
+        return fis;
+    }
+
+    
+    public InputStream getInputStreamFromJar(JarFile jar, String path) throws IOException {
+
+        path = path.substring(1, path.length());
+        ZipEntry entry = this.getEntry(jar, path);
+        if (entry == null) {
+            return null;
+        }
+        InputStream fis = jar.getInputStream(entry);
+
+        return fis;
+    }
     
 }

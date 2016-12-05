@@ -23,7 +23,7 @@
 package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import de.uos.inf.did.abbozza.Abbozza;
+import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.IOException;
 
 /**
@@ -32,13 +32,13 @@ import java.io.IOException;
  */
 public class ConfigHandler extends AbstractHandler {
 
-    public ConfigHandler(Abbozza abbozza) {
+    public ConfigHandler(AbbozzaServer abbozza) {
         super(abbozza);
     }
 
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-        sendResponse(exchg, 200, "text/plain", _abbozza.getConfiguration().get().toString());
+        sendResponse(exchg, 200, "text/plain", _abbozzaServer.getConfiguration().get().toString());
     }
 
 }

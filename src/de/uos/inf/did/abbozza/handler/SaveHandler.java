@@ -22,30 +22,22 @@
 package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import de.uos.inf.did.abbozza.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
+import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.awt.Component;
 import java.awt.HeadlessException;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import static java.lang.System.in;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -61,7 +53,7 @@ import org.w3c.dom.NodeList;
  */
 public class SaveHandler extends AbstractHandler {
 
-    public SaveHandler(Abbozza abbozza) {
+    public SaveHandler(AbbozzaServer abbozza) {
         super(abbozza);
     }
 
@@ -111,8 +103,8 @@ public class SaveHandler extends AbstractHandler {
             }
 
             // Generate JFileChooser
-            File lastSketchFile = _abbozza.getLastSketchFile();
-            String path = ((lastSketchFile != null) ? lastSketchFile.getAbsolutePath() : _abbozza.getSketchbookPath());
+            File lastSketchFile = _abbozzaServer.getLastSketchFile();
+            String path = ((lastSketchFile != null) ? lastSketchFile.getAbsolutePath() : _abbozzaServer.getSketchbookPath());
             JFileChooser chooser = new JFileChooser(path) {
                 protected JDialog createDialog(Component parent)
                         throws HeadlessException {
@@ -177,13 +169,12 @@ public class SaveHandler extends AbstractHandler {
                  */
                 writer.close();
                 in.close();
-                _abbozza.setLastSketchFile(file);
+                _abbozzaServer.setLastSketchFile(file);
             }
         } catch (Exception ex) {
-            AbbozzaLogger.out(ex.toString(), AbbozzaLogger.ALL);
+            AbbozzaLogger.out(ex.toString(), AbbozzaLogger.DEBUG);
         }
-        _abbozza.getEditor().setState(JFrame.ICONIFIED);
-        _abbozza.getEditor().setExtendedState(JFrame.ICONIFIED);
+        _abbozzaServer.toolIconify();
     }
 
 }
