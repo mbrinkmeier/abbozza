@@ -13,22 +13,13 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="NetBeansProjects"/>
         <group>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliope/Code.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/calliope.html</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliope/Generator.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/blocks/Functions.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/blocks/VariableDecl.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Tools.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/arduino.html</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliope/features.xml</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/blocks/Variable.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliope/blocks/Main.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/blocks/Math.js</file>
-        </group>
-        <group>
             <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/AbbozzaServer.java</file>
             <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/arduino/Abbozza.java</file>
             <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/CheckHandler.java</file>
+        </group>
+        <group>
+            <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/JarDirHandler.java</file>
+            <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/LoadHandler.java</file>
         </group>
     </open-files>
 </project-private>
