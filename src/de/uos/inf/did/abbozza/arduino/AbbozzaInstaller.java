@@ -290,7 +290,8 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
     private void installButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_installButtonActionPerformed
         File sketchbookDir = new File(sketchbookField.getText());
         File browserFile = new File(browserField.getText());
-        File file = new File(System.getProperty("user.dir"), "Abbozza.jar");
+        File file = new File(AbbozzaInstaller.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+        // File file = new File(System.getProperty("user.dir"), "Abbozza.jar");
         if (file.exists()) {
             try {
                 AbbozzaLogger.out("Jar found at " + file.getCanonicalPath(), AbbozzaLogger.DEBUG);

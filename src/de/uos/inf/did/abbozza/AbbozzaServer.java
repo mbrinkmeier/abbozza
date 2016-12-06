@@ -137,6 +137,7 @@ public abstract class AbbozzaServer implements HttpHandler {
          * Read the configuration from <user.home>/.abbozza/<system>/abbozza.cfg
          */
         configPath = System.getProperty("user.home") + "/.abbozza/" + this.system + "/abbozza.cfg";
+        System.out.println("Reading config from " + configPath);
         config = new AbbozzaConfig(configPath);
         
         AbbozzaLocale.setLocale(config.getLocale());
