@@ -109,7 +109,7 @@ public class AbbozzaConfig {
         config_tasksEditable = true;
         storeProperties(config);
         setDefaultOptions();
-        AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
+        AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
         AbbozzaLogger.out("Default configuration set", AbbozzaLogger.INFO);
         // }        
     }
@@ -141,7 +141,7 @@ public class AbbozzaConfig {
     public void set(Properties properties) {
 
         if ("true".equals(properties.get("freshInstall"))) {
-            AbbozzaLogger.out("Setting default configuration after fresh install", AbbozzaLogger.DEBUG);
+            AbbozzaLogger.out("Setting default configuration after fresh install", AbbozzaLogger.NONE);
             setDefault(properties.getProperty("browserPath"));
             write();
             return;
@@ -169,7 +169,7 @@ public class AbbozzaConfig {
         }
         config_tasksEditable = "true".equals(properties.getProperty("tasksEditable", "true"));
         if (properties.getProperty("loglevel") != null) {
-            AbbozzaLogger.setLevel(Integer.parseInt(properties.getProperty("loglevel", "4")));
+            AbbozzaLogger.setLevel(Integer.parseInt(properties.getProperty("loglevel", ""+AbbozzaLogger.NONE)));
         } else {
             AbbozzaLogger.setLevel(AbbozzaLogger.NONE);
         }
@@ -250,7 +250,7 @@ public class AbbozzaConfig {
         config.setProperty("option." + option, Integer.toString(value));
     }
 
-    public int getOptionInt(String option) {
+    public int getOptionInt(String option) { 
         String value = config.getProperty("option." + option);
         if (value == null) {
             return -1;
