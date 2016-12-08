@@ -50,7 +50,8 @@ public class CheckHandler extends AbstractHandler {
             BufferedReader in = new BufferedReader(new InputStreamReader(exchg.getRequestBody()));
             StringBuffer code = new StringBuffer();
             while (in.ready()) {
-                code.append(in.readLine());
+                String line = in.readLine();
+                code.append(line);
                 code.append('\n');
             }
             String response = setCode(code.toString());

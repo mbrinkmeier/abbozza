@@ -29,7 +29,10 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.jar.JarFile;
+import java.util.zip.ZipEntry;
 
 /**
  *
@@ -50,21 +53,22 @@ public class TaskHandler extends AbstractHandler {
         
         String path = exchg.getRequestURI().getPath();
         path = path.substring(5);
-        AbbozzaLogger.out("TaskHandler: " + taskPath + path + " requested", AbbozzaLogger.INFO);
+        path = taskPath + path;
+        AbbozzaLogger.out("TaskHandler: " + path + " requested", AbbozzaLogger.INFO);
+
         OutputStream os = exchg.getResponseBody();
         
-        byte[] bytearray = getBytes(taskPath + path);
+        byte[] bytearray = getBytes(path);
                 
         if (bytearray == null) {
-            AbbozzaLogger.out("TaskHandler: " + taskPath + path + " not found! Looking in jars!", AbbozzaLogger.INFO);
+            AbbozzaLogger.out("TaskHandler: " + path + " not found! Looking in jars!", AbbozzaLogger.INFO);
             AbbozzaLogger.out("TaskHandler: Looking for " + "/tasks/" + AbbozzaServer.getInstance().getSystem() + path, AbbozzaLogger.INFO);
             // String result = "abbozza! : " + path + " not found in task directory! Looking in jars.";
             bytearray = this._jarHandler.getBytes("/tasks/" + AbbozzaServer.getInstance().getSystem() + path);
         }
         
         if (bytearray == null) {        
-            AbbozzaLogger.out("TaskHandler: tasks" + path + " not found!", AbbozzaLogger.INFO);
-            String result = "abbozza! : " + path + " not found!";
+            AbbozzaLogger.out("TaskHandler: tasks" + path + " not found!", AbbozzaLogger.INFO);            String result = "abbozza! : " + path + " not found!";
             // System.out.println(result);
 
             exchg.sendResponseHeaders(400, result.length());
@@ -101,6 +105,16 @@ public class TaskHandler extends AbstractHandler {
     
     
     public byte[] getBytes(String path) throws IOException {
+               
+        // Check if there is a jar in the path
+        if ( path.contains(".jar") ) {
+            int index = path.indexOf(".jar")+4;
+            String jarPath = path.substring(0, index );
+            AbbozzaLogger.out("TaskHandler : File in jar " + jarPath + " requested",AbbozzaLogger.DEBUG);
+            JarFile jarFile = new JarFile(jarPath);
+            return getBytesFromJar(jarFile,path.substring(index));
+        }
+        
         File file = new File(path); 
         if (!file.exists()) {
             return null;
@@ -114,6 +128,31 @@ public class TaskHandler extends AbstractHandler {
         FileInputStream fis = new FileInputStream(file);
 
         byte[] bytearray = new byte[(int) file.length()];
+        BufferedInputStream bis = new BufferedInputStream(fis);
+        bis.read(bytearray, 0, bytearray.length);
+        bis.close();
+
+        return bytearray;
+    }
+
+    
+    public byte[] getBytesFromJar(JarFile jarFile, String path) throws IOException {
+        
+        if ( path.equals("")  ) {
+            path = "start.abz";
+        }
+        
+        AbbozzaLogger.out("TaskHandler : Reading bytes from " + path + " in " + jarFile.getName(),AbbozzaLogger.DEBUG);
+        
+        path = path.substring(1, path.length());
+        ZipEntry entry = jarFile.getEntry(path);
+        InputStream fis = jarFile.getInputStream(entry);
+
+        if (fis == null) {
+            return null;
+        }
+
+        byte[] bytearray = new byte[(int) entry.getSize()];
         BufferedInputStream bis = new BufferedInputStream(fis);
         bis.read(bytearray, 0, bytearray.length);
         bis.close();

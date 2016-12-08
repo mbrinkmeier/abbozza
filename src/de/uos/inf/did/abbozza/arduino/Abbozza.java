@@ -176,13 +176,11 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
     private void setEditorText(final String code) {
         try {
-            System.out.println("hier");
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
                     editor.getCurrentTab().setText(code);
                 }
             });
-            System.out.println("da");
         } catch (InterruptedException ex) {
             Logger.getLogger(Abbozza.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvocationTargetException ex) {
@@ -206,9 +204,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         try {            
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.compiling"), AbbozzaLogger.INFO);
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.compiling"));
-        
             editor.getSketchController().build(false, false);
-            
             editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.done_compiling"));
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"), AbbozzaLogger.INFO);
         } catch (Exception e) {

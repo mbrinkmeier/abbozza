@@ -64,9 +64,11 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         
         loadConfiguration();
 
-        // browserPathField.setText("open");
-        browserPathField.setEnabled(false);
-        browserButton.setEnabled(false);
+        if ( System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0 ) {
+            // browserPathField.setText("open");
+            browserPathField.setEnabled(false);
+            browserButton.setEnabled(false);
+        }
         
         if (showServer) {
             jTabbedPane1.setSelectedComponent(serverPanel);

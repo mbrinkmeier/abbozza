@@ -72,15 +72,13 @@ public class BoardHandler extends AbstractHandler {
         
         // Get the set path
         String path = server.getPathToBoard();
+        AbbozzaLogger.out("[BoardHandler] Path to board is " + path , AbbozzaLogger.DEBUG);
+        
         // Get the board if possible
         String board = this.findBoard();
         
-        /**
-         * 
-         */
         File dir;
         
-        AbbozzaLogger.out("Board requested at '" + path + "'", AbbozzaLogger.DEBUG);
         
         if ( board != null ) {
             dir = new File( board );
@@ -90,12 +88,12 @@ public class BoardHandler extends AbstractHandler {
 
         // If no board was found, ask the user, is required
         if ( board == "" && this._query ) {
-            AbbozzaLogger.out("User is queried for path to store hex", AbbozzaLogger.DEBUG);
+            AbbozzaLogger.out("BoardHandler] User is queried for path to store hex", AbbozzaLogger.DEBUG);
             // Give the old path as default
             dir = queryPathToBoard(path);
             if ( dir != null ) {
                 server.setPathToBoard(dir.getCanonicalPath());
-                AbbozzaLogger.out("Path set to " + dir.getCanonicalPath(), AbbozzaLogger.DEBUG);
+                AbbozzaLogger.out("BoardHandler] Path set to " + dir.getCanonicalPath(), AbbozzaLogger.DEBUG);
             } else {
                 sendResponse(exchg, 201, "text/plain", "Query aborted");                            
             }
@@ -104,15 +102,16 @@ public class BoardHandler extends AbstractHandler {
         if ( !dir.exists() || !dir.isDirectory() || !dir.canWrite() ) {
             // If no board was found, send the path known to the server
             if (path == null) {
-                AbbozzaLogger.out("Board not found. No alternative path given.", AbbozzaLogger.DEBUG);
+                AbbozzaLogger.out("BoardHandler] Board not found. No alternative path given.", AbbozzaLogger.DEBUG);
                 sendResponse(exchg, 201, "text/plain", "");                            
             } else {
-                AbbozzaLogger.out("Board not found. Using given path " + path , AbbozzaLogger.DEBUG);
+                AbbozzaLogger.out("BoardHandler] Board not found. Using given path " + path , AbbozzaLogger.DEBUG);
                 sendResponse(exchg, 200, "text/plain", path);            
             }
         } else {
             // If board was found, use it
-            AbbozzaLogger.out("Board found at : " + dir.getCanonicalPath(), AbbozzaLogger.DEBUG);
+            server.setPathToBoard(dir.getCanonicalPath());
+            AbbozzaLogger.out("BoardHandler]  Board found at : " + dir.getCanonicalPath(), AbbozzaLogger.DEBUG);
             sendResponse(exchg, 200, "text/plain", dir.getCanonicalPath());
         }
     }
@@ -153,7 +152,7 @@ public class BoardHandler extends AbstractHandler {
                     volume = volumes.readLine();
                     if ( volume.contains("MINI") || volume.contains("MICROBIT")) {
                         volume = volume.split(" ")[2];
-                        AbbozzaLogger.out("Board found at " + volume, AbbozzaLogger.INFO);
+                        AbbozzaLogger.out("[BoardHandler.findBoard] Board found at " + volume, AbbozzaLogger.INFO);
                         return volume;
                     }
                 }
