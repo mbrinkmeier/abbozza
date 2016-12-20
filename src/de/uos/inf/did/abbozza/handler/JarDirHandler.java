@@ -77,6 +77,7 @@ public class JarDirHandler implements HttpHandler {
     public void handle(HttpExchange exchg) throws IOException {
 
         String path = exchg.getRequestURI().getPath();
+        
         OutputStream os = exchg.getResponseBody();
         
         byte[] bytearray = getBytes(path);

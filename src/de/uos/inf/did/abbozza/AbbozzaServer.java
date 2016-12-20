@@ -103,7 +103,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     private int serverPort;
     public MonitorHandler monitorHandler;
     private File lastSketchFile = null;
-
+    private String lastTaskPath;
 
     /**
      * The system independent initialization of the server
@@ -144,10 +144,12 @@ public abstract class AbbozzaServer implements HttpHandler {
 
         AbbozzaLogger.out("Version " + VERSION, AbbozzaLogger.INFO);
 
-        if (this.getConfig().getUpdate()) {
+        if (this.getConfiguration().getUpdate()) {
             checkForUpdate(false);
         }
 
+        this.lastTaskPath = this.getConfiguration().getTaskPath();
+        
         // AbbozzaLocale.setLocale("de_DE");
         AbbozzaLogger.out(AbbozzaLocale.entry("msg.loaded"), AbbozzaLogger.INFO);
 
@@ -560,12 +562,21 @@ public abstract class AbbozzaServer implements HttpHandler {
         this.lastSketchFile = lastSketchFile;
     }
 
+    public void setLastTaskPath(String path) {
+        lastTaskPath = path;
+        AbbozzaLogger.out("lastTaskPath set to " + lastTaskPath,AbbozzaLogger.DEBUG);
+    }
+    
+    public String getLastTaskPath () {
+        return lastTaskPath;
+    }
+    
     /*
     public int getRunningServerPort() {
         return serverPort;
     }
     */
-
+    
     public static AbbozzaServer getInstance() {
         return instance;
     }

@@ -22,6 +22,7 @@
 package de.uos.inf.did.abbozza.handler;
 
 import com.sun.net.httpserver.HttpExchange;
+import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.awt.Component;
@@ -47,8 +48,14 @@ public class LoadHandler extends AbstractHandler {
     @Override
     public void handle(HttpExchange exchg) throws IOException {
         try {
-            String sketch = loadSketch();
-            this.sendResponse(exchg, 200, "text/xml", sketch);
+            String query = exchg.getRequestURI().getQuery();
+            if ( query == null ) {
+                String sketch = loadSketch();
+                this.sendResponse(exchg, 200, "text/xml", sketch);
+            } else {
+                AbbozzaLogger.out("loadHandler: query " + query, AbbozzaLogger.DEBUG);
+                this.sendResponse(exchg, 200, "text/xml", "");                
+            }
         } catch (IOException ioe) {
             this.sendResponse(exchg, 404, "", "");
         }
@@ -90,6 +97,7 @@ public class LoadHandler extends AbstractHandler {
                 Abbozza.getConfig().apply(panel.getOptions());
             }
             _abbozzaServer.setLastSketchFile(file);
+            _abbozzaServer.setLastTaskPath(file.getParentFile().getCanonicalPath());
         } else {
             throw new IOException();
         }

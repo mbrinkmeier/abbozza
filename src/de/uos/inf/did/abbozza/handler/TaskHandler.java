@@ -46,10 +46,10 @@ public class TaskHandler extends AbstractHandler {
         super(abbozza);
         this._jarHandler = jarHandler;
     }
-
+   
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-        String taskPath = this._abbozzaServer.getConfiguration().getTaskPath();
+        String taskPath = this._abbozzaServer.getLastTaskPath();
         
         String path = exchg.getRequestURI().getPath();
         path = path.substring(5);
