@@ -53,8 +53,9 @@ public class LoadHandler extends AbstractHandler {
                 String sketch = loadSketch();
                 this.sendResponse(exchg, 200, "text/xml", sketch);
             } else {
-                AbbozzaLogger.out("loadHandler: query " + query, AbbozzaLogger.DEBUG);
-                this.sendResponse(exchg, 200, "text/xml", "");                
+                AbbozzaLogger.out("loadHandler: load " + query, AbbozzaLogger.DEBUG);
+                String sketch = loadSketch(query);
+                this.sendResponse(exchg, 200, "text/xml", sketch);
             }
         } catch (IOException ioe) {
             this.sendResponse(exchg, 404, "", "");
@@ -103,6 +104,41 @@ public class LoadHandler extends AbstractHandler {
         }
         _abbozzaServer.toolIconify();
         return result;
+    }
+
+    public String loadSketch(String path) throws IOException {
+        // TODO Load given file
+        String result = "";
+        File lastSketchFile = _abbozzaServer.getLastSketchFile();
+        BufferedReader reader;
+        String basePath = ((lastSketchFile != null) ? lastSketchFile.getAbsolutePath() : _abbozzaServer.getSketchbookPath());
+
+        /*
+        // Prepare accessory-panel
+        LoadHandlerPanel panel = new LoadHandlerPanel(chooser);
+        chooser.setAccessory(panel);
+        chooser.addPropertyChangeListener(panel);
+
+        chooser.setFileFilter(new FileNameExtensionFilter("abbozza! (*.abz)", "abz"));
+        chooser.setSelectedFile(lastSketchFile);
+        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            reader = new BufferedReader(new FileReader(file));
+            while (reader.ready()) {
+                result = result + reader.readLine() + '\n';
+            }
+            reader.close();
+            if (panel.applyOptions()) {
+                Abbozza.getConfig().apply(panel.getOptions());
+            }
+            _abbozzaServer.setLastSketchFile(file);
+            _abbozzaServer.setLastTaskPath(file.getParentFile().getCanonicalPath());
+        } else {
+            throw new IOException();
+        }
+        _abbozzaServer.toolIconify();
+        return result;                
+        */
     }
 
 }
