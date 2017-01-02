@@ -103,6 +103,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     private int serverPort;
     public MonitorHandler monitorHandler;
     private File lastSketchFile = null;
+    private String anchorPath = null;
     private String lastTaskPath;
 
     /**
@@ -562,6 +563,14 @@ public abstract class AbbozzaServer implements HttpHandler {
         this.lastSketchFile = lastSketchFile;
     }
 
+    public String getAnchorPath() {
+        return anchorPath;
+    }
+
+    public void setAnchorPath(String lastSketchPath) {
+        this.anchorPath = lastSketchPath;
+    }
+    
     public void setLastTaskPath(String path) {
         lastTaskPath = path;
         AbbozzaLogger.out("lastTaskPath set to " + lastTaskPath,AbbozzaLogger.DEBUG);
