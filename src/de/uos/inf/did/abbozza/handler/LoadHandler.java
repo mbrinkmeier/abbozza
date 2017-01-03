@@ -46,7 +46,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class LoadHandler extends AbstractHandler {
 
-    private String _lastPath = null;
+    private String _anchorPath = null;
     
     public LoadHandler(AbbozzaServer abbozza) {
         super(abbozza);
@@ -131,7 +131,7 @@ public class LoadHandler extends AbstractHandler {
                 url = new URL("file://" + path);
             } else {
                 AbbozzaLogger.out("loading from relative path " + path ,AbbozzaLogger.DEBUG);                
-                String basePath = _abbozzaServer.getAnchorPath();
+                String basePath = this._anchorPath;
                 if (basePath == null) {
                     basePath = _abbozzaServer.getSketchbookPath();
                 }                
@@ -142,10 +142,7 @@ public class LoadHandler extends AbstractHandler {
         String u = url.toString();
         String anchor = u.substring(0,u.lastIndexOf('/')+1);
         AbbozzaLogger.out("load anchor " + anchor,AbbozzaLogger.DEBUG);
-        _abbozzaServer.setAnchorPath(anchor);
-        // File lastSketchFile = _abbozzaServer.getLastSketchFile();
-        // BufferedReader reader;
-        // String basePath = ((lastSketchFile != null) ? lastSketchFile.getAbsolutePath() : _abbozzaServer.getSketchbookPath());
+        this._anchorPath = anchor;
 
         URLConnection conn = url.openConnection();
         InputStream inStream = conn.getInputStream();

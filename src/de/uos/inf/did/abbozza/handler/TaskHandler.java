@@ -26,11 +26,16 @@ import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
@@ -41,42 +46,89 @@ import java.util.zip.ZipEntry;
 public class TaskHandler extends AbstractHandler {
     
     private JarDirHandler _jarHandler;
+    private String _anchorPath = null;
     
     public TaskHandler(AbbozzaServer abbozza, JarDirHandler jarHandler) {
         super(abbozza);
         this._jarHandler = jarHandler;
+        this._anchorPath = abbozza.getConfiguration().getTaskPath();
     }
    
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-        String taskPath = this._abbozzaServer.getLastTaskPath();
-        
+        /**
+         * The request has the following form:
+         *  task/<path>?<anchor>
+         * 
+         * <anchor> is an anchor path
+         * <path> is a path realtive to the current anchor path
+         **/
+        URL url;
+        String query = exchg.getRequestURI().getQuery();
         String path = exchg.getRequestURI().getPath();
+        
+        // If an anchor path is given, change it
+        if (query != null) {
+            AbbozzaLogger.out("TaskHandler: New task-anchor path given: " + query,AbbozzaLogger.DEBUG);
+            try {
+                // If the query is a wellformed URL use it as anchor
+                url = new URL(query);
+                this._anchorPath = url.toString();
+                AbbozzaLogger.out("TaskHandler: loading from given url " + path ,AbbozzaLogger.DEBUG);                
+            } catch (MalformedURLException ex) {
+                // If it isn't a wellformed URL reset the anchor to the standard task path
+                this._anchorPath = "file://" + this._abbozzaServer.getConfiguration().getTaskPath();
+            }
+        } else {
+            AbbozzaLogger.out("TaskHandler: using anchor : " + this._anchorPath,AbbozzaLogger.DEBUG);            
+        }
+        
+        // Use the new anchor path 
+        String basePath = this._anchorPath;
+        
         path = path.substring(5);
-        path = taskPath + path;
+        path = basePath + path;
         AbbozzaLogger.out("TaskHandler: " + path + " requested", AbbozzaLogger.INFO);
 
         OutputStream os = exchg.getResponseBody();
+        InputStream is = getStream(path);
         
-        byte[] bytearray = getBytes(path);
+        int len = 0;
+        if ( is != null ) {
+            AbbozzaLogger.out("TaskHandler: " + path + " received", AbbozzaLogger.INFO);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            // pump bytes from input to output
+            while ( reader.ready() ) {
                 
-        if (bytearray == null) {
-            AbbozzaLogger.out("TaskHandler: " + path + " not found! Looking in jars!", AbbozzaLogger.INFO);
-            AbbozzaLogger.out("TaskHandler: Looking for " + "/tasks/" + AbbozzaServer.getInstance().getSystem() + path, AbbozzaLogger.INFO);
-            // String result = "abbozza! : " + path + " not found in task directory! Looking in jars.";
-            bytearray = this._jarHandler.getBytes("/tasks/" + AbbozzaServer.getInstance().getSystem() + path);
+                os.write(b);
+                System.out.print(b);
+                len++;
+            }
+            exchg.sendResponseHeaders(200, len);
+        } else {
+        
+            byte[] bytearray = getBytes(path);
+                
+            if (bytearray == null) {
+                AbbozzaLogger.out("TaskHandler: " + path + " not found! Looking in jars!", AbbozzaLogger.INFO);
+                AbbozzaLogger.out("TaskHandler: Looking for " + "/tasks/" + AbbozzaServer.getInstance().getSystem() + path, AbbozzaLogger.INFO);
+                // String result = "abbozza! : " + path + " not found in task directory! Looking in jars.";
+                bytearray = this._jarHandler.getBytes("/tasks/" + AbbozzaServer.getInstance().getSystem() + path);
+            }
+        
+            if (bytearray == null) {        
+                AbbozzaLogger.out("TaskHandler: tasks" + path + " not found!", AbbozzaLogger.INFO);     
+                String result = "abbozza! : " + path + " not found!";
+                exchg.sendResponseHeaders(400, result.length());
+                os.write(result.getBytes());
+                os.close();
+                return;
+            }
+            
+            exchg.sendResponseHeaders(200, bytearray.length);
+            os.write(bytearray, 0, bytearray.length);
         }
         
-        if (bytearray == null) {        
-            AbbozzaLogger.out("TaskHandler: tasks" + path + " not found!", AbbozzaLogger.INFO);            String result = "abbozza! : " + path + " not found!";
-            // System.out.println(result);
-
-            exchg.sendResponseHeaders(400, result.length());
-            os.write(result.getBytes());
-            os.close();
-            return;
-        }
-
         Headers responseHeaders = exchg.getResponseHeaders();
         if (path.endsWith(".css")) {
             responseHeaders.set("Content-Type", "text/css");
@@ -96,16 +148,27 @@ public class TaskHandler extends AbstractHandler {
             responseHeaders.set("Content-Type", "text/text");            
         }
 
-        // AbbozzaLogger.out(new String(bytearray),AbbozzaLogger.INFO);
         // ok, we are ready to send the response.
-        exchg.sendResponseHeaders(200, bytearray.length);
-        os.write(bytearray, 0, bytearray.length);
         os.close();    
     }
     
+    public InputStream getStream(String path) throws IOException {
+        URL url;
+        try {
+            url = new URL(path);
+        } catch (MalformedURLException ex) {
+            AbbozzaLogger.out("TaskHandler : malformed URL " + path + " requested",AbbozzaLogger.DEBUG);
+            return null;
+        }
+
+        URLConnection conn = url.openConnection();
+        InputStream in = conn.getInputStream();        
+        
+        return in;
+    }
     
     public byte[] getBytes(String path) throws IOException {
-               
+
         // Check if there is a jar in the path
         if ( path.contains(".jar") ) {
             int index = path.indexOf(".jar")+4;
