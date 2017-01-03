@@ -105,7 +105,7 @@ public class LoadHandler extends AbstractHandler {
                 Abbozza.getConfig().apply(panel.getOptions());
             }
             _abbozzaServer.setLastSketchFile(file);
-            _abbozzaServer.setLastTaskPath(file.getParentFile().getCanonicalPath());
+            _abbozzaServer.setTaskAnchor("file://" + file.getParentFile().getCanonicalPath());
         } else {
             throw new IOException();
         }

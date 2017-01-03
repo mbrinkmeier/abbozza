@@ -26,7 +26,9 @@ import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -46,12 +48,10 @@ import java.util.zip.ZipEntry;
 public class TaskHandler extends AbstractHandler {
     
     private JarDirHandler _jarHandler;
-    private String _anchorPath = null;
     
     public TaskHandler(AbbozzaServer abbozza, JarDirHandler jarHandler) {
         super(abbozza);
         this._jarHandler = jarHandler;
-        this._anchorPath = abbozza.getConfiguration().getTaskPath();
     }
    
     @Override
@@ -66,6 +66,7 @@ public class TaskHandler extends AbstractHandler {
         URL url;
         String query = exchg.getRequestURI().getQuery();
         String path = exchg.getRequestURI().getPath();
+        String taskAnchor;
         
         // If an anchor path is given, change it
         if (query != null) {
@@ -73,18 +74,21 @@ public class TaskHandler extends AbstractHandler {
             try {
                 // If the query is a wellformed URL use it as anchor
                 url = new URL(query);
-                this._anchorPath = url.toString();
+                _abbozzaServer.setTaskAnchor(url.toString());
+                taskAnchor = url.toString();
                 AbbozzaLogger.out("TaskHandler: loading from given url " + path ,AbbozzaLogger.DEBUG);                
             } catch (MalformedURLException ex) {
                 // If it isn't a wellformed URL reset the anchor to the standard task path
-                this._anchorPath = "file://" + this._abbozzaServer.getConfiguration().getTaskPath();
+                _abbozzaServer.setTaskAnchor("file://" + this._abbozzaServer.getConfiguration().getTaskPath());
+                taskAnchor = "file://" + this._abbozzaServer.getConfiguration().getTaskPath();
             }
         } else {
-            AbbozzaLogger.out("TaskHandler: using anchor : " + this._anchorPath,AbbozzaLogger.DEBUG);            
+            AbbozzaLogger.out("TaskHandler: using anchor : " + _abbozzaServer.getTaskAnchor(),AbbozzaLogger.DEBUG);            
+            taskAnchor = _abbozzaServer.getTaskAnchor();
         }
         
         // Use the new anchor path 
-        String basePath = this._anchorPath;
+        String basePath = taskAnchor;
         
         path = path.substring(5);
         path = basePath + path;
@@ -92,22 +96,23 @@ public class TaskHandler extends AbstractHandler {
 
         OutputStream os = exchg.getResponseBody();
         InputStream is = getStream(path);
+
+        byte[] bytearray;
         
-        int len = 0;
         if ( is != null ) {
             AbbozzaLogger.out("TaskHandler: " + path + " received", AbbozzaLogger.INFO);
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream(1024);
+
             // pump bytes from input to output
             while ( reader.ready() ) {
-                
-                os.write(b);
-                System.out.print(b);
-                len++;
+                int b = reader.read();
+                buffer.write(b);
             }
-            exchg.sendResponseHeaders(200, len);
+            bytearray = buffer.toByteArray();
         } else {
         
-            byte[] bytearray = getBytes(path);
+            bytearray = getBytes(path);
                 
             if (bytearray == null) {
                 AbbozzaLogger.out("TaskHandler: " + path + " not found! Looking in jars!", AbbozzaLogger.INFO);
@@ -125,9 +130,10 @@ public class TaskHandler extends AbstractHandler {
                 return;
             }
             
-            exchg.sendResponseHeaders(200, bytearray.length);
-            os.write(bytearray, 0, bytearray.length);
         }
+
+        exchg.sendResponseHeaders(200, bytearray.length);
+        os.write(bytearray, 0, bytearray.length);
         
         Headers responseHeaders = exchg.getResponseHeaders();
         if (path.endsWith(".css")) {
