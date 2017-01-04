@@ -90,8 +90,8 @@ public class TaskHandler extends AbstractHandler {
         // Use the new anchor path 
         String basePath = taskAnchor;
         
-        path = path.substring(5);
-        path = basePath + path;
+        path = path.substring(6);
+        path = basePath + "/" + path;
         AbbozzaLogger.out("TaskHandler: " + path + " requested", AbbozzaLogger.INFO);
 
         OutputStream os = exchg.getResponseBody();

@@ -29,6 +29,7 @@ import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,8 +46,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author mbrinkmeier
  */
 public class LoadHandler extends AbstractHandler {
-
-    private String _anchorPath = null;
     
     public LoadHandler(AbbozzaServer abbozza) {
         super(abbozza);
@@ -75,8 +74,7 @@ public class LoadHandler extends AbstractHandler {
         BufferedReader reader;
         String path = ((lastSketchFile != null) ? lastSketchFile.getAbsolutePath() : _abbozzaServer.getSketchbookPath());
         JFileChooser chooser = new JFileChooser(path) {
-            protected JDialog createDialog(Component parent)
-                    throws HeadlessException {
+            protected JDialog createDialog(Component parent) throws HeadlessException {
                 JDialog dialog = super.createDialog(parent);
                 // config here as needed - just to see a difference
                 dialog.setLocationByPlatform(true);
@@ -84,7 +82,6 @@ public class LoadHandler extends AbstractHandler {
                 dialog.setAlwaysOnTop(true);
                 return dialog;
             }
-
         };
         
         // Prepare accessory-panel
@@ -92,20 +89,27 @@ public class LoadHandler extends AbstractHandler {
         chooser.setAccessory(panel);
         chooser.addPropertyChangeListener(panel);
 
-        chooser.setFileFilter(new FileNameExtensionFilter("abbozza! (*.abz)", "abz"));
+        chooser.setFileFilter(new FileNameExtensionFilter("abbozza! Sketches und Aufgabenarchive (*.abz, *.abj)", "abz","abj"));
         chooser.setSelectedFile(lastSketchFile);
-        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            File file = chooser.getSelectedFile();
-            reader = new BufferedReader(new FileReader(file));
-            while (reader.ready()) {
-                result = result + reader.readLine() + '\n';
+        int choice = chooser.showOpenDialog(null);
+        if ((choice == JFileChooser.APPROVE_OPTION) || (panel.getUrl() != null)) {
+            URL url;
+            if (panel.getUrl() != null ) {
+                url = new URL(panel.getUrl());
+            } else {
+                File file = chooser.getSelectedFile();                
+                url = file.toURI().toURL();
             }
-            reader.close();
+            
+            if ( url.toString().endsWith("abj") ) {
+                    result = getStartFromAbj(url);
+            } else {
+                    result = getSketchFromFile(url); 
+            }
+            
             if (panel.applyOptions()) {
                 Abbozza.getConfig().apply(panel.getOptions());
-            }
-            _abbozzaServer.setLastSketchFile(file);
-            _abbozzaServer.setTaskAnchor("file://" + file.getParentFile().getCanonicalPath());
+            }            
         } else {
             throw new IOException();
         }
@@ -115,34 +119,38 @@ public class LoadHandler extends AbstractHandler {
 
     
     public String loadSketch(String path) throws IOException {
-        // TODO Load given file
         String result = "";
         URL url;
         
         // Check path
         try {
             url = new URL(path);
-            AbbozzaLogger.out("loading from given url " + path ,AbbozzaLogger.DEBUG);                
+            AbbozzaLogger.out("LoadHandler: loading from given url " + path ,AbbozzaLogger.DEBUG);                
+            if ( path.endsWith("abj")) {
+                path = "jar:" + url.toString() + "!/start.abz";
+                url = new URL(path);
+            }
         } catch (MalformedURLException ex) {
             // Interpret path as path to local file
             // If path is absolute
             if ( path.startsWith("/")) {
-                AbbozzaLogger.out("loading from absolute path " + path ,AbbozzaLogger.DEBUG);                
+                AbbozzaLogger.out("LoadHandler: loading from absolute path " + path ,AbbozzaLogger.DEBUG);                
                 url = new URL("file://" + path);
             } else {
-                AbbozzaLogger.out("loading from relative path " + path ,AbbozzaLogger.DEBUG);                
-                String basePath = this._anchorPath;
+                AbbozzaLogger.out("LoadHandler: loading from relative path " + path ,AbbozzaLogger.DEBUG);                
+                String basePath = _abbozzaServer.getTaskAnchor();
+                AbbozzaLogger.out("LoadHandler: using anchor " + basePath ,AbbozzaLogger.DEBUG);                
                 if (basePath == null) {
                     basePath = _abbozzaServer.getSketchbookPath();
                 }                
-                url = new URL("file://" + basePath + "/" + path);
+                url = new URL(basePath + "/" + path);
             }
         }
-        AbbozzaLogger.out("load " + url.toString(),AbbozzaLogger.DEBUG);
+        AbbozzaLogger.out("LoadHandler: load " + url.toString(),AbbozzaLogger.DEBUG);
         String u = url.toString();
-        String anchor = u.substring(0,u.lastIndexOf('/')+1);
-        AbbozzaLogger.out("load anchor " + anchor,AbbozzaLogger.DEBUG);
-        this._anchorPath = anchor;
+        String anchor = u.substring(0,u.lastIndexOf('/'));
+        AbbozzaLogger.out("LoadHandler: load anchor " + anchor,AbbozzaLogger.DEBUG);
+        _abbozzaServer.setTaskAnchor(anchor);
 
         URLConnection conn = url.openConnection();
         InputStream inStream = conn.getInputStream();
@@ -150,10 +158,76 @@ public class LoadHandler extends AbstractHandler {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
         
         while (reader.ready()) {
-            result = result + reader.readLine()+"/n";
+            result = result + reader.readLine()+"\n";
         }
-        
+                
         return result;                
+    }
+
+    
+        private String getStartFromAbj(URL abj) throws MalformedURLException {
+        String result = "";
+        try {
+            URL url = new URL("jar:" + abj.toString() + "!/start.abz");
+            AbbozzaLogger.out("LoadHandler: Open abj " + url.toString(),AbbozzaLogger.DEBUG);
+            URLConnection conn = url.openConnection();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+            while (reader.ready()) {
+                 result = result + reader.readLine() + '\n';
+             }
+            reader.close();
+            // _abbozzaServer.setLastSketchFile(abj.toString());
+            _abbozzaServer.setTaskAnchor("jar:" + abj.toString() + "!");
+        } catch (Exception ex) {
+            AbbozzaLogger.err("LoadHandler: Could not open " + abj.toString());
+            return null;
+        }
+        return result;
+    }
+
+    private String getSketchFromFile(URL abz) throws FileNotFoundException, IOException {
+        String result = "";
+        BufferedReader reader = new BufferedReader(new InputStreamReader(abz.openStream()));
+        while (reader.ready()) {
+            result = result + reader.readLine() + '\n';
+        }
+        reader.close();
+        // _abbozzaServer.setLastSketchFile(file);
+        _abbozzaServer.setTaskAnchor(abz.toString().substring(0,abz.toString().lastIndexOf('/')));
+        return result;
+    }
+
+    
+    private String getStartFromAbj(File file) throws MalformedURLException {
+        String result = "";
+        try {
+            URL url = new URL("jar:file://" + file.getCanonicalPath() + "!/start.abz");
+            AbbozzaLogger.out("LoadHandler: Open abj " + url.toString(),AbbozzaLogger.DEBUG);
+            URLConnection conn = url.openConnection();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+            while (reader.ready()) {
+                 result = result + reader.readLine() + '\n';
+             }
+            reader.close();
+            _abbozzaServer.setLastSketchFile(file);
+            _abbozzaServer.setTaskAnchor("jar:file://" + file.getCanonicalPath() + "!");
+        } catch (Exception ex) {
+            AbbozzaLogger.err("LoadHandler: Could not open " + file.getPath());
+            return null;
+        }
+        return result;
+    }
+
+    private String getSketchFromFile(File file) throws FileNotFoundException, IOException {
+        String result = "";
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        while (reader.ready()) {
+            result = result + reader.readLine() + '\n';
+        }
+        reader.close();
+        _abbozzaServer.setLastSketchFile(file);
+        _abbozzaServer.setTaskAnchor("file://" + file.getParentFile().getCanonicalPath());
+        return result;
     }
 
 }
