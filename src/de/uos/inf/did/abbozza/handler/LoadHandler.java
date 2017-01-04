@@ -35,8 +35,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -70,7 +73,18 @@ public class LoadHandler extends AbstractHandler {
 
     public String loadSketch() throws IOException {
         String result = "";
-        File lastSketchFile = _abbozzaServer.getLastSketchFile();
+        File lastSketchFile;
+        URL last = _abbozzaServer.getLastSketchFile();
+        if ( last == null ) {
+            lastSketchFile = new File(".");
+        } else {
+            try {
+                lastSketchFile = new File(last.toURI());
+            } catch (URISyntaxException ex) {
+                lastSketchFile = new File(".");
+            }
+        }
+        AbbozzaLogger.out("LoadHandler: last sketch " + lastSketchFile.getCanonicalPath(),AbbozzaLogger.DEBUG);
         BufferedReader reader;
         String path = ((lastSketchFile != null) ? lastSketchFile.getAbsolutePath() : _abbozzaServer.getSketchbookPath());
         JFileChooser chooser = new JFileChooser(path) {
@@ -138,19 +152,17 @@ public class LoadHandler extends AbstractHandler {
                 url = new URL("file://" + path);
             } else {
                 AbbozzaLogger.out("LoadHandler: loading from relative path " + path ,AbbozzaLogger.DEBUG);                
-                String basePath = _abbozzaServer.getTaskAnchor();
-                AbbozzaLogger.out("LoadHandler: using anchor " + basePath ,AbbozzaLogger.DEBUG);                
-                if (basePath == null) {
-                    basePath = _abbozzaServer.getSketchbookPath();
+                URL context = _abbozzaServer.getTaskContext();
+                if (context == null) {
+                    context = new File(_abbozzaServer.getSketchbookPath()).toURI().toURL();
                 }                
-                url = new URL(basePath + "/" + path);
+                AbbozzaLogger.out("LoadHandler: using anchor " + context.toString() ,AbbozzaLogger.DEBUG);                
+                url = new URL(context,path);
             }
         }
         AbbozzaLogger.out("LoadHandler: load " + url.toString(),AbbozzaLogger.DEBUG);
-        String u = url.toString();
-        String anchor = u.substring(0,u.lastIndexOf('/'));
-        AbbozzaLogger.out("LoadHandler: load anchor " + anchor,AbbozzaLogger.DEBUG);
-        _abbozzaServer.setTaskAnchor(anchor);
+        AbbozzaLogger.out("LoadHandler: load anchor " + url.toString(),AbbozzaLogger.DEBUG);
+        _abbozzaServer.setTaskContext(url);
 
         URLConnection conn = url.openConnection();
         InputStream inStream = conn.getInputStream();
@@ -165,20 +177,21 @@ public class LoadHandler extends AbstractHandler {
     }
 
     
-        private String getStartFromAbj(URL abj) throws MalformedURLException {
+    private String getStartFromAbj(URL abj) {
         String result = "";
         try {
             URL url = new URL("jar:" + abj.toString() + "!/start.abz");
             AbbozzaLogger.out("LoadHandler: Open abj " + url.toString(),AbbozzaLogger.DEBUG);
             URLConnection conn = url.openConnection();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while (reader.ready()) {
                  result = result + reader.readLine() + '\n';
              }
             reader.close();
             // _abbozzaServer.setLastSketchFile(abj.toString());
-            _abbozzaServer.setTaskAnchor("jar:" + abj.toString() + "!");
+            _abbozzaServer.setTaskContext(new URL("jar:" + abj.toString() + "!/start.abz"));
         } catch (Exception ex) {
+            ex.printStackTrace(System.err);
             AbbozzaLogger.err("LoadHandler: Could not open " + abj.toString());
             return null;
         }
@@ -193,12 +206,12 @@ public class LoadHandler extends AbstractHandler {
         }
         reader.close();
         // _abbozzaServer.setLastSketchFile(file);
-        _abbozzaServer.setTaskAnchor(abz.toString().substring(0,abz.toString().lastIndexOf('/')));
+        _abbozzaServer.setTaskContext(abz);
         return result;
     }
 
     
-    private String getStartFromAbj(File file) throws MalformedURLException {
+    private String getStartFromAbj(File file) {
         String result = "";
         try {
             URL url = new URL("jar:file://" + file.getCanonicalPath() + "!/start.abz");
@@ -209,8 +222,8 @@ public class LoadHandler extends AbstractHandler {
                  result = result + reader.readLine() + '\n';
              }
             reader.close();
-            _abbozzaServer.setLastSketchFile(file);
-            _abbozzaServer.setTaskAnchor("jar:file://" + file.getCanonicalPath() + "!");
+            _abbozzaServer.setLastSketchFile(file.toURI().toURL());
+            _abbozzaServer.setTaskContext(new URL("jar:file://" + file.getCanonicalPath() + "!"));
         } catch (Exception ex) {
             AbbozzaLogger.err("LoadHandler: Could not open " + file.getPath());
             return null;
@@ -225,8 +238,8 @@ public class LoadHandler extends AbstractHandler {
             result = result + reader.readLine() + '\n';
         }
         reader.close();
-        _abbozzaServer.setLastSketchFile(file);
-        _abbozzaServer.setTaskAnchor("file://" + file.getParentFile().getCanonicalPath());
+        _abbozzaServer.setLastSketchFile(file.toURI().toURL());
+        _abbozzaServer.setTaskContext(new URL("file://" + file.getParentFile().getCanonicalPath()));
         return result;
     }
 

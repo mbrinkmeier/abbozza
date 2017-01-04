@@ -66,7 +66,7 @@ public class TaskHandler extends AbstractHandler {
         URL url;
         String query = exchg.getRequestURI().getQuery();
         String path = exchg.getRequestURI().getPath();
-        String taskAnchor;
+        URL taskContext;
         
         // If an anchor path is given, change it
         if (query != null) {
@@ -74,33 +74,29 @@ public class TaskHandler extends AbstractHandler {
             try {
                 // If the query is a wellformed URL use it as anchor
                 url = new URL(query);
-                _abbozzaServer.setTaskAnchor(url.toString());
-                taskAnchor = url.toString();
+                _abbozzaServer.setTaskContext(url);
+                taskContext = url;
                 AbbozzaLogger.out("TaskHandler: loading from given url " + path ,AbbozzaLogger.DEBUG);                
             } catch (MalformedURLException ex) {
                 // If it isn't a wellformed URL reset the anchor to the standard task path
-                _abbozzaServer.setTaskAnchor("file://" + this._abbozzaServer.getConfiguration().getTaskPath());
-                taskAnchor = "file://" + this._abbozzaServer.getConfiguration().getTaskPath();
+                taskContext = new URL("file://" + this._abbozzaServer.getConfiguration().getTaskPath());
+                _abbozzaServer.setTaskContext(taskContext);
             }
         } else {
-            AbbozzaLogger.out("TaskHandler: using anchor : " + _abbozzaServer.getTaskAnchor(),AbbozzaLogger.DEBUG);            
-            taskAnchor = _abbozzaServer.getTaskAnchor();
+            AbbozzaLogger.out("TaskHandler: using anchor : " + _abbozzaServer.getTaskContext().toString(),AbbozzaLogger.DEBUG);            
+            taskContext = _abbozzaServer.getTaskContext();
         }
         
         // Use the new anchor path 
-        String basePath = taskAnchor;
-        
-        path = path.substring(6);
-        path = basePath + "/" + path;
-        AbbozzaLogger.out("TaskHandler: " + path + " requested", AbbozzaLogger.INFO);
+        URL sketch = new URL(taskContext,path.substring(6));
+        AbbozzaLogger.out("TaskHandler: " + sketch.toString() + " requested", AbbozzaLogger.INFO);
 
         OutputStream os = exchg.getResponseBody();
-        InputStream is = getStream(path);
+        InputStream is = sketch.openStream();
 
         byte[] bytearray;
         
         if ( is != null ) {
-            AbbozzaLogger.out("TaskHandler: " + path + " received", AbbozzaLogger.INFO);
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             ByteArrayOutputStream buffer = new ByteArrayOutputStream(1024);
 
@@ -110,13 +106,14 @@ public class TaskHandler extends AbstractHandler {
                 buffer.write(b);
             }
             bytearray = buffer.toByteArray();
+            AbbozzaLogger.out("TaskHandler: " + sketch.toString() + " received", AbbozzaLogger.INFO);
         } else {
-        
+            /*
             bytearray = getBytes(path);
                 
             if (bytearray == null) {
-                AbbozzaLogger.out("TaskHandler: " + path + " not found! Looking in jars!", AbbozzaLogger.INFO);
-                AbbozzaLogger.out("TaskHandler: Looking for " + "/tasks/" + AbbozzaServer.getInstance().getSystem() + path, AbbozzaLogger.INFO);
+                AbbozzaLogger.out("TaskHandler: " + sketch.toString() + " not found! Looking in jars!", AbbozzaLogger.INFO);
+                AbbozzaLogger.out("TaskHandler: Looking for " + "/tasks/" + AbbozzaServer.getInstance().getSystem() + sketch.toString(), AbbozzaLogger.INFO);
                 // String result = "abbozza! : " + path + " not found in task directory! Looking in jars.";
                 bytearray = this._jarHandler.getBytes("/tasks/" + AbbozzaServer.getInstance().getSystem() + path);
             }
@@ -129,13 +126,12 @@ public class TaskHandler extends AbstractHandler {
                 os.close();
                 return;
             }
-            
+            */
+            return;
         }
-
-        exchg.sendResponseHeaders(200, bytearray.length);
-        os.write(bytearray, 0, bytearray.length);
         
         Headers responseHeaders = exchg.getResponseHeaders();
+        path = sketch.getPath();
         if (path.endsWith(".css")) {
             responseHeaders.set("Content-Type", "text/css");
         } else if (path.endsWith(".js")) {
@@ -155,9 +151,12 @@ public class TaskHandler extends AbstractHandler {
         }
 
         // ok, we are ready to send the response.
+        exchg.sendResponseHeaders(200, bytearray.length);
+        os.write(bytearray, 0, bytearray.length);
         os.close();    
     }
     
+    /*
     public InputStream getStream(String path) throws IOException {
         URL url;
         try {
@@ -172,7 +171,9 @@ public class TaskHandler extends AbstractHandler {
         
         return in;
     }
+    */
     
+    /*
     public byte[] getBytes(String path) throws IOException {
 
         // Check if there is a jar in the path
@@ -203,8 +204,9 @@ public class TaskHandler extends AbstractHandler {
 
         return bytearray;
     }
-
+    */
     
+    /*
     public byte[] getBytesFromJar(JarFile jarFile, String path) throws IOException {
         
         if ( path.equals("")  ) {
@@ -228,5 +230,5 @@ public class TaskHandler extends AbstractHandler {
 
         return bytearray;
     }
-
+    */
 }

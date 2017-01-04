@@ -103,7 +103,7 @@ public class SaveHandler extends AbstractHandler {
             }
 
             // Generate JFileChooser
-            File lastSketchFile = _abbozzaServer.getLastSketchFile();
+            File lastSketchFile = new File(_abbozzaServer.getLastSketchFile().toURI());
             String path = ((lastSketchFile != null) ? lastSketchFile.getAbsolutePath() : _abbozzaServer.getSketchbookPath());
             JFileChooser chooser = new JFileChooser(path) {
                 protected JDialog createDialog(Component parent)
@@ -125,7 +125,7 @@ public class SaveHandler extends AbstractHandler {
             panel.setUndeletableSelected(opts.getAttribute("protected").equals("yes") ? true : false);
 
             // Prepare File filters
-            chooser.setFileFilter(new FileNameExtensionFilter("abbozza! (*.abz)", "abz"));
+            chooser.setFileFilter(new FileNameExtensionFilter("abbozza! (*.abz)", "abz", "ABZ"));
             chooser.setSelectedFile(lastSketchFile);
 
             // Show FileChooser
@@ -169,7 +169,7 @@ public class SaveHandler extends AbstractHandler {
                  */
                 writer.close();
                 in.close();
-                _abbozzaServer.setLastSketchFile(file);
+                _abbozzaServer.setLastSketchFile(file.toURI().toURL());
             }
         } catch (Exception ex) {
             AbbozzaLogger.out(ex.toString(), AbbozzaLogger.DEBUG);

@@ -50,6 +50,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -102,9 +103,8 @@ public abstract class AbbozzaServer implements HttpHandler {
     protected HttpServer httpServer;
     private int serverPort;
     public MonitorHandler monitorHandler;
-    private File _lastSketchFile = null;
-    private String _taskAnchor;
-    
+    private URL _lastSketchFile = null;
+    private URL _taskContext;
 
     /**
      * The system independent initialization of the server
@@ -149,7 +149,11 @@ public abstract class AbbozzaServer implements HttpHandler {
             checkForUpdate(false);
         }
 
-        this._taskAnchor = this.getConfiguration().getTaskPath();
+        try {
+            this._taskContext = new File(this.getConfiguration().getTaskPath()).toURI().toURL();
+        } catch (MalformedURLException ex) {
+            this._taskContext = null;
+        }
         
         // AbbozzaLocale.setLocale("de_DE");
         AbbozzaLogger.out(AbbozzaLocale.entry("msg.loaded"), AbbozzaLogger.INFO);
@@ -555,21 +559,28 @@ public abstract class AbbozzaServer implements HttpHandler {
         return config;
     }
 
-    public File getLastSketchFile() {
+    public URL getLastSketchFile() {
+        if (_lastSketchFile == null) {
+            try {
+                _lastSketchFile = new URL("file://" + this.sketchbookPath);
+            } catch (MalformedURLException ex) {
+                _lastSketchFile = null;
+            }
+        }
         return _lastSketchFile;
     }
 
-    public void setLastSketchFile(File lastSketchFile) {
+    public void setLastSketchFile(URL lastSketchFile) {
         this._lastSketchFile = lastSketchFile;
     }
     
-    public void setTaskAnchor(String path) {
-        _taskAnchor = path;
-        AbbozzaLogger.out("lastTaskPath set to " + _taskAnchor,AbbozzaLogger.DEBUG);
+    public void setTaskContext(URL context) {
+        _taskContext = context;
+        AbbozzaLogger.out("Task context set to " + _taskContext,AbbozzaLogger.DEBUG);
     }
     
-    public String getTaskAnchor () {
-        return _taskAnchor;
+    public URL getTaskContext () {
+        return _taskContext;
     }
     
     /*
