@@ -41,6 +41,7 @@
 	    
         <category name="Mathe" id="cat.MATH">
             <block type="math_number"></block>
+            <block type="math_decimal"></block>
             <block type="math_calc"></block>
             <!--block type="math_round"></block-->
             <block type="math_unary"></block>

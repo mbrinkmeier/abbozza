@@ -111,7 +111,7 @@ Trotzdem fortfahren?</msg>
         <msg id="cat.COND">Entscheidungen</msg>
         <msg id="cat.INOUT">Ein- und Ausgabe</msg>
         <msg id="cat.DEVIN">Sensoren</msg>
-        <msg id="cat.DEVOUT">Aktuatoren</msg>
+        <msg id="cat.DEVOUT">Aktoren</msg>
         <msg id="cat.MATH">Mathe</msg>
         <msg id="cat.TEXT">Text</msg>
         <msg id="cat.VAR">Variablen</msg>

@@ -111,7 +111,7 @@ Continuing?</msg>
         <msg id="cat.LOOPS">Loops</msg>
         <msg id="cat.INOUT">In- and Output</msg>
         <msg id="cat.DEVIN">Sensors</msg>
-        <msg id="cat.DEVOUT">ActuaTORS</msg>
+        <msg id="cat.DEVOUT">Actuators</msg>
         <msg id="cat.MATH">Maths</msg>
         <msg id="cat.TEXT">Text</msg>
         <msg id="cat.VAR">Variables</msg>
@@ -180,7 +180,7 @@ Continuing?</msg>
         <msg id ="io.HIGH">high</msg>
         <msg id ="io.LOW">low</msg>
         <msg id ="io.READDPIN">Digital value of pin</msg>
-        <msg id ="io.SETDPIN">Set difital pin # to</msg>
+        <msg id ="io.SETDPIN">Set digital pin # to</msg>
         <msg id ="io.READAPIN">Analog value of pin</msg>
         <msg id ="io.SETAPIN">Set analog pin # to</msg>
 		
