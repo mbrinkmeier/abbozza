@@ -265,5 +265,11 @@ Continuing?</msg>
         <msg id="err.UNKNOWN_DEVICE">Unknown device</msg>
         <msg id="err.ILLEGAL_PIN">Invalid pin: #1</msg>
         <msg id="err.DEFAULT_VALUE">Value not set</msg>
-    </errors>
+        <msg id="err.WRONG_SYSTEM">The sketch ist for # systems!</msg>
+        <msg id="err.WRONG_SYSTEM_TITLE">Wrong system!</msg>
+     </errors>
+    <names>
+        <msg id="arduino">Arduino compatible</msg>
+        <msg id="calliope">Calliope Mini and micro:bit compatible</msg>
+    </names>
 </language>

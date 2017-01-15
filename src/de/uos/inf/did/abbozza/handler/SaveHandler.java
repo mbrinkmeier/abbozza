@@ -101,7 +101,17 @@ public class SaveHandler extends AbstractHandler {
             } else {
                 opts = (Element) options.item(0);
             }
-
+            
+            // Find system
+            NodeList systems = xml.getElementsByTagName("system");
+            Element sysXml;
+            if (systems.getLength() == 0) {
+                sysXml = xml.createElement("system");
+                root.appendChild(sysXml);
+            } else {
+                sysXml = (Element) systems.item(0);
+            }
+            
             // Generate JFileChooser
             File lastSketchFile = new File(_abbozzaServer.getLastSketchFile().toURI());
             String path = ((lastSketchFile != null) ? lastSketchFile.getAbsolutePath() : _abbozzaServer.getSketchbookPath());
@@ -152,7 +162,10 @@ public class SaveHandler extends AbstractHandler {
                 opts.setAttribute("apply", panel.isOptionSelected() ? "yes" : "no");
                 // 3rd step: Set attribute "protected"
                 opts.setAttribute("protected", panel.isUndeletableSelected() ? "yes" : "no");
+                // 4th step: Set system
+                sysXml.setTextContent(this._abbozzaServer.getSystem());
 
+                
                 // Write DOM to file via Transformer
                 Transformer transformer = TransformerFactory.newInstance().newTransformer();
                 // Do not add a surrounding xml tag

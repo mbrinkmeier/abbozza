@@ -42,6 +42,7 @@ import org.w3c.dom.NodeList;
  */
 public class LoadHandlerPanel extends javax.swing.JPanel implements PropertyChangeListener {
 
+    private String system = "";
     private JFileChooser chooser;
     private String options = "{}";
     private boolean applyOptions = false;
@@ -186,6 +187,10 @@ public class LoadHandlerPanel extends javax.swing.JPanel implements PropertyChan
                 this.options = opts.item(0).getTextContent();
                 this.applyOptions = ((Element) opts.item(0)).getAttribute("apply").equals("yes") ? true : false;
             }
+            NodeList systems = xml.getElementsByTagName("system");
+            if (systems.getLength() != 0 ) {
+                this.system = systems.item(0).getTextContent();
+            }
 
             // Read DOM from stream
           } catch (Exception ex) {
@@ -195,6 +200,9 @@ public class LoadHandlerPanel extends javax.swing.JPanel implements PropertyChan
        }
     }
     
+    public String getSystem() {
+        return this.system;
+    }
     
     public String getOptions() {
         return this.options;
