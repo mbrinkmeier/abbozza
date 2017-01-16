@@ -13,12 +13,20 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="NetBeansProjects"/>
         <group>
-            <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/AbbozzaServer.java</file>
-            <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/TaskHandler.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/AbbozzaServer.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/arduino/GeneratorArduino.js</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/Generator.js</file>
         </group>
         <group>
-            <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/AbbozzaServer.java</file>
-            <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/TaskHandler.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/AbbozzaServer.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/UploadHandler.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/arduino/Abbozza.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/CheckHandler.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/MonitorHandler.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/ColorMgr.js</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/monitor/AbbozzaMonitor.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/ConfigDialogHandler.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/LoadHandler.java</file>
         </group>
     </open-files>
 </project-private>
