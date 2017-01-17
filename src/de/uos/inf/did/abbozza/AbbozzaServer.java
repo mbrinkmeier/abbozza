@@ -562,7 +562,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     public URL getLastSketchFile() {
         if (_lastSketchFile == null) {
             try {
-                _lastSketchFile = new URL("file://" + this.sketchbookPath);
+                _lastSketchFile = new File(this.sketchbookPath).toURI().toURL();
             } catch (MalformedURLException ex) {
                 _lastSketchFile = null;
             }
