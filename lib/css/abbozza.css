@@ -428,6 +428,10 @@ div[role="treeitem"]:hover {
     padding: 1px;
 }
 
+.taskHintBody {
+    padding: 0px;
+    margin: 0px
+}
 
 .taskHintContent {
     margin: 0px;
