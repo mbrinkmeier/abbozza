@@ -82,7 +82,7 @@ public class LoadHandler extends AbstractHandler {
         } else {
             try {
                 lastSketchFile = new File(last.toURI());
-            } catch (URISyntaxException ex) {
+            } catch (Exception ex) {
                 lastSketchFile = new File(".");
             }
         }
@@ -116,6 +116,8 @@ public class LoadHandler extends AbstractHandler {
                 File file = chooser.getSelectedFile();                
                 url = file.toURI().toURL();
             }
+            
+            this._abbozzaServer.setLastSketchFile(url);
             
             if ( url.toString().endsWith("abj") ) {
                     result = getStartFromAbj(url);
