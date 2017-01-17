@@ -186,6 +186,7 @@ public class SaveHandler extends AbstractHandler {
             }
         } catch (Exception ex) {
             AbbozzaLogger.out(ex.toString(), AbbozzaLogger.DEBUG);
+            ex.printStackTrace(System.err);
         }
         _abbozzaServer.toolIconify();
     }
