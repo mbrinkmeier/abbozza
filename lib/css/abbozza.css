@@ -432,7 +432,7 @@ div[role="treeitem"]:hover {
 .taskHintContent {
     margin: 0px;
     padding: 5px;
-    border: 0px;
+    border: 5px;
     overflow: auto;
     color: black;
     background-color: #ffffff;
