@@ -12,62 +12,102 @@ import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.jar.JarFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 
 /**
- *
+ * This HttpHandler handles requests for files which can be in one of several
+ * places. 
+ * 
+ * Upon receiving a request JarDirHandler checks his list of possible locations
+ * for the requested path. It returns the first found file.
+ * 
  * @author michael
  */
 public class JarDirHandler implements HttpHandler {
 
-    private Vector<Object> entries;
+    // The vector of entries
+    private Vector<URI> entries;
 
+    /**
+     * Initialize the JarDirHandler
+     */
     public JarDirHandler() {
-        entries = new Vector<Object>();
+        entries = new Vector<URI>();
     }
 
+    /**
+     * Add an URL to the list of possible locations.
+     * @param url The url to be added
+     */
+    public void addURI(URI uri) {
+        entries.add(uri);
+    }
+    
+    /**
+     * Add a directory to the list of possible locations.
+     * 
+     * @param path The path
+     * @param name The name for message purposes
+     */
     public void addDir(String path, String name) {
         File file = new File(path);
         if (!file.exists()) {
             AbbozzaLogger.err("JarHandler: " + name + " : " + file.getAbsolutePath() + " not found");
-            file = null;
         } else {
             AbbozzaLogger.out("JarHandler: " + name + " : " + file.getAbsolutePath(),AbbozzaLogger.INFO);
-            return;
         }
-        entries.add(file);
+        entries.add(file.toURI());
     }
     
-    
+    /**
+     * Add a directory to the list of possible locations.
+     * 
+     * @param dir The directory
+     */
     public void addDir(File dir) {
-        entries.add(dir);
+        entries.add(dir.toURI());
     }
 
-    
+    /**
+     * Add a jar to the list of possible locations.
+     * 
+     * @param path The path to the jar
+     * @param name the name for messagaging purposes
+     */
     public void addJar(String path, String name) {
-        JarFile file;
+        URI uri;
+        URI jarUri = new File(path).toURI();
         try {
-            file = new JarFile(path);
-            AbbozzaLogger.out("JarHandler: " + name + " : " + file.getName(),AbbozzaLogger.INFO);
-        } catch (IOException e) {
+            uri = new URI("jar:"+ jarUri.toString() +"!");
+            AbbozzaLogger.out("JarHandler: " + name + " : " + uri.toString(),AbbozzaLogger.INFO);
+        } catch (URISyntaxException e) {
             AbbozzaLogger.err("JarHandler: " + name + " not found (" + path + ")");
             return;
         }        
-        entries.add(file);
+        entries.add(uri);
     }
     
     
-    public void addJar(JarFile jar) {
-        entries.add(jar);
-    }
+    // public void addJar(JarFile jar) {
+    //     entries.add(jar);
+    // }
 
     public void clear() {
         entries.clear();
@@ -117,20 +157,50 @@ public class JarDirHandler implements HttpHandler {
         os.close();
     }
 
-    public byte[] getBytes(String path) throws IOException {
+    /**
+     * Retreive the byte content of the requested file.
+     * 
+     * @param path
+     * @return
+     * @throws IOException 
+     */
+    public byte[] getBytes(String path) {
         AbbozzaLogger.out("JarHandler: Reading " + path, AbbozzaLogger.INFO);
         byte[] bytearray = null;
         int tries = 0;
 
         while ((tries < 3) && (bytearray == null)) {
 
-            Enumeration<Object> it = entries.elements();
-            while (it.hasMoreElements() && (bytearray == null)) {
-                Object entry = it.nextElement();
-                if (entry instanceof JarFile) {
-                    bytearray = getBytesFromJar((JarFile) entry, path);
-                } else if (entry instanceof File) {
-                    bytearray = getBytesFromDir((File) entry, path);
+            Enumeration<URI> uriIt = entries.elements();
+
+            while (uriIt.hasMoreElements() && (bytearray == null)) {
+                try {
+                    // The uri contains the base
+                    URI uri = uriIt.nextElement();
+                    AbbozzaLogger.out("JarHandler: Base " + uri.toString(), AbbozzaLogger.DEBUG);                    
+                    URL fileUrl = new URL(uri.toString() + path);
+                    AbbozzaLogger.out("JarHandler: Checking " + fileUrl.toString(), AbbozzaLogger.DEBUG);
+                
+                    URLConnection conn = fileUrl.openConnection();
+                    InputStream inStream = conn.getInputStream();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    int reads = inStream.read(); 
+                    while(reads != -1){ 
+                        baos.write(reads); 
+                        reads = inStream.read(); 
+                    } 
+                    bytearray = baos.toByteArray();   
+                    
+                    /*
+                    Object entry = uriIt.nextElement();
+                    if (entry instanceof JarFile) {
+                        bytearray = getBytesFromJar((JarFile) entry, path);
+                    } else if (entry instanceof File) {
+                        bytearray = getBytesFromDir((File) entry, path);
+                    }
+                    */
+                } catch (IOException ex) {
+                    bytearray = null;
                 }
             }
 
@@ -147,6 +217,41 @@ public class JarDirHandler implements HttpHandler {
     }
     
     
+    
+    public InputStream getInputStream(String path) {
+        AbbozzaLogger.out("JarHandler: Opening Stream " + path, AbbozzaLogger.INFO);
+        InputStream inStream = null;
+        int tries = 0;
+      
+        while ((tries < 3) && (inStream == null)) {
+
+            Enumeration<URI> uriIt = entries.elements();
+            while (uriIt.hasMoreElements() && (inStream == null)) {
+                try {
+                    // The uri contains the base
+                    URI uri = uriIt.nextElement();
+                    AbbozzaLogger.out("JarHandler: Base " + uri.toString(), AbbozzaLogger.DEBUG);                    
+                    URL fileUrl = new URL(uri.toString() + path);
+                    AbbozzaLogger.out("JarHandler: Checking " + fileUrl.toString(), AbbozzaLogger.DEBUG);
+                    
+                    URLConnection conn = fileUrl.openConnection();
+                    inStream = conn.getInputStream();                        
+                } catch (IOException ex) {
+                    inStream = null;
+                    AbbozzaLogger.err("JarHandler: " + path + " not found");
+                }
+
+                if (inStream == null) {
+                    tries++;
+                    AbbozzaServer.getInstance().findJarsAndDirs(this);
+                }
+            }
+            
+        }
+        return inStream;
+    }
+
+    /*
     public byte[] getBytesFromDir(File webDir, String path) throws IOException {
         File file = new File(webDir + path);
         if (!file.exists()) {
@@ -258,5 +363,6 @@ public class JarDirHandler implements HttpHandler {
 
         return fis;
     }
+*/
     
 }
