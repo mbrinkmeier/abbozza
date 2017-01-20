@@ -69,9 +69,9 @@ public class JarDirHandler implements HttpHandler {
     public void addDir(String path, String name) {
         File file = new File(path);
         if (!file.exists()) {
-            AbbozzaLogger.err("JarHandler: " + name + " : " + file.getAbsolutePath() + " not found");
+            AbbozzaLogger.err("JarHandler: " + name + " : " + file.toURI().toString() + " not found");
         } else {
-            AbbozzaLogger.out("JarHandler: " + name + " : " + file.getAbsolutePath(),AbbozzaLogger.INFO);
+            AbbozzaLogger.out("JarHandler: " + name + " : " + file.toURI().toString() ,AbbozzaLogger.INFO);
         }
         entries.add(file.toURI());
     }
