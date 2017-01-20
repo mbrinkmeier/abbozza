@@ -115,6 +115,9 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         localJarPath = sketchbookPath + "/tools/Abbozza/tool/";
         globalJarPath = PreferencesData.get("runtime.ide.path") + "/";
         runtimePath = globalJarPath;
+        
+        localPluginPath = sketchbookPath + "/tools/Abbozza/plugins";
+        globalPluginPath = globalJarPath + "/tools/Abbozza/plugins";
     }
  
     

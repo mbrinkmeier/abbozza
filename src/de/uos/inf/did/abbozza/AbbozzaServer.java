@@ -36,6 +36,7 @@ import de.uos.inf.did.abbozza.handler.SaveHandler;
 import de.uos.inf.did.abbozza.handler.TaskHandler;
 import de.uos.inf.did.abbozza.handler.UploadHandler;
 import de.uos.inf.did.abbozza.handler.VersionHandler;
+import de.uos.inf.did.abbozza.plugin.PluginManager;
 import java.awt.Desktop;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -105,6 +106,9 @@ public abstract class AbbozzaServer implements HttpHandler {
     public MonitorHandler monitorHandler;
     private URL _lastSketchFile = null;
     private URL _taskContext;
+    protected String globalPluginPath;
+    protected String localPluginPath;
+    private PluginManager pluginManager;
 
     /**
      * The system independent initialization of the server
@@ -149,6 +153,9 @@ public abstract class AbbozzaServer implements HttpHandler {
             checkForUpdate(false);
         }
 
+        // Load plugins
+        pluginManager = new PluginManager(this);
+        
         try {
             this._taskContext = new File(this.getConfiguration().getTaskPath()).toURI().toURL();
         } catch (MalformedURLException ex) {
@@ -181,6 +188,9 @@ public abstract class AbbozzaServer implements HttpHandler {
         int  p = url.getPath().lastIndexOf("/");
         globalJarPath = url.getPath().substring(0, p+1);
         // globalJarPath = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        
+        localPluginPath = localJarPath + "/plugins";
+        globalPluginPath = globalJarPath + "/plugins";
     }
 
     public String getSketchbookPath() {
@@ -197,6 +207,14 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     public String getLocalJarPath() {
         return localJarPath;
+    }
+    
+    public String getGlobalPluginPath() {
+        return globalPluginPath;
+    }
+    
+    public String getLocalPluginPath() {
+        return localPluginPath;
     }
     
     public String getSystem() {
