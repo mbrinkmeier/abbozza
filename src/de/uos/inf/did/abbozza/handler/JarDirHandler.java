@@ -105,10 +105,6 @@ public class JarDirHandler implements HttpHandler {
     }
     
     
-    // public void addJar(JarFile jar) {
-    //     entries.add(jar);
-    // }
-
     public void clear() {
         entries.clear();
     }
@@ -124,7 +120,6 @@ public class JarDirHandler implements HttpHandler {
 
         if (bytearray == null) {
             String result = "abbozza! : " + path + " nicht gefunden!";
-            // System.out.println(result);
 
             exchg.sendResponseHeaders(400, result.length());
             os.write(result.getBytes());
@@ -190,14 +185,6 @@ public class JarDirHandler implements HttpHandler {
                     } 
                     bytearray = baos.toByteArray();   
                     
-                    /*
-                    Object entry = uriIt.nextElement();
-                    if (entry instanceof JarFile) {
-                        bytearray = getBytesFromJar((JarFile) entry, path);
-                    } else if (entry instanceof File) {
-                        bytearray = getBytesFromDir((File) entry, path);
-                    }
-                    */
                 } catch (IOException ex) {
                     bytearray = null;
                 }
@@ -257,119 +244,5 @@ public class JarDirHandler implements HttpHandler {
         
         return inStream;
     }
-
-    /*
-    public byte[] getBytesFromDir(File webDir, String path) throws IOException {
-        File file = new File(webDir + path);
-        if (!file.exists()) {
-            return null;
-        }
-        
-        // Check if the requested file is below the given directory
-        if (!file.getCanonicalPath().startsWith(webDir.getCanonicalPath())) {
-            return null;
-        }
-
-        FileInputStream fis = new FileInputStream(file);
-
-        byte[] bytearray = new byte[(int) file.length()];
-        BufferedInputStream bis = new BufferedInputStream(fis);
-        bis.read(bytearray, 0, bytearray.length);
-        bis.close();
-
-        return bytearray;
-    }
-
-    
-    public byte[] getBytesFromJar(JarFile jar, String path) throws IOException {
-
-        path = path.substring(1, path.length());
-        ZipEntry entry = this.getEntry(jar, path);
-        if (entry == null) {
-            return null;
-        }
-        InputStream fis = jar.getInputStream(entry);
-
-        if (fis == null) {
-            return null;
-        }
-
-        byte[] bytearray = new byte[(int) entry.getSize()];
-        BufferedInputStream bis = new BufferedInputStream(fis);
-        bis.read(bytearray, 0, bytearray.length);
-        bis.close();
-
-        return bytearray;
-    }
-
-    
-    public ZipEntry getEntry(JarFile jar, String name) {
-        ZipEntry entry = jar.getEntry(name);
-        if (entry != null) {
-            return entry;
-        }
-        return null;
-    }
-    
-    
-    public InputStream getInputStream(String path) throws IOException {
-        AbbozzaLogger.out("JarHandler: Reading " + path, AbbozzaLogger.INFO);
-        InputStream stream = null;
-        int tries = 0;
-
-        while ((tries < 3) && (stream == null)) {
-
-            Enumeration<Object> it = entries.elements();
-            while (it.hasMoreElements() && (stream == null)) {
-                Object entry = it.nextElement();
-                if (entry instanceof JarFile) {
-                    stream = getInputStreamFromJar((JarFile) entry, path);
-                } else if (entry instanceof File) {
-                    stream = getInputStreamFromDir((File) entry, path);
-                }
-            }
-
-            if (stream == null) {
-                tries++;
-                AbbozzaServer.getInstance().findJarsAndDirs(this);
-            }
-        }
-
-        if (stream == null) {
-            AbbozzaLogger.out(AbbozzaLocale.entry("msg.not_found",path),AbbozzaLogger.ERROR);
-        }
-        return stream;        
-    }
-
-
-    public InputStream getInputStreamFromDir(File webDir, String path) throws IOException {
-        File file = new File(webDir + path);
-        if (!file.exists()) {
-            return null;
-        }
-        
-        // Check if the requested file is below the given directory
-        if (!file.getCanonicalPath().startsWith(webDir.getCanonicalPath())) {
-            return null;
-        }
-
-        FileInputStream fis = new FileInputStream(file);
-
-        return fis;
-    }
-
-    
-    public InputStream getInputStreamFromJar(JarFile jar, String path) throws IOException {
-
-        path = path.substring(1, path.length());
-        ZipEntry entry = this.getEntry(jar, path);
-        if (entry == null) {
-            return null;
-        }
-        InputStream fis = jar.getInputStream(entry);
-
-        return fis;
-    }
-*/
     
 }
