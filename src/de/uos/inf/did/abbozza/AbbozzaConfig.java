@@ -222,8 +222,18 @@ public class AbbozzaConfig {
         props.setProperty("taskPath", config_taskPath);
         props.setProperty("tasksEditable", config_tasksEditable ? "true" : "false");
     }
-
+    
+    /**
+     * Apply the string of options.
+     * The string contains a series of <key>=<value> pairs, seperated by
+     * commata and enclosed in braces {,}
+     * 
+     * @param options
+     * @throws IOException 
+     */
     public void apply(String options) throws IOException {
+        // Remove braces, replace commata by newlines and remove leading 
+        // and trailing whitespaces
         options = options.replace('{', ' ');
         options = options.replace('}', ' ');
         options = options.replace(',', '\n');
@@ -232,12 +242,27 @@ public class AbbozzaConfig {
     }
 
     /**
-     * Options
+     * 
+     * Operations for setting and retreiving options from the option tree.
+     * 
+     */
+    
+    /**
+     * Set a boolean option
+     * 
+     * @param option The option identifier
+     * @param value The new value
      */
     public void setOption(String option, boolean value) {
         config.setProperty("option." + option, (value) ? "true" : "false");
     }
 
+    /**
+     * Get a boolean option
+     * 
+     * @param option The option identifier
+     * @return Its current value
+     */
     public boolean getOption(String option) {
         String value = config.getProperty("option." + option);
         if (value == null) {
@@ -246,10 +271,22 @@ public class AbbozzaConfig {
         return (value.equals("true")) ? true : false;
     }
 
+    /**
+     * Set an integer option
+     * 
+     * @param option The option identifier
+     * @param value The new value
+     */
     public void setOptionInt(String option, int value) {
         config.setProperty("option." + option, Integer.toString(value));
     }
 
+    /**
+     * Get an integer option
+     * 
+     * @param option The option identifier
+     * @return Its current value
+     */
     public int getOptionInt(String option) { 
         String value = config.getProperty("option." + option);
         if (value == null) {
@@ -258,17 +295,31 @@ public class AbbozzaConfig {
         return (Integer.parseInt(value));
     }
 
+    /**
+     * Set a string option
+     * 
+     * @param option The option identifier
+     * @param value The new value
+     */
     public void setOptionStr(String option, String value) {
         config.setProperty("option." + option, value);
     }
 
+    /**
+     * Get a string option
+     * 
+     * @param option The option identifier
+     * @return Its current value
+     */
     public String getOptionStr(String option) {
         String value = config.getProperty("option." + option);
         return value;
     }
 
     /**
-     * Retreive general configuration
+     * 
+     * Oprerations for the general options, which aren't organized in the option tree.
+     * 
      */
     public int getServerPort() {
         return config_serverPort;

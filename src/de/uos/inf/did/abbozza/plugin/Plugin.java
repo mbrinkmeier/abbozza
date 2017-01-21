@@ -24,11 +24,10 @@ package de.uos.inf.did.abbozza.plugin;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -45,12 +44,13 @@ import org.xml.sax.SAXException;
  * 
  * @author michael
  */
-class Plugin implements HttpHandler {
+public class Plugin implements HttpHandler {
 
     private File _path;
     private String _id;
     private String _name;
     private String _description;
+    private Node _options;
     
     public Plugin(File path) {
         this._path = path;
@@ -67,7 +67,7 @@ class Plugin implements HttpHandler {
             DocumentBuilder builder = factory.newDocumentBuilder();
             StringBuilder xmlStringBuilder = new StringBuilder();
             pluginXml = builder.parse(new FileInputStream(xmlFile));
- 
+
             NodeList plugins = pluginXml.getElementsByTagName("plugin");
             if ( plugins.getLength() > 0) {
                 Node root = plugins.item(0);
@@ -76,12 +76,14 @@ class Plugin implements HttpHandler {
                 Node child;
                 for ( int i = 0; i < children.hashCode(); i++) {
                     child = children.item(i);
-                    if (child.getNodeName().contains("name")) {
+                    if (child.getNodeName().equals("name")) {
                         this._name = child.getTextContent();
-                    } else if (child.getNodeName().contains("description")) {
+                    } else if (child.getNodeName().equals("description")) {
                         this._description = child.getTextContent();                        
-                    } 
-                } 
+                    } else if (child.getNodeName().equals("options")) {
+                        _options = child.cloneNode(true);
+                    }
+                }
             }
         } catch (ParserConfigurationException ex) {
             this._id = null;
@@ -112,6 +114,10 @@ class Plugin implements HttpHandler {
     @Override
     public void handle(HttpExchange he) throws IOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Node getOptions() {
+        return this._options.cloneNode(true);
     }
     
 }

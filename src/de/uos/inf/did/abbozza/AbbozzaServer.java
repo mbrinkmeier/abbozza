@@ -37,19 +37,17 @@ import de.uos.inf.did.abbozza.handler.TaskHandler;
 import de.uos.inf.did.abbozza.handler.UploadHandler;
 import de.uos.inf.did.abbozza.handler.VersionHandler;
 import de.uos.inf.did.abbozza.plugin.PluginManager;
+import de.uos.inf.did.abbozza.plugin.Plugin;
 import java.awt.Desktop;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.StringWriter;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -58,6 +56,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -66,7 +65,15 @@ import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -524,10 +531,18 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
 
     
-    // @TODO Change file
+    /**
+     * This operation constructs the option tree from the global
+     * options.xml and the option tag inside all plugins.
+     * 
+     * @return The XML-document containing the option tree
+     */
     public Document getOptionTree() {
         Document optionsXml = null;
+        
         if (jarHandler != null) {
+            
+            // Retreive the global option tree
             try {
                 byte[] bytes = jarHandler.getBytes("/js/abbozza/" + system +"/options.xml");
                 if (bytes != null) {
@@ -538,8 +553,23 @@ public abstract class AbbozzaServer implements HttpHandler {
                     ByteArrayInputStream input = new ByteArrayInputStream(bytes);
                     optionsXml = builder.parse(input);
                 }
-            } catch (IOException | SAXException | ParserConfigurationException ex) {
-                AbbozzaLogger.out("Could not find /js/abbozza/" + system +"/options.xml", AbbozzaLogger.ERROR);
+                // printXML(optionsXml);
+                
+                // If successful, add the plugin trees
+                Node root = optionsXml.getElementsByTagName("options").item(0);
+                Enumeration<Plugin> plugins = this.pluginManager.plugins();
+                while ( plugins.hasMoreElements() ) {
+                    Plugin plugin = plugins.nextElement();
+                    Node pluginOpts = plugin.getOptions();
+                   
+                    ((Element) pluginOpts).setAttribute("plugin", plugin.getId());
+                    
+                    optionsXml.adoptNode(pluginOpts);
+                    root.appendChild(pluginOpts);
+                }
+                               
+            } catch (Exception ex) {
+                ex.printStackTrace(System.out);
             }
         }
         return optionsXml;
@@ -607,12 +637,46 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
     */
     
+    public static Plugin getPlugin(String id) {
+        return instance.pluginManager.getPlugin(id);
+    }
+    
     public static AbbozzaServer getInstance() {
         return instance;
     }
 
     public static AbbozzaConfig getConfig() {
         return getInstance().config;
+    }
+
+    public static void printXML(Node node) {
+        StringWriter sw = new StringWriter();
+        try {
+            Transformer t = TransformerFactory.newInstance().newTransformer();
+            t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            t.transform(new DOMSource(node.cloneNode(true)), new StreamResult(sw));
+        } catch (Exception te) {
+            System.out.println("nodeToString Transformer Exception");
+        }
+        System.out.println(sw.toString());
+    }
+    
+    public static void printXML(Document doc) {
+        try {
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            //initialize StreamResult with File object to save to file
+            StreamResult result = new StreamResult(new StringWriter());
+            DOMSource source = new DOMSource(doc);
+            transformer.transform(source, result);
+            String xmlString = result.getWriter().toString();
+            System.out.println(xmlString);
+        } catch (TransformerConfigurationException ex) {
+            ex.printStackTrace(System.out);
+        } catch (TransformerException ex) {
+            ex.printStackTrace(System.out);
+        }
     }
 
 }

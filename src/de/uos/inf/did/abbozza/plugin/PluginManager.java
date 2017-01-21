@@ -26,18 +26,8 @@ import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  *
@@ -61,7 +51,7 @@ public class PluginManager {
         
         // Check local dir
         File path = new File(this._abbozza.getGlobalPluginPath());
-        AbbozzaLogger.out("PluginManager: " + path,AbbozzaLogger.INFO);    
+        AbbozzaLogger.out("PluginManager: Checking local dir " + path,AbbozzaLogger.INFO);    
         File[] dirs = null;
         dirs = path.listFiles(new FileFilter() {
             public boolean accept(File pathname) {
@@ -72,15 +62,16 @@ public class PluginManager {
         if (dirs != null) {
             for (int i=0; i < dirs.length; i++) {
                 plugin = new Plugin(dirs[i]);
-                if (plugin.getId() != null ) {
-                    AbbozzaLogger.out("PluginManager: Directory " + dirs[i].toString() + " found",AbbozzaLogger.INFO);                
+                if (plugin.getId() != null ) {                    
+                    AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " found in " + dirs[i].toString() ,AbbozzaLogger.INFO);
+                    this._plugins.put(plugin.getId(), plugin);
                 }
             }
         }   
 
         // Check global dir
         path = new File(this._abbozza.getLocalPluginPath());
-        AbbozzaLogger.out("PluginManager: " + path,AbbozzaLogger.INFO);        
+        AbbozzaLogger.out("PluginManager: Checking global dir " + path,AbbozzaLogger.INFO);        
         dirs = path.listFiles(new FileFilter() {
             public boolean accept(File pathname) {
                 return pathname.isDirectory();
@@ -91,12 +82,23 @@ public class PluginManager {
             for (int i=0; i < dirs.length; i++) {
                 plugin = new Plugin(dirs[i]);
                 if (plugin.getId() != null ) {
-                     AbbozzaLogger.out("PluginManager: Directory " + dirs[i].toString() + " found",AbbozzaLogger.INFO);
+                    AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " found in " + dirs[i].toString() ,AbbozzaLogger.INFO);
+                    this._plugins.put(plugin.getId(), plugin);
                 }
             }
         }
-        AbbozzaLogger.out("PluginManager: plugins detected",AbbozzaLogger.INFO);        
-        
+    }
+    
+    /**
+     * Get an iterator over all plugins
+     * @return The iterator
+     */
+    public Enumeration<Plugin> plugins() {
+        return this._plugins.elements();
+    }
+
+    public Plugin getPlugin(String id) {
+        return this._plugins.get(id);
     }
     
 }

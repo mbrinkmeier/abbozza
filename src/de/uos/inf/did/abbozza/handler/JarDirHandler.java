@@ -71,7 +71,7 @@ public class JarDirHandler implements HttpHandler {
         if (!file.exists()) {
             AbbozzaLogger.err("JarHandler: " + name + " : " + file.toURI().toString() + " not found");
         } else {
-            AbbozzaLogger.out("JarHandler: " + name + " : " + file.toURI().toString() ,AbbozzaLogger.INFO);
+            AbbozzaLogger.out("JarHandler: " + name + " : " + file.toURI().toString() ,AbbozzaLogger.DEBUG);
         }
         entries.add(file.toURI());
     }
@@ -96,7 +96,7 @@ public class JarDirHandler implements HttpHandler {
         URI jarUri = new File(path).toURI();
         try {
             uri = new URI("jar:"+ jarUri.toString() +"!");
-            AbbozzaLogger.out("JarHandler: " + name + " : " + uri.toString(),AbbozzaLogger.INFO);
+            AbbozzaLogger.out("JarHandler: " + name + " : " + uri.toString(),AbbozzaLogger.DEBUG);
         } catch (URISyntaxException e) {
             AbbozzaLogger.err("JarHandler: " + name + " not found (" + path + ")");
             return;
@@ -161,7 +161,7 @@ public class JarDirHandler implements HttpHandler {
      * @throws IOException 
      */
     public byte[] getBytes(String path) {
-        AbbozzaLogger.out("JarDirHandler: Reading " + path, AbbozzaLogger.INFO);
+        AbbozzaLogger.out("JarDirHandler: Reading " + path, AbbozzaLogger.DEBUG);
         byte[] bytearray = null;
         int tries = 0;
 
@@ -211,7 +211,7 @@ public class JarDirHandler implements HttpHandler {
      * @return An InputStream to the requested file or null.
      */
     public InputStream getInputStream(String path) {
-        AbbozzaLogger.out("JarDirHandler: Opening Stream " + path, AbbozzaLogger.INFO);
+        AbbozzaLogger.out("JarDirHandler: Opening Stream " + path, AbbozzaLogger.DEBUG);
         InputStream inStream = null;
         int tries = 0;
       
