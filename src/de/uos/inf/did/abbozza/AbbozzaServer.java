@@ -256,6 +256,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         httpServer.createContext("/abbozza/version", new VersionHandler(this));
         httpServer.createContext("/abbozza/", this /* handler */);
         httpServer.createContext("/task/", new TaskHandler(this, jarHandler));
+        httpServer.createContext("/plugins",  this.pluginManager);
         httpServer.createContext("/", jarHandler);
     }
 
@@ -270,7 +271,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         String path = exchg.getRequestURI().getPath();
         OutputStream os = exchg.getResponseBody();
 
-        AbbozzaLogger.out(path + " requested");
+        AbbozzaLogger.out(path + " requested", AbbozzaLogger.DEBUG);
 
         if (!path.startsWith("/" + system)) {
             String result = AbbozzaLocale.entry("msg.not_found", path);

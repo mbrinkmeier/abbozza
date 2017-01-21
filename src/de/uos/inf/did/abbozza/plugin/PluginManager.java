@@ -22,10 +22,15 @@
  */
 package de.uos.inf.did.abbozza.plugin;
 
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -33,7 +38,7 @@ import java.util.Hashtable;
  *
  * @author michael
  */
-public class PluginManager {
+public class PluginManager implements HttpHandler {
 
     private AbbozzaServer _abbozza;
     private Hashtable<String,Plugin> _plugins;
@@ -43,6 +48,7 @@ public class PluginManager {
         this._abbozza = server;
         this._plugins = new Hashtable<String,Plugin>();
         this.detectPlugins();
+        
     }
     
     
@@ -91,6 +97,7 @@ public class PluginManager {
     
     /**
      * Get an iterator over all plugins
+     * 
      * @return The iterator
      */
     public Enumeration<Plugin> plugins() {
@@ -99,6 +106,36 @@ public class PluginManager {
 
     public Plugin getPlugin(String id) {
         return this._plugins.get(id);
+    }
+
+    @Override
+    public void handle(HttpExchange exchg) throws IOException {
+        String response = "";
+        String path = exchg.getRequestURI().getPath();
+        OutputStream os = exchg.getResponseBody();
+        Headers responseHeaders = exchg.getResponseHeaders();
+
+        AbbozzaLogger.out("PluginManager: " + path + " requested",AbbozzaLogger.INFO);
+        
+        if (path.equals("/plugins/plugins.js")) {
+            Enumeration<Plugin> plugins = _plugins.elements();
+            while ( plugins.hasMoreElements()) {
+                Plugin plugin = plugins.nextElement();
+                response = response + "\n" + plugin.getJavaScript();
+            }
+            responseHeaders.set("Content-Type", "text/javascript");
+        } else {
+            response = "Found plugins:";
+            Enumeration<Plugin> plugins = _plugins.elements();
+            while ( plugins.hasMoreElements()) {
+                Plugin plugin = plugins.nextElement();
+                response = response + "\n\t" + plugin.getId();
+            }
+            responseHeaders.set("Content-Type", "text/plain");
+        }
+        exchg.sendResponseHeaders(200, response.length());
+        os.write(response.getBytes());
+        os.close();
     }
     
 }

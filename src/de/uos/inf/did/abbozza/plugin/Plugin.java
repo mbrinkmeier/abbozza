@@ -24,16 +24,20 @@ package de.uos.inf.did.abbozza.plugin;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.Tools;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -50,11 +54,13 @@ public class Plugin implements HttpHandler {
     private String _id;
     private String _name;
     private String _description;
+    private Vector<File> _js;
     private Node _options;
     
     public Plugin(File path) {
         this._path = path;
         this._id = null;
+        this._js = new Vector<File>();
         readXML();
     }
     
@@ -76,12 +82,19 @@ public class Plugin implements HttpHandler {
                 Node child;
                 for ( int i = 0; i < children.hashCode(); i++) {
                     child = children.item(i);
-                    if (child.getNodeName().equals("name")) {
+                    String childName = child.getNodeName();
+                    if (childName.equals("name")) {
                         this._name = child.getTextContent();
-                    } else if (child.getNodeName().equals("description")) {
+                    } else if (childName.equals("description")) {
                         this._description = child.getTextContent();                        
-                    } else if (child.getNodeName().equals("options")) {
+                    } else if (childName.equals("options")) {
                         _options = child.cloneNode(true);
+                    } else if (childName.equals("js") ) {
+                        String fileName = ((Element) child).getAttributes().getNamedItem("file").getNodeValue();
+                        if ( fileName != null ) {
+                            File file = new File(this._path.toString()+ "/" + fileName);
+                            this._js.add(file);
+                        }
                     }
                 }
             }
@@ -109,6 +122,18 @@ public class Plugin implements HttpHandler {
 
     public String getDescription() {
         return this._description;
+    }
+    
+    public String getJavaScript() {
+        String code = "";
+        for (int i = 0; i < _js.size() ; i++) {
+            try {
+                code = code + "\n" + new String(Tools.readBytes(_js.get(i)));
+            } catch (IOException ex) {
+                AbbozzaLogger.err("Plugin: " + _js.get(i).toString() + " coulod not be read!");
+            }
+        }
+        return code;
     }
     
     @Override
