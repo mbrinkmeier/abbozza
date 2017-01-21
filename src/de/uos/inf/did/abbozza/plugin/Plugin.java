@@ -22,6 +22,7 @@
  */
 package de.uos.inf.did.abbozza.plugin;
 
+import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
@@ -58,6 +59,7 @@ public class Plugin {
     private String _description;
     private Vector<File> _js;
     private Node _options;
+    private Node _feature;
     private PluginHandler _handler;
     
     /**
@@ -70,6 +72,7 @@ public class Plugin {
         this._path = path;
         this._id = null;
         this._js = new Vector<File>();
+        this._feature = null;
         readXML();
     }
     
@@ -95,10 +98,16 @@ public class Plugin {
                 for ( int i = 0; i < children.getLength(); i++) {
                     child = children.item(i);
                     String childName = child.getNodeName();
+                    
+                    // Get the display name
                     if (childName.equals("name")) {
                         this._name = child.getTextContent();
+                        
+                    // Get the description
                     } else if (childName.equals("description")) {
                         this._description = child.getTextContent();                        
+                        
+                    // Get the option trees
                     } else if (childName.equals("options")) {
                         _options = child.cloneNode(true);
                     } else if (childName.equals("js") ) {
@@ -107,26 +116,27 @@ public class Plugin {
                             File file = new File(this._path.toString()+ "/" + fileName);
                             this._js.add(file);
                         }
+                        
+                    // Get the handler calss
                     } else if (childName.equals("handler")) {
-                        try {
-                            String className = ((Element) child).getAttributes().getNamedItem("class").getNodeValue();                            
-                            URLClassLoader classLoader = new URLClassLoader(new URL[]{_path.toURI().toURL()}, AbbozzaServer.class.getClassLoader() );
-                            Class handlerClass = classLoader.loadClass(className);
-                            this._handler = (PluginHandler) handlerClass.newInstance();
-                        } catch (Exception ex) {
-                            AbbozzaLogger.err("Plugin 1: \n" + ex.toString());
-                        }
+                        String className = ((Element) child).getAttributes().getNamedItem("class").getNodeValue();                            
+                        URLClassLoader classLoader = new URLClassLoader(new URL[]{_path.toURI().toURL()}, AbbozzaServer.class.getClassLoader() );
+                        Class handlerClass = classLoader.loadClass(className);
+                        this._handler = (PluginHandler) handlerClass.newInstance();
+                        this._handler.setPlugin(this);
+
+                    // Get the feature tree
+                    } else if (childName.equals("feature")) {
+                        this._feature = child;
                     }
+                    
                 }
             }
-        } catch (ParserConfigurationException | IOException | SAXException ex) {
-            this._id = null;
-            AbbozzaLogger.err("Plugin 2: \n" + ex.toString());
         } catch (Exception ex) {
-            AbbozzaLogger.err("Plugin 3: \n" + ex.toString());
-            ex.printStackTrace(System.out);
+            this._id = null;
+            AbbozzaLogger.err("Plugin: \n" + ex.toString());
+            AbbozzaLogger.stackTrace(ex);
         }
-        System.out.println("hier");
     }
     
     /**
@@ -191,4 +201,12 @@ public class Plugin {
         return this._options.cloneNode(true);
     }
     
+    public boolean isActivated() {
+        return AbbozzaServer.getConfig().getOption(_id + ".enabled");
+    }
+
+    public Node getFeature() {
+        return this._feature.cloneNode(true);
+    }
+
 }

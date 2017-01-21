@@ -23,6 +23,7 @@
 package de.uos.inf.did.abbozza.plugin;
 
 import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -34,6 +35,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 /**
  *
@@ -49,8 +52,7 @@ public class PluginManager implements HttpHandler {
         AbbozzaLogger.out("PluginManager: Started",AbbozzaLogger.INFO);
         this._abbozza = server;
         this._plugins = new Hashtable<String,Plugin>();
-        this.detectPlugins();
-        
+        this.detectPlugins();        
     }
     
     
@@ -115,11 +117,26 @@ public class PluginManager implements HttpHandler {
         Enumeration<Plugin> plugins = _plugins.elements();
         while ( plugins.hasMoreElements()) {
             Plugin plugin = plugins.nextElement();
-            server.createContext("/plugin/" + plugin.getId(), plugin.getHttpHandler());
+            server.createContext("/abbozza/plugin/" + plugin.getId(), plugin.getHttpHandler());
             AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " registered HttpHandler",AbbozzaLogger.INFO);
         }
     }
     
+    
+    public void mergeFeatures(Document features) {
+        Enumeration<Plugin> plugins = _plugins.elements();
+        Node root = features.getElementsByTagName("features").item(0);
+        while ( plugins.hasMoreElements()) {
+            Plugin plugin = plugins.nextElement();
+            Node feature = plugin.getFeature();
+            try {
+            features.adoptNode(feature);
+            root.appendChild(feature);
+            } catch (Exception ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+    }
 
     @Override
     public void handle(HttpExchange exchg) throws IOException {
@@ -130,11 +147,13 @@ public class PluginManager implements HttpHandler {
 
         AbbozzaLogger.out("PluginManager: " + path + " requested",AbbozzaLogger.DEBUG);
         
-        if (path.equals("/plugins/plugins.js")) {
+        if (path.equals("/abbozza/plugins/plugins.js")) {
             Enumeration<Plugin> plugins = _plugins.elements();
             while ( plugins.hasMoreElements()) {
                 Plugin plugin = plugins.nextElement();
-                response = response + "\n" + plugin.getJavaScript();
+                if ( plugin.isActivated() ) {
+                    response = response + "\n" + plugin.getJavaScript();
+                }
             }
             responseHeaders.set("Content-Type", "text/javascript");
         } else {
@@ -143,6 +162,11 @@ public class PluginManager implements HttpHandler {
             while ( plugins.hasMoreElements()) {
                 Plugin plugin = plugins.nextElement();
                 response = response + "\n\t" + plugin.getId();
+                if ( plugin.isActivated() ) {
+                    response = response + " [activated]";
+                } else {
+                    response = response + " [deactivated]";                    
+                }
             }
             responseHeaders.set("Content-Type", "text/plain");
         }

@@ -46,18 +46,34 @@ public class PluginHandler implements HttpHandler {
     }
     
     @Override
-    public void handle(HttpExchange exchg) throws IOException {
-        String path = exchg.getRequestURI().getPath();
-        AbbozzaLogger.out("PluginHandler: " + path + " requested",AbbozzaLogger.DEBUG);
- 
-        String response = _plugin.getId();
-        
+    final public void handle(HttpExchange exchg) throws IOException {
+        // Check if the plugin is activated
+        if ( !this._plugin.isActivated()) {
+            OutputStream os = exchg.getResponseBody();
+            Headers responseHeaders = exchg.getResponseHeaders();
+            String response = this._plugin.getId() + " is deactivated";
+            responseHeaders.set("Content-Type", "text/plain");
+            exchg.sendResponseHeaders(200, response.length());
+            os.write(response.getBytes());
+            os.close();
+        } else {
+            handleRequest(exchg);
+        }
+    }
+    
+    public void handleRequest(HttpExchange exchg) throws IOException {
         OutputStream os = exchg.getResponseBody();
         Headers responseHeaders = exchg.getResponseHeaders();
+
+        String path = exchg.getRequestURI().getPath();
+        AbbozzaLogger.out("PluginHandler: " + path + " requested",AbbozzaLogger.INFO);
+        
+        String response = _plugin.getId();
+        
         responseHeaders.set("Content-Type", "text/plain");
         exchg.sendResponseHeaders(200, response.length());
         os.write(response.getBytes());
-        os.close();
+        os.close();        
     }
     
 }

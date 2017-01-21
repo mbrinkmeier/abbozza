@@ -29,6 +29,7 @@ import com.sun.net.httpserver.HttpServer;
 import de.uos.inf.did.abbozza.handler.CheckHandler;
 import de.uos.inf.did.abbozza.handler.ConfigDialogHandler;
 import de.uos.inf.did.abbozza.handler.ConfigHandler;
+import de.uos.inf.did.abbozza.handler.FeatureHandler;
 import de.uos.inf.did.abbozza.handler.JarDirHandler;
 import de.uos.inf.did.abbozza.handler.LoadHandler;
 import de.uos.inf.did.abbozza.handler.MonitorHandler;
@@ -103,6 +104,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     // several attributes
     protected String system;                // the name of the system (used for paths)
     protected JarDirHandler jarHandler;
+
     protected AbbozzaConfig config = null;
     private boolean isStarted = false;      // true if the server was started
     // public ByteArrayOutputStream logger;
@@ -248,14 +250,15 @@ public abstract class AbbozzaServer implements HttpHandler {
         httpServer.createContext("/abbozza/upload", new UploadHandler(this));
         httpServer.createContext("/abbozza/config", new ConfigHandler(this));
         httpServer.createContext("/abbozza/frame", new ConfigDialogHandler(this));
+        httpServer.createContext("/abbozza/features", new FeatureHandler(this));
 
         this.monitorHandler = new MonitorHandler(this);
         httpServer.createContext("/abbozza/monitor", monitorHandler);
         httpServer.createContext("/abbozza/monitorresume", monitorHandler);
         httpServer.createContext("/abbozza/version", new VersionHandler(this));
+        httpServer.createContext("/abbozza/plugins",  this.pluginManager);
         httpServer.createContext("/abbozza/", this /* handler */);
         httpServer.createContext("/task/", new TaskHandler(this, jarHandler));
-        httpServer.createContext("/plugins",  this.pluginManager);
         httpServer.createContext("/", jarHandler);
         
         this.pluginManager.registerPluginHandlers(httpServer);
@@ -632,12 +635,20 @@ public abstract class AbbozzaServer implements HttpHandler {
     public URL getTaskContext () {
         return _taskContext;
     }
+
+    public JarDirHandler getJarHandler() {
+        return jarHandler;
+    }
     
     /*
     public int getRunningServerPort() {
         return serverPort;
     }
     */
+    
+    public static PluginManager getPluginManager() {
+        return instance.pluginManager;
+    }
     
     public static Plugin getPlugin(String id) {
         return instance.pluginManager.getPlugin(id);
@@ -681,4 +692,5 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
     }
 
+    
 }

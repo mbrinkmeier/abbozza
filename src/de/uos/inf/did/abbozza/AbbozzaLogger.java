@@ -104,4 +104,9 @@ public class AbbozzaLogger {
         System.out.println("abbozza! [err] : " + msg);
             fire("abbozza! [err] : " + msg);
     }
+    
+    public static void stackTrace(Exception ex) {
+        System.out.println("abbozza! [err] : Stack trace for exception");
+        ex.printStackTrace(System.out);
+    }
 }
