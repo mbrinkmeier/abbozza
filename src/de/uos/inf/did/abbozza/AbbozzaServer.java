@@ -248,8 +248,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         httpServer.createContext("/abbozza/upload", new UploadHandler(this));
         httpServer.createContext("/abbozza/config", new ConfigHandler(this));
         httpServer.createContext("/abbozza/frame", new ConfigDialogHandler(this));
-        // httpServer.createContext("/abbozza/board", new BoardHandler(this, false));
-        // httpServer.createContext("/abbozza/queryboard", new BoardHandler(this, true));
+
         this.monitorHandler = new MonitorHandler(this);
         httpServer.createContext("/abbozza/monitor", monitorHandler);
         httpServer.createContext("/abbozza/monitorresume", monitorHandler);
@@ -258,8 +257,10 @@ public abstract class AbbozzaServer implements HttpHandler {
         httpServer.createContext("/task/", new TaskHandler(this, jarHandler));
         httpServer.createContext("/plugins",  this.pluginManager);
         httpServer.createContext("/", jarHandler);
+        
+        this.pluginManager.registerPluginHandlers(httpServer);
     }
-
+    
     /**
      * Request handling
      *

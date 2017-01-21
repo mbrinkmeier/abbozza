@@ -30,6 +30,8 @@ import de.uos.inf.did.abbozza.Tools;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,7 +50,7 @@ import org.xml.sax.SAXException;
  * 
  * @author michael
  */
-public class Plugin implements HttpHandler {
+public class Plugin {
 
     private File _path;
     private String _id;
@@ -56,14 +58,24 @@ public class Plugin implements HttpHandler {
     private String _description;
     private Vector<File> _js;
     private Node _options;
+    private PluginHandler _handler;
     
+    /**
+     * Instantiate the pugin. 
+     * 
+     * @param path 
+     */
     public Plugin(File path) {
+        this._handler = null;
         this._path = path;
         this._id = null;
         this._js = new Vector<File>();
         readXML();
     }
     
+    /**
+     * Read the plugin details from plugin.xml
+     */
     private void readXML() {
         try {
             File xmlFile = new File(this._path + "/plugin.xml");
@@ -80,7 +92,7 @@ public class Plugin implements HttpHandler {
                 this._id = root.getAttributes().getNamedItem("id").getNodeValue();
                 NodeList children = root.getChildNodes();
                 Node child;
-                for ( int i = 0; i < children.hashCode(); i++) {
+                for ( int i = 0; i < children.getLength(); i++) {
                     child = children.item(i);
                     String childName = child.getNodeName();
                     if (childName.equals("name")) {
@@ -95,35 +107,60 @@ public class Plugin implements HttpHandler {
                             File file = new File(this._path.toString()+ "/" + fileName);
                             this._js.add(file);
                         }
+                    } else if (childName.equals("handler")) {
+                        try {
+                            String className = ((Element) child).getAttributes().getNamedItem("class").getNodeValue();                            
+                            URLClassLoader classLoader = new URLClassLoader(new URL[]{_path.toURI().toURL()}, AbbozzaServer.class.getClassLoader() );
+                            Class handlerClass = classLoader.loadClass(className);
+                            this._handler = (PluginHandler) handlerClass.newInstance();
+                        } catch (Exception ex) {
+                            AbbozzaLogger.err("Plugin 1: \n" + ex.toString());
+                        }
                     }
                 }
             }
-        } catch (ParserConfigurationException ex) {
+        } catch (ParserConfigurationException | IOException | SAXException ex) {
             this._id = null;
-            Logger.getLogger(Plugin.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            this._id = null;
-            Logger.getLogger(Plugin.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SAXException ex) {
-            this._id = null;
-            Logger.getLogger(Plugin.class.getName()).log(Level.SEVERE, null, ex);
+            AbbozzaLogger.err("Plugin 2: \n" + ex.toString());
         } catch (Exception ex) {
-            ex.printStackTrace(System.err);
-        } 
+            AbbozzaLogger.err("Plugin 3: \n" + ex.toString());
+            ex.printStackTrace(System.out);
+        }
+        System.out.println("hier");
     }
     
+    /**
+     * Returns the id of the plugin
+     * 
+     * @return the id
+     */
     public String getId() {
         return this._id;
     }
 
+    /**
+     * Returns the display name of the plugin
+     * 
+     * @return the display name
+     */
     public String getName() {
         return this._name;
     }
 
+    /**
+     * Returns a description of the plugin
+     * 
+     * @return the description
+     */
     public String getDescription() {
         return this._description;
     }
     
+    /**
+     * Returns a concatenation of all javascript files belonging to the plugin
+     * 
+     * @return the concatenated javascript files
+     */
     public String getJavaScript() {
         String code = "";
         for (int i = 0; i < _js.size() ; i++) {
@@ -136,11 +173,20 @@ public class Plugin implements HttpHandler {
         return code;
     }
     
-    @Override
-    public void handle(HttpExchange he) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Gets a http handler for the context /plugin/<id>
+     * 
+     * @return The http handler
+     */
+    public PluginHandler getHttpHandler() {
+        return this._handler;
     }
-
+    
+    /**
+     * Returns an document node describing all options of the plugin
+     * 
+     * @return the document node
+     */
     public Node getOptions() {
         return this._options.cloneNode(true);
     }

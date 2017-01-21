@@ -25,6 +25,7 @@ package de.uos.inf.did.abbozza.plugin;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.File;
@@ -42,6 +43,7 @@ public class PluginManager implements HttpHandler {
 
     private AbbozzaServer _abbozza;
     private Hashtable<String,Plugin> _plugins;
+    
     
     public PluginManager(AbbozzaServer server) {
         AbbozzaLogger.out("PluginManager: Started",AbbozzaLogger.INFO);
@@ -108,6 +110,17 @@ public class PluginManager implements HttpHandler {
         return this._plugins.get(id);
     }
 
+
+    public void registerPluginHandlers(HttpServer server) {
+        Enumeration<Plugin> plugins = _plugins.elements();
+        while ( plugins.hasMoreElements()) {
+            Plugin plugin = plugins.nextElement();
+            server.createContext("/plugin/" + plugin.getId(), plugin.getHttpHandler());
+            AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " registered HttpHandler",AbbozzaLogger.INFO);
+        }
+    }
+    
+
     @Override
     public void handle(HttpExchange exchg) throws IOException {
         String response = "";
@@ -115,7 +128,7 @@ public class PluginManager implements HttpHandler {
         OutputStream os = exchg.getResponseBody();
         Headers responseHeaders = exchg.getResponseHeaders();
 
-        AbbozzaLogger.out("PluginManager: " + path + " requested",AbbozzaLogger.INFO);
+        AbbozzaLogger.out("PluginManager: " + path + " requested",AbbozzaLogger.DEBUG);
         
         if (path.equals("/plugins/plugins.js")) {
             Enumeration<Plugin> plugins = _plugins.elements();
@@ -137,5 +150,5 @@ public class PluginManager implements HttpHandler {
         os.write(response.getBytes());
         os.close();
     }
-    
+
 }
