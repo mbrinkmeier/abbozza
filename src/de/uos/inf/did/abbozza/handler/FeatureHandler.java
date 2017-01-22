@@ -59,7 +59,7 @@ public class FeatureHandler extends AbstractHandler {
         String path = "/js/abbozza/" + this._abbozzaServer.getSystem() + "/features.xml";
                 
         try {
-            AbbozzaLogger.out("Loading features from " + path,AbbozzaLogger.INFO);
+            AbbozzaLogger.out("FeatureHandler: Loading features from " + path,AbbozzaLogger.INFO);
             InputStream stream = this._abbozzaServer.getJarHandler().getInputStream(path);
             builder = factory.newDocumentBuilder();
             StringBuilder xmlStringBuilder = new StringBuilder();

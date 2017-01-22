@@ -390,8 +390,8 @@ public abstract class AbbozzaServer implements HttpHandler {
 
             this.isStarted = true;
 
-            AbbozzaLogger.out("Duplexer Started ... ",4);
-            AbbozzaLogger.out("Starting ... ",4);
+            AbbozzaLogger.out("Duplexer Started ... ",AbbozzaLogger.INFO);
+            AbbozzaLogger.out("Starting ... ",AbbozzaLogger.INFO);
 
             serverPort = config.getServerPort();
             while (httpServer == null) {
@@ -401,7 +401,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                     httpServer.start();
                     AbbozzaLogger.out("Http-server started on port: " + serverPort, AbbozzaLogger.INFO);
                 } catch (Exception e) {
-                    e.printStackTrace(System.err);
+                    AbbozzaLogger.stackTrace(e);
                     AbbozzaLogger.out("Port " + serverPort + " failed", AbbozzaLogger.INFO);
                     serverPort++;
                     httpServer = null;

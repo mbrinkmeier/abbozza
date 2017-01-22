@@ -42,6 +42,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -122,23 +123,30 @@ public class PluginManager implements HttpHandler {
         Enumeration<Plugin> plugins = _plugins.elements();
         while ( plugins.hasMoreElements()) {
             Plugin plugin = plugins.nextElement();
-            server.createContext("/abbozza/plugin/" + plugin.getId(), plugin.getHttpHandler());
-            AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " registered HttpHandler",AbbozzaLogger.INFO);
+            if (plugin.getHttpHandler() != null) {
+                server.createContext("/abbozza/plugin/" + plugin.getId(), plugin.getHttpHandler());
+                AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " registered HttpHandler",AbbozzaLogger.INFO);
+            }
         }
     }
     
     
     public void mergeFeatures(Document features) {
+        NodeList roots = features.getElementsByTagName("features");
+        if (roots.getLength() == 0 ) return;
+        Node root = roots.item(0);
+        
         Enumeration<Plugin> plugins = _plugins.elements();
-        Node root = features.getElementsByTagName("features").item(0);
         while ( plugins.hasMoreElements()) {
             Plugin plugin = plugins.nextElement();
             Node feature = plugin.getFeature();
-            try {
-            features.adoptNode(feature);
-            root.appendChild(feature);
-            } catch (Exception ex) {
-                AbbozzaLogger.stackTrace(ex);
+            if (feature != null) {
+                try {
+                    features.adoptNode(feature);
+                    root.appendChild(feature);
+                } catch (Exception ex) {
+                    AbbozzaLogger.stackTrace(ex);
+                }
             }
         }
     }

@@ -131,6 +131,17 @@ public class Plugin {
             AbbozzaLogger.err("Plugin: \n" + ex.toString());
             AbbozzaLogger.stackTrace(ex);
         }
+        
+        if (_options == null) {
+            try {
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document doc = builder.newDocument();
+                _options = doc.createElement("options");
+            } catch (ParserConfigurationException ex) {
+                Logger.getLogger(Plugin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     /**
@@ -220,6 +231,7 @@ public class Plugin {
      * @return the document node
      */
     public Node getOptions() {
+        if ( this._options == null) return null;
         return this._options.cloneNode(true);
     }
     
@@ -228,6 +240,7 @@ public class Plugin {
     }
 
     public Node getFeature() {
+        if ( this._feature == null ) return null;
         return this._feature.cloneNode(true);
     }
 

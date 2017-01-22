@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <features>
-
     <feature id="feat.BASE">
         <category name="Entscheidungen" id="cat.COND">
             <block type="cond_if"></block>

@@ -49,8 +49,8 @@ public class AbbozzaLocale {
         
         addLocaleXml("/js/languages/" + locale + ".xml");
         addLocaleXml("/js/abbozza/" +  AbbozzaServer.getInstance().getSystem() + "/languages/" + locale + ".xml");
-        Document doc = AbbozzaServer.getPluginManager().getLocales(locale); 
-        addLocaleXml(doc);
+        // Document doc = AbbozzaServer.getPluginManager().getLocales(locale); 
+        // addLocaleXml(doc);
     }
 
     /**
