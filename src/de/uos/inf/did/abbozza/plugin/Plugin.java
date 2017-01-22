@@ -73,21 +73,15 @@ public class Plugin {
         this._id = null;
         this._js = new Vector<File>();
         this._feature = null;
-        readXML();
+        parseXML();
     }
     
     /**
      * Read the plugin details from plugin.xml
      */
-    private void readXML() {
+    private void parseXML() {
         try {
-            File xmlFile = new File(this._path + "/plugin.xml");
-            Document pluginXml;
-            
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            StringBuilder xmlStringBuilder = new StringBuilder();
-            pluginXml = builder.parse(new FileInputStream(xmlFile));
+            Document pluginXml = getXML();
 
             NodeList plugins = pluginXml.getElementsByTagName("plugin");
             if ( plugins.getLength() > 0) {
@@ -138,6 +132,34 @@ public class Plugin {
             AbbozzaLogger.stackTrace(ex);
         }
     }
+    
+    /**
+     * Returns the plugins xml
+     * @return 
+     */
+    private Document getXML() {
+        Document pluginXml = null;
+        
+        try {
+            File xmlFile = new File(this._path + "/plugin.xml");
+            
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            StringBuilder xmlStringBuilder = new StringBuilder();
+            pluginXml = builder.parse(new FileInputStream(xmlFile));        
+        } catch (ParserConfigurationException ex) {
+            AbbozzaLogger.err("Plugin: Could not parse " + this._path + "/plugin.xml");
+            AbbozzaLogger.stackTrace(ex);
+        } catch (SAXException ex) {
+            AbbozzaLogger.err("Plugin: Could not parse " + this._path + "/plugin.xml");
+            AbbozzaLogger.stackTrace(ex);
+        } catch (IOException ex) {
+            AbbozzaLogger.err("Plugin: Could not read " + this._path + "/plugin.xml");
+            AbbozzaLogger.stackTrace(ex);
+        }
+        return pluginXml;
+    }
+    
     
     /**
      * Returns the id of the plugin
@@ -207,6 +229,27 @@ public class Plugin {
 
     public Node getFeature() {
         return this._feature.cloneNode(true);
+    }
+
+    /**
+     * This operation returns the requested local node for the plugin
+     * 
+     * @param locale The requested Locale
+     * @return The node containig the requested locale
+     */
+    Node getLocale(String locale) {
+        Node requestedLocale = null;
+        Document pluginXml = getXML();
+        
+        NodeList locales = pluginXml.getElementsByTagName("locale");
+        for ( int i = 0; i < locales.getLength(); i++ ) {
+            Node localeNode = locales.item(i);
+            String loc = localeNode.getAttributes().getNamedItem("language").getTextContent();
+            if ( (requestedLocale == null) || (locale.equals(loc)) ) {
+                requestedLocale = localeNode;
+            }
+        }
+        return requestedLocale;
     }
 
 }

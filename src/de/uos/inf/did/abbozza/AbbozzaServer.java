@@ -153,7 +153,10 @@ public abstract class AbbozzaServer implements HttpHandler {
         configPath = System.getProperty("user.home") + "/.abbozza/" + this.system + "/abbozza.cfg";
         System.out.println("Reading config from " + configPath);
         config = new AbbozzaConfig(configPath);
-        
+
+        // Load plugins
+        pluginManager = new PluginManager(this);
+                
         AbbozzaLocale.setLocale(config.getLocale());
 
         AbbozzaLogger.out("Version " + VERSION, AbbozzaLogger.INFO);
@@ -162,9 +165,6 @@ public abstract class AbbozzaServer implements HttpHandler {
             checkForUpdate(false);
         }
 
-        // Load plugins
-        pluginManager = new PluginManager(this);
-        
         try {
             this._taskContext = new File(this.getConfiguration().getTaskPath()).toURI().toURL();
         } catch (MalformedURLException ex) {

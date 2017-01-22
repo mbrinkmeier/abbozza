@@ -48,7 +48,9 @@ public class AbbozzaLocale {
         locale = loc;
         
         addLocaleXml("/js/languages/" + locale + ".xml");
-        addLocaleXml("/js/abbozza/" +  AbbozzaServer.getInstance().getSystem() + "/languages/" + locale + ".xml");        
+        addLocaleXml("/js/abbozza/" +  AbbozzaServer.getInstance().getSystem() + "/languages/" + locale + ".xml");
+        Document doc = AbbozzaServer.getPluginManager().getLocales(locale); 
+        addLocaleXml(doc);
     }
 
     /**
@@ -79,10 +81,31 @@ public class AbbozzaLocale {
                 entries.setProperty(key, entry);
             }
         } catch (Exception ex) {
-            Logger.getLogger(AbbozzaLocale.class.getName()).log(Level.SEVERE, null, ex);
+            AbbozzaLogger.out("AbbozzaLocale: " + path + " not found");
         }
     }
     
+    /**
+     * Adds the entries of a given Document
+     * 
+     * @param path 
+     */
+    public static void addLocaleXml(Document localeXml) {
+        if (localeXml == null) return;
+        
+        try {           
+            NodeList nodes = localeXml.getElementsByTagName("msg");
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Node node = nodes.item(i);
+                String key = node.getAttributes().getNamedItem("id").getNodeValue();
+                String entry = node.getTextContent();
+                entries.setProperty(key, entry);
+            }
+        } catch (Exception ex) {
+            AbbozzaLogger.stackTrace(ex);
+        }
+    }
+
     /**
      * gets the current locale
      * 

@@ -35,6 +35,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -133,7 +138,7 @@ public class PluginManager implements HttpHandler {
             features.adoptNode(feature);
             root.appendChild(feature);
             } catch (Exception ex) {
-                ex.printStackTrace(System.out);
+                AbbozzaLogger.stackTrace(ex);
             }
         }
     }
@@ -174,5 +179,39 @@ public class PluginManager implements HttpHandler {
         os.write(response.getBytes());
         os.close();
     }
+    
+    /**
+     * This operation returns a Document containing the locales of all registered plugins.
+     * 
+     * @return 
+     */
+
+    public Document getLocales(String locale) {
+        try {
+            Document globalLocale;
+            
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            
+            globalLocale = builder.newDocument();
+            
+            // Iterate through all plugins
+            Enumeration<Plugin> plugins = _plugins.elements();
+            while ( plugins.hasMoreElements()) {
+                Plugin plugin = plugins.nextElement();
+                Node pluginLocale = plugin.getLocale(locale);
+                if (pluginLocale != null) {
+                    globalLocale.adoptNode(pluginLocale);
+                    globalLocale.appendChild(pluginLocale);
+                }
+            }
+           
+            return globalLocale;
+            
+        } catch (ParserConfigurationException ex) {
+            AbbozzaLogger.stackTrace(ex);
+            return null;
+        }
+   }
 
 }
