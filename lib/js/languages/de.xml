@@ -87,6 +87,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.unprotect_block">Erlaube das Löschen des Blocks</msg>
         <msg id="gui.block_id">Setze Block ID</msg>
         <msg id="gui.ask_for_id">ID des Blocks:</msg>
+        <msg id="gui.interrupts">Interrupts</msg>        
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
@@ -249,7 +250,8 @@ Trotzdem fortfahren?</msg>
         
         <msg id="int.INTERRUPTS">Aktiviere Interrupts</msg>
         <msg id="int.NOINTERRUPTS">Deaktiviere Interrupts</msg>
-        <msg id="int.ATTACH">Interrupt an Pin # bei</msg>
+        <msg id="int.ATTACH">Interrupt an Pin # führt # aus bei</msg>
+        <msg id="int.DETACH">Ignoriere Interrupt an Pin</msg>
         <msg id="int.CHANGE">Änderung</msg>
         <msg id="int.HIGH">1</msg>
         <msg id="int.LOW">0</msg>
@@ -272,6 +274,7 @@ Trotzdem fortfahren?</msg>
         <msg id="err.DEFAULT_VALUE">Wert nicht gesetzt</msg>
         <msg id="err.WRONG_SYSTEM">Der Sketch ist für # Systeme!</msg>
         <msg id="err.WRONG_SYSTEM_TITLE">Falsches System!</msg>
+        <msg id="err.WRONG_NAME">Unbekannter Name</msg>
     </errors>
     <names>
         <msg id="arduino">Arduino kompatible</msg>

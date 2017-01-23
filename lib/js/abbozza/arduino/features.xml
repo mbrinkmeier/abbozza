@@ -102,13 +102,10 @@
 	    
         <category id="cat.SERIAL">
         </category>
-	            
-        <!-- category name="Interrupts" id="cat.INT">
-            <block type="int_interrupts"></block>
-            <block type="int_no_interrupts"></block>
-            <block type="int_attach"></block>
-        </category -->
-                
+        
+        <category name="Interrupts" id="cat.INT">
+        </category>
+                         
         <!--category name="Test" id="cat.TEST">
             <block type="test"></block>
         </category-->
@@ -180,10 +177,14 @@
         </category> 		
     </feature>
 
-    <!-- feature id="feat.TEACHER">
-        <category name="Lehrer" id="cat.TEACHER">
-            <block type="teacher_text"></block>
+    <feature id ="feat.INT">
+        <category name="Interrupts" id="cat.INT">
+            <block type="int_interrupts"></block>
+            <block type="int_no_interrupts"></block>
+            <block type="int_attach"></block>
+            <block type="int_detach"></block>
+            <block type="int_isr"></block>
         </category>
-    </feature -->
-    
+    </feature>
+        
 </features>

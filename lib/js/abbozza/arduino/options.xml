@@ -6,6 +6,7 @@
         <item name="gui.local_variables" option="localVars" default="true"/>
         <item name="gui.devices" option="devices" default="true"/>
         <item name="gui.serial_communication" option="serial" default="true"/>
+        <item name="gui.interrupts" option="interrupts" default="true"/>
         <group name="gui.arrays">
             <choice name="gui.no_arrays" option="noArrays" default="false"/> 
             <choice name="gui.lin_arrays" option="linArrays" default="false"/> 

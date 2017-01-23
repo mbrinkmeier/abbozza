@@ -87,6 +87,7 @@ Continuing?</msg>
         <msg id="gui.unprotect_block">Allow deletion of block</msg>
         <msg id="gui.block_id">Set block ID</msg>
         <msg id="gui.ask_for_id">Block ID:</msg>
+        <msg id="gui.interrupts">Interrupts</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>
@@ -239,7 +240,7 @@ Continuing?</msg>
         <msg id="DEVICES">Devices</msg>
 		
         <msg id="LOCALVARS">Local variables</msg>
-        <msg id="GLOBALVARS">Global variables</msg>
+        <msg id="GLOBALVARS">GINTERRUPTSlobal variables</msg>
         <msg id="TITLE">Title</msg>
         <msg id="VARIABLES">Variables</msg>
         <msg id="UPLOADING">Load Sketch onto Arduino ...</msg>
@@ -249,6 +250,13 @@ Continuing?</msg>
                         
         <msg id="int.INTERRUPTS">Activate interrupts</msg>
         <msg id="int.NOINTERRUPTS">Deactivate interrupts</msg>
+        <msg id="int.ATTACH">Interrupt at pin # calls # on</msg>
+        <msg id="int.DETACH">Ignore interrupt at pin</msg>
+        <msg id="int.CHANGE">change</msg>
+        <msg id="int.HIGH">1</msg>
+        <msg id="int.LOW">0</msg>
+        <msg id="int.RISING">rising</msg>
+        <msg id="int.FALLING">falling</msg>
 
     </blocks>
     <errors>
@@ -267,7 +275,8 @@ Continuing?</msg>
         <msg id="err.DEFAULT_VALUE">Value not set</msg>
         <msg id="err.WRONG_SYSTEM">The sketch ist for # systems!</msg>
         <msg id="err.WRONG_SYSTEM_TITLE">Wrong system!</msg>
-     </errors>
+        <msg id="err.WRONG_NAME">Unknown</msg>
+</errors>
     <names>
         <msg id="arduino">Arduino compatible</msg>
         <msg id="calliope">Calliope Mini and micro:bit compatible</msg>
