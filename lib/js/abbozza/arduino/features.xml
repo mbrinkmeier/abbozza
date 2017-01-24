@@ -11,11 +11,29 @@
             <block type="loop_while"></block>
             <block type="loop_do_while"></block>
             <block type="loop_fixed"></block>
-            <block type="loop_count"></block>
+            <block type="loop_count_dir">
+                <value name="FROM">
+                    <block type="math_number"><field name="VALUE">0</field></block>
+                </value>   
+                <value name="TO">
+                    <block type="math_number"><field name="VALUE">42</field></block>
+                </value>   
+            </block>
+            <block type="loop_count_dir_step">
+                <value name="FROM">
+                    <block type="math_number"><field name="VALUE">0</field></block>
+                </value>   
+                <value name="TO">
+                    <block type="math_number"><field name="VALUE">42</field></block>
+                </value>   
+                <value name="STEP">
+                    <block type="math_number"><field name="VALUE">1</field></block>
+                </value>   
+            </block>
             <block type="loop_break"></block>
             <block type="loop_delay">
                 <value name="TIME">
-                    <block type="math_number"></block>
+                    <block type="math_number"><field name="VALUE">1000</field></block>
                 </value>
             </block>            
         </category>
@@ -50,6 +68,8 @@
             <block type="math_random2"></block>
             <block type="math_randomseed"></block>
             <block type="math_millis"></block>
+            <block type="math_constrain"></block>
+            <block type="math_scale"></block>
         </category>
 	    
         <category name="Text" id="cat.TEXT">

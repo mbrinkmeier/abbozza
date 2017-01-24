@@ -151,6 +151,8 @@ Trotzdem fortfahren?</msg>
         <msg id="math.RANDOM0">Zufallszahl zwischen 0 und</msg>
         <msg id="math.RANDOM">Zufallszahl zwischen # und </msg>
         <msg id="math.INITRAND">Initialisiere Zufallsgenerator mit</msg>
+        <msg id="math.CONSTRAIN">Beschränke # zwischen # und</msg>
+        <msg id="math.SCALE">Skaliere # von (#,#) auf (#,#)</msg>
 
         <msg id="loop.ENDLESS">Wiederhole fortlaufend</msg>
         <msg id="loop.WHILE">Wiederhole solange</msg>
@@ -161,6 +163,8 @@ Trotzdem fortfahren?</msg>
         <msg id="loop.COUNT">Zähle # von # bis # mit Schrittweite</msg>
         <msg id="loop.WAITFOR">Warte</msg>
         <msg id="loop.WAITFOR_MS">ms</msg>
+        <msg id="loop.ASCENDING">aufsteigend</msg>
+        <msg id="loop.DESCENDING">absteigend</msg>
 		
         <msg id="logic.TRUE">wahr</msg>
         <msg id="logic.FALSE">falsch</msg>

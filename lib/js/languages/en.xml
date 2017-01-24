@@ -151,6 +151,8 @@ Continuing?</msg>
         <msg id="math.RANDOM0">Random number between 0 and </msg>
         <msg id="math.RANDOM">Random number between # and </msg>
         <msg id="math.INITRAND">Initialise random generator with</msg>
+        <msg id="math.CONSTRAIN">Constrain # between # and</msg>
+        <msg id="math.SCALE">Scale # from (#,#) to (#,#)</msg>
 
         <msg id="loop.ENDLESS">Repeat continously</msg>
         <msg id="loop.WHILE">While</msg>
@@ -161,6 +163,8 @@ Continuing?</msg>
         <msg id="loop.COUNT">Count with # from # to # by</msg>
         <msg id="loop.WAITFOR">Wait</msg>
         <msg id="loop.WAITFOR_MS">ms</msg>
+        <msg id="loop.ASCENDING">ascending</msg>
+        <msg id="loop.DESCENDING">descending</msg>
 		
         <msg id="logic.TRUE">true</msg>
         <msg id="logic.FALSE">false</msg>
