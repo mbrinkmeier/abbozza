@@ -17,8 +17,12 @@
             <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/Generator.js</file>
         </group>
         <group>
-            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/arduino/GeneratorArduino.js</file>
-            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/Generator.js</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/AbbozzaServer.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/JarDirHandler.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/Connection.js</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/arduino.html</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/gui/field_nameinput.js</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
         </group>
     </open-files>
 </project-private>
