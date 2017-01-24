@@ -244,7 +244,7 @@ Continuing?</msg>
         <msg id="DEVICES">Devices</msg>
 		
         <msg id="LOCALVARS">Local variables</msg>
-        <msg id="GLOBALVARS">GINTERRUPTSlobal variables</msg>
+        <msg id="GLOBALVARS">Global variables</msg>
         <msg id="TITLE">Title</msg>
         <msg id="VARIABLES">Variables</msg>
         <msg id="UPLOADING">Load Sketch onto Arduino ...</msg>
