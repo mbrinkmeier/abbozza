@@ -540,7 +540,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         dialog.setModal(true);
         dialog.toFront();
         dialog.setVisible(true);
-        toolIconify();
+        toolIconify();        
         if (dialog.getState() == 0) {
             config.set(dialog.getConfiguration());
             AbbozzaLocale.setLocale(config.getLocale());

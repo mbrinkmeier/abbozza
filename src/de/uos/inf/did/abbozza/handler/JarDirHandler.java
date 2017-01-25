@@ -116,15 +116,6 @@ public class JarDirHandler implements HttpHandler {
         String path = exchg.getRequestURI().getPath();
         
         OutputStream os = exchg.getResponseBody();
-
-        sketch = "";
-        if (path.equals("/"))  {
-            BufferedReader buf = new BufferedReader(new InputStreamReader(exchg.getRequestBody()));
-            while (buf.ready()) {
-                sketch = sketch + buf.readLine() + "\n";
-            }
-            sketch = sketch.replace("sketch=", "");
-        }
         
         byte[] bytearray = getBytes(path);
 
@@ -175,11 +166,9 @@ public class JarDirHandler implements HttpHandler {
     public byte[] getBytes(String path) {
         byte[] bytearray = null;
         int tries = 0;
-        boolean replaceSketch =false;
 
         if ( path.equals("/") ) {
             path = "/" + AbbozzaServer.getInstance().getSystem() + ".html";
-            replaceSketch = true;
         }
 
         AbbozzaLogger.out("JarDirHandler: Reading " + path, AbbozzaLogger.INFO);
@@ -203,17 +192,7 @@ public class JarDirHandler implements HttpHandler {
                         reads = inStream.read(); 
                     } 
                     bytearray = baos.toByteArray();   
-                    
-                    // Replace the sketch hook, if required
-                    if ( replaceSketch ) {                       
-                        String html = new String(bytearray);
-                        String replacement = "<xml id=\"sketch\" style=\"display:none\">" + sketch + "</xml>";
-                        html = html.replace("<!-- ### sketch ### -->", replacement);
-                        bytearray = html.getBytes();
-                        System.out.println("HIER");
-                        System.out.println(html);
-                    }
-                    
+                                        
                 } catch (IOException ex) {
                     bytearray = null;
                 }

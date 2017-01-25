@@ -475,7 +475,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         setVisible(false);
-        // state = 1;
+        state = 1;
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void storeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_storeButtonActionPerformed
