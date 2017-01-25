@@ -32,6 +32,7 @@ import de.uos.inf.did.abbozza.handler.ConfigHandler;
 import de.uos.inf.did.abbozza.handler.FeatureHandler;
 import de.uos.inf.did.abbozza.handler.JarDirHandler;
 import de.uos.inf.did.abbozza.handler.LoadHandler;
+import de.uos.inf.did.abbozza.handler.LocaleHandler;
 import de.uos.inf.did.abbozza.handler.MonitorHandler;
 import de.uos.inf.did.abbozza.handler.SaveHandler;
 import de.uos.inf.did.abbozza.handler.TaskHandler;
@@ -251,6 +252,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         httpServer.createContext("/abbozza/config", new ConfigHandler(this));
         httpServer.createContext("/abbozza/frame", new ConfigDialogHandler(this));
         httpServer.createContext("/abbozza/features", new FeatureHandler(this));
+        httpServer.createContext("/abbozza/locale", new LocaleHandler(this));
 
         this.monitorHandler = new MonitorHandler(this);
         httpServer.createContext("/abbozza/monitor", monitorHandler);
@@ -692,5 +694,5 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
     }
 
-    
+
 }

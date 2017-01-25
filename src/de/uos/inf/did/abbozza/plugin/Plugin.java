@@ -53,36 +53,38 @@ import org.xml.sax.SAXException;
  */
 public class Plugin {
 
-    private File _path;
+    private URL _url;
     private String _id;
     private String _name;
     private String _description;
     private Vector<File> _js;
     private Node _options;
     private Node _feature;
+    private Node _locales;
     private PluginHandler _handler;
     
+        
     /**
      * Instantiate the pugin. 
      * 
-     * @param path 
+     * @param url
      */
-    public Plugin(File path) {
+    public Plugin(URL url, Document xml) {
         this._handler = null;
-        this._path = path;
+        this._url = url;
         this._id = null;
         this._js = new Vector<File>();
         this._feature = null;
-        parseXML();
+        this._locales = null;
+        parseXML(xml);
+        AbbozzaLogger.out("Plugin: " + this._url + " added", AbbozzaLogger.INFO);
     }
     
     /**
      * Read the plugin details from plugin.xml
      */
-    private void parseXML() {
-        try {
-            Document pluginXml = getXML();
-
+    private void parseXML(Document pluginXml) {
+        try {            
             NodeList plugins = pluginXml.getElementsByTagName("plugin");
             if ( plugins.getLength() > 0) {
                 Node root = plugins.item(0);
@@ -107,14 +109,14 @@ public class Plugin {
                     } else if (childName.equals("js") ) {
                         String fileName = ((Element) child).getAttributes().getNamedItem("file").getNodeValue();
                         if ( fileName != null ) {
-                            File file = new File(this._path.toString()+ "/" + fileName);
+                            File file = new File(this._url.toString()+ "/" + fileName);
                             this._js.add(file);
                         }
                         
-                    // Get the handler calss
+                    // Get the handler class
                     } else if (childName.equals("handler")) {
                         String className = ((Element) child).getAttributes().getNamedItem("class").getNodeValue();                            
-                        URLClassLoader classLoader = new URLClassLoader(new URL[]{_path.toURI().toURL()}, AbbozzaServer.class.getClassLoader() );
+                        URLClassLoader classLoader = new URLClassLoader(new URL[]{_url.toURI().toURL()}, AbbozzaServer.class.getClassLoader() );
                         Class handlerClass = classLoader.loadClass(className);
                         this._handler = (PluginHandler) handlerClass.newInstance();
                         this._handler.setPlugin(this);
@@ -122,9 +124,12 @@ public class Plugin {
                     // Get the feature tree
                     } else if (childName.equals("feature")) {
                         this._feature = child;
+                                      
+                    // Get the locales
+                    } else if ( childName.equals("locales")) {
+                        this._locales = child;
                     }
-                    
-                }
+                }   
             }
         } catch (Exception ex) {
             this._id = null;
@@ -142,33 +147,6 @@ public class Plugin {
                 Logger.getLogger(Plugin.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
-    
-    /**
-     * Returns the plugins xml
-     * @return 
-     */
-    private Document getXML() {
-        Document pluginXml = null;
-        
-        try {
-            File xmlFile = new File(this._path + "/plugin.xml");
-            
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            StringBuilder xmlStringBuilder = new StringBuilder();
-            pluginXml = builder.parse(new FileInputStream(xmlFile));        
-        } catch (ParserConfigurationException ex) {
-            AbbozzaLogger.err("Plugin: Could not parse " + this._path + "/plugin.xml");
-            AbbozzaLogger.stackTrace(ex);
-        } catch (SAXException ex) {
-            AbbozzaLogger.err("Plugin: Could not parse " + this._path + "/plugin.xml");
-            AbbozzaLogger.stackTrace(ex);
-        } catch (IOException ex) {
-            AbbozzaLogger.err("Plugin: Could not read " + this._path + "/plugin.xml");
-            AbbozzaLogger.stackTrace(ex);
-        }
-        return pluginXml;
     }
     
     
@@ -210,7 +188,7 @@ public class Plugin {
             try {
                 code = code + "\n" + new String(Tools.readBytes(_js.get(i)));
             } catch (IOException ex) {
-                AbbozzaLogger.err("Plugin: " + _js.get(i).toString() + " coulod not be read!");
+                AbbozzaLogger.err("Plugin: " + _js.get(i).toString() + " could not be read!");
             }
         }
         return code;
@@ -252,16 +230,26 @@ public class Plugin {
      */
     Node getLocale(String locale) {
         Node requestedLocale = null;
-        Document pluginXml = getXML();
         
-        NodeList locales = pluginXml.getElementsByTagName("locale");
-        for ( int i = 0; i < locales.getLength(); i++ ) {
-            Node localeNode = locales.item(i);
-            String loc = localeNode.getAttributes().getNamedItem("language").getTextContent();
-            if ( (requestedLocale == null) || (locale.equals(loc)) ) {
-                requestedLocale = localeNode;
+        if ( this._locales == null) return null;
+        
+        try {
+        NodeList languages = this._locales.getChildNodes();
+        for ( int i = 0; i < languages.getLength(); i++ ) {
+            Node localeNode = languages.item(i);
+            String name = localeNode.getNodeName();
+            if (name.equals("language")) {
+                Node id = localeNode.getAttributes().getNamedItem("id");
+                if ( (id != null) && (id.getTextContent().equals(locale))
+                        || requestedLocale == null) {
+                    requestedLocale = localeNode;
+                }
             }
         }
+        } catch (Exception ex) {
+            AbbozzaLogger.stackTrace(ex);
+        }
+
         return requestedLocale;
     }
 
