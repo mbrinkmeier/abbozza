@@ -58,6 +58,7 @@ public class Plugin {
     private String _name;
     private String _description;
     private Vector<File> _js;
+    private Document _xml;
     private Node _options;
     private Node _feature;
     private Node _locales;
@@ -74,8 +75,8 @@ public class Plugin {
         this._url = url;
         this._id = null;
         this._js = new Vector<File>();
-        this._feature = null;
-        this._locales = null;
+        // this._feature = null;
+        // this._locales = null;
         parseXML(xml);
         AbbozzaLogger.out("Plugin: " + this._url + " added", AbbozzaLogger.INFO);
     }
@@ -84,6 +85,7 @@ public class Plugin {
      * Read the plugin details from plugin.xml
      */
     private void parseXML(Document pluginXml) {
+        this._xml = pluginXml;
         try {            
             NodeList plugins = pluginXml.getElementsByTagName("plugin");
             if ( plugins.getLength() > 0) {
@@ -228,29 +230,20 @@ public class Plugin {
      * @param locale The requested Locale
      * @return The node containig the requested locale
      */
-    Node getLocale(String locale) {
-        Node requestedLocale = null;
+    Element getLocale(String locale) {
         
         if ( this._locales == null) return null;
-        
-        try {
-        NodeList languages = this._locales.getChildNodes();
+                
+        Element foundElement = null;
+        NodeList languages = this._xml.getElementsByTagName("language");
         for ( int i = 0; i < languages.getLength(); i++ ) {
-            Node localeNode = languages.item(i);
-            String name = localeNode.getNodeName();
-            if (name.equals("language")) {
-                Node id = localeNode.getAttributes().getNamedItem("id");
-                if ( (id != null) && (id.getTextContent().equals(locale))
-                        || requestedLocale == null) {
-                    requestedLocale = localeNode;
-                }
+            Element element = (Element) languages.item(i);
+            if ( (foundElement == null) || (locale.equals(element.getAttribute("id"))) ) {
+                foundElement = element;
             }
         }
-        } catch (Exception ex) {
-            AbbozzaLogger.stackTrace(ex);
-        }
-
-        return requestedLocale;
+                
+        return (Element) foundElement.cloneNode(true);
     }
 
 }

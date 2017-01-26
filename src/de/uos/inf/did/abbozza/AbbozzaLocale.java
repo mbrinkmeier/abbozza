@@ -24,9 +24,13 @@ package de.uos.inf.did.abbozza;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;
+import java.util.Hashtable;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.XMLConstants;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import org.xml.sax.SAXException;
 
 /**
@@ -36,7 +40,9 @@ import org.xml.sax.SAXException;
 public class AbbozzaLocale {
 
     private static String locale;
-    private static Properties entries;
+    private static Document localeXml;
+    // private static Hashtable entries;
+    // private static Properties entries;
 
     /**
      * Set the current locale and reads it from the xml-files
@@ -44,13 +50,119 @@ public class AbbozzaLocale {
      * @param loc 
      */
     public static void setLocale(String loc) {
-        entries = new Properties();
+        // entries = new Properties();
         locale = loc;
+        localeXml = buildLocale();
+        // entries = new Hashtable<String,String>();
         
-        addLocaleXml("/js/languages/" + locale + ".xml");
-        addLocaleXml("/js/abbozza/" +  AbbozzaServer.getInstance().getSystem() + "/languages/" + locale + ".xml");
+        NodeList nodes = localeXml.getElementsByTagName("msg");
+        for (int i = 0; i < nodes.getLength(); i++ ) {
+            Element node = (Element) nodes.item(i);
+            node.setIdAttribute("id", true);
+        }
+        
+        
+        // addLocaleXml("/js/languages/" + locale + ".xml");
+        // addLocaleXml("/js/abbozza/" +  AbbozzaServer.getInstance().getSystem() + "/languages/" + locale + ".xml");
         // Document doc = AbbozzaServer.getPluginManager().getLocales(locale); 
         // addLocaleXml(doc);
+    }
+
+        private static Document buildLocale() {
+        try {
+            // Read the xml file for the global feature
+            
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = schemaFactory.newSchema();
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setSchema(schema);
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document localeXml = builder.newDocument();
+            Element root = localeXml.createElement("languages");
+            localeXml.appendChild(root);
+            
+            System.out.println(Tools.documentToString(localeXml.getDoctype()));
+            String locale = AbbozzaLocale.locale;
+            Document globalLocale = fetchLocale("/js/languages/" + locale + ".xml");
+                    
+            Element foundElement = null;
+            if ( globalLocale != null ) {
+                NodeList languages = globalLocale.getElementsByTagName("language");
+                for ( int i = 0; i < languages.getLength(); i++ ) {
+                    Element element = (Element) languages.item(i);
+                    if ( (foundElement == null) || (locale.equals(element.getAttribute("id"))) ) {
+                        foundElement = element;
+                    }
+                }
+                if ( foundElement != null ) {
+                    Element child = (Element) foundElement.cloneNode(true);
+                    localeXml.adoptNode(child);
+                    root.appendChild(child);
+                    child.setAttribute("id","global_" + locale);
+                }
+            }
+            
+            Document systemLocale = fetchLocale("/js/abbozza/" + AbbozzaServer.getInstance().getSystem() + "/languages/" + locale + ".xml");
+            
+            foundElement = null;
+            if ( globalLocale != null ) {
+                NodeList languages = systemLocale.getElementsByTagName("language");
+                for ( int i = 0; i < languages.getLength(); i++ ) {
+                    Element element = (Element) languages.item(i);
+                    if ( (foundElement == null) || (locale.equals(element.getAttribute("id"))) ) {
+                        foundElement = element;
+                    }
+                }
+                if ( foundElement != null ) {
+                    Element child = (Element) foundElement.cloneNode(true);
+                    localeXml.adoptNode(child);
+                    root.appendChild(child);
+                    child.setAttribute("id",AbbozzaServer.getInstance().getSystem() + "_" + locale);
+                }
+            }
+            
+            // Add locales from Plugins
+            AbbozzaServer.getPluginManager().addLocales(locale,root);
+            
+            /*
+            if (pluginLocale != null ) {
+            System.out.println(Tools.documentToString(pluginLocale));
+            System.out.println("BB");
+            Node root = globalLocale.adoptNode(pluginLocale.getDocumentElement());
+            System.out.println("CC");
+            globalLocale.appendChild(root);
+            System.out.println("DD");
+            }
+            System.out.println("BBBB");
+            
+            System.out.println(Tools.documentToString(globalLocale));
+            System.out.println("CCCC");
+            */
+            return localeXml;
+        } catch (Exception ex) {
+            AbbozzaLogger.stackTrace(ex);
+            return null;
+        }
+    }
+
+    private static Document fetchLocale(String path) {
+        Document localeXml = null;
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        
+        try {
+            AbbozzaLogger.out("LocaleHandler: Loading locale from " + path,AbbozzaLogger.INFO);
+            InputStream stream = AbbozzaServer.getInstance().getJarHandler().getInputStream(path);
+            
+            builder = factory.newDocumentBuilder();
+            localeXml = builder.parse(stream);            
+        } catch (Exception ex) {
+            AbbozzaLogger.out("LocaleHandler: " + path + " not found");
+            localeXml = null;
+        }
+       
+        return localeXml;
     }
 
     /**
@@ -58,6 +170,7 @@ public class AbbozzaLocale {
      * 
      * @param path 
      */
+    /*
     public static void addLocaleXml(String path) {
         Document localeXml;
 
@@ -84,12 +197,14 @@ public class AbbozzaLocale {
             AbbozzaLogger.out("AbbozzaLocale: " + path + " not found");
         }
     }
+    */
     
     /**
      * Adds the entries of a given Document
      * 
      * @param path 
      */
+    /*
     public static void addLocaleXml(Document localeXml) {
         if (localeXml == null) return;
         
@@ -105,7 +220,8 @@ public class AbbozzaLocale {
             AbbozzaLogger.stackTrace(ex);
         }
     }
-
+    */
+    
     /**
      * gets the current locale
      * 
@@ -115,6 +231,10 @@ public class AbbozzaLocale {
         return locale;
     }
 
+    public static Document getLocaleXml() {
+        return AbbozzaLocale.localeXml;
+    }
+    
     /**
      * Returns an entry of the current locale
      * 
@@ -122,7 +242,10 @@ public class AbbozzaLocale {
      * @return 
      */
     public static String entry(String key) {
-        return entries.getProperty(key, key);
+        Element el = localeXml.getElementById(key);
+        if ( el == null ) return key;
+        return el.getTextContent();
+        // entries.getProperty(key, key);
     }
 
     /**
@@ -134,7 +257,8 @@ public class AbbozzaLocale {
      * @return 
      */
     public static String entry(String key, String value) {
-        String res = entries.getProperty(key, key);
+        // String res = entries.getProperty(key, key);
+        String res = entry(key);
         res = res.replace("#", value);
         return res;
     }

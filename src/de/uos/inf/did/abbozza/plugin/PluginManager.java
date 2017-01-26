@@ -44,6 +44,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -245,7 +246,7 @@ public class PluginManager implements HttpHandler {
      * 
      * @return 
      */
-    public Document getLocales(String locale) {
+    public void addLocales(String locale, Element root) {
         try {
             Document locales;
             
@@ -258,19 +259,16 @@ public class PluginManager implements HttpHandler {
             Enumeration<Plugin> plugins = _plugins.elements();
             while ( plugins.hasMoreElements()) {
                 Plugin plugin = plugins.nextElement();
-                Node pluginLocale = plugin.getLocale(locale);
+                Element pluginLocale = plugin.getLocale(locale);
                 if (pluginLocale != null) {
-                    locales.adoptNode(pluginLocale);
-                    locales.appendChild(pluginLocale);
+                    root.getOwnerDocument().adoptNode(pluginLocale);
+                    root.appendChild(pluginLocale);
+                    pluginLocale.setAttribute("id",plugin.getId() + "_" + locale);
                 }
             }
-            System.out.println(Tools.documentToString(locales));
-           
-            return locales;
             
         } catch (ParserConfigurationException ex) {
             AbbozzaLogger.stackTrace(ex);
-            return null;
         }
     }
     

@@ -146,7 +146,7 @@
         </category>
     </feature>
 
-    <feature id="feat.MISC">
+    <feature id="feat.MISC" option="lcd">
         <category name="LCD" id="cat.LCD">
             <block type="dev_lcd"></block>
         </category>
