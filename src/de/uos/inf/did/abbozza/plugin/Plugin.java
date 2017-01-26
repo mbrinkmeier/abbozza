@@ -57,7 +57,7 @@ public class Plugin {
     private String _id;
     private String _name;
     private String _description;
-    private Vector<File> _js;
+    private Vector<URL> _js;
     private Document _xml;
     private Node _options;
     private Node _feature;
@@ -74,7 +74,7 @@ public class Plugin {
         this._handler = null;
         this._url = url;
         this._id = null;
-        this._js = new Vector<File>();
+        this._js = new Vector<URL>();
         // this._feature = null;
         // this._locales = null;
         parseXML(xml);
@@ -111,8 +111,8 @@ public class Plugin {
                     } else if (childName.equals("js") ) {
                         String fileName = ((Element) child).getAttributes().getNamedItem("file").getNodeValue();
                         if ( fileName != null ) {
-                            File file = new File(this._url.toString()+ "/" + fileName);
-                            this._js.add(file);
+                            URL url = new URL(this._url.toString() + fileName);
+                            this._js.add(url);
                         }
                         
                     // Get the handler class
