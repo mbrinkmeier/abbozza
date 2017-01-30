@@ -80,7 +80,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     public static final int VER_MAJOR = 0;
     public static final int VER_MINOR = 8;
     public static final int VER_REV = 1;
-    public static final int VER_HOTFIX = 4;
+    public static final int VER_HOTFIX = 5;
     public static final String VER_REM = "";
     public static final String VERSION = "" + VER_MAJOR + "." + VER_MINOR + "." + VER_REV + "." + VER_HOTFIX + " " + VER_REM;
 

@@ -76,6 +76,7 @@
             <block type="text_const"></block>
             <block type="text_charat"></block>
             <block type="text_concat"></block>
+            <block type="text_from_number"></block>
         </category>
 
         <category name="Ein- und Ausgabe" id="cat.INOUT">
