@@ -254,11 +254,14 @@ public abstract class AbbozzaServer implements HttpHandler {
             os.write(result.getBytes());
             os.close();
         } else {
+            /*
             String line;
             BufferedReader in = new BufferedReader(new InputStreamReader(exchg.getRequestBody()));
             while (in.ready()) {
                 line = in.readLine();
             }
+            */
+            
             Headers responseHeaders = exchg.getResponseHeaders();
             responseHeaders.set("Content-Type", "text/plain");
             exchg.sendResponseHeaders(200, 0);

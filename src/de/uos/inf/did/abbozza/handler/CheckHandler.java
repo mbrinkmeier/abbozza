@@ -46,14 +46,31 @@ public class CheckHandler extends AbstractHandler {
 
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-        try {
+        try {            
+            /*
             BufferedReader in = new BufferedReader(new InputStreamReader(exchg.getRequestBody()));
             StringBuffer code = new StringBuffer();
-            while (in.ready()) {
+            while ( in.ready() ) {
                 String line = in.readLine();
                 code.append(line);
                 code.append('\n');
             }
+            in.close();
+            */
+            
+            InputStreamReader isr =  new InputStreamReader(exchg.getRequestBody());
+            BufferedReader br = new BufferedReader(isr);
+
+            int b;
+            StringBuilder buf = new StringBuilder(512);
+            while ((b = br.read()) != -1) {
+                buf.append((char) b);
+            }
+
+            br.close();
+            isr.close();
+            String code = buf.toString();
+            
             String response = setCode(code.toString());
             if (response.equals("")) {
                 this.sendResponse(exchg, 200, "text/plain", AbbozzaLocale.entry("msg.done-compiling"));
