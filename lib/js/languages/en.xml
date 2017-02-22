@@ -88,6 +88,7 @@ Continuing?</msg>
         <msg id="gui.unprotect_block">Allow deletion of block</msg>
         <msg id="gui.block_id">Set block ID</msg>
         <msg id="gui.ask_for_id">Block ID:</msg>
+        <msg id="gui.interrupts">Interrupts</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>
@@ -137,6 +138,7 @@ Continuing?</msg>
         <msg id="var.GLOBAL">global</msg>
 		
         <msg id="txt.LETTERAT">Character no. # from</msg>
+        <msg id="txt.FROMNUMBER">Convert # to string</msg>
 		
         <msg id="math.MIN">Minimum</msg>
         <msg id="math.MAX">Maximum</msg>
@@ -151,6 +153,8 @@ Continuing?</msg>
         <msg id="math.RANDOM0">Random number between 0 and </msg>
         <msg id="math.RANDOM">Random number between # and </msg>
         <msg id="math.INITRAND">Initialise random generator with</msg>
+        <msg id="math.CONSTRAIN">Constrain # between # and</msg>
+        <msg id="math.SCALE">Scale # from (#,#) to (#,#)</msg>
 
         <msg id="loop.ENDLESS">Repeat continously</msg>
         <msg id="loop.WHILE">While</msg>
@@ -161,6 +165,8 @@ Continuing?</msg>
         <msg id="loop.COUNT">Count with # from # to # by</msg>
         <msg id="loop.WAITFOR">Wait</msg>
         <msg id="loop.WAITFOR_MS">ms</msg>
+        <msg id="loop.ASCENDING">ascending</msg>
+        <msg id="loop.DESCENDING">descending</msg>
 		
         <msg id="logic.TRUE">true</msg>
         <msg id="logic.FALSE">false</msg>
@@ -250,6 +256,13 @@ Continuing?</msg>
                         
         <msg id="int.INTERRUPTS">Activate interrupts</msg>
         <msg id="int.NOINTERRUPTS">Deactivate interrupts</msg>
+        <msg id="int.ATTACH">Interrupt at pin # calls # on</msg>
+        <msg id="int.DETACH">Ignore interrupt at pin</msg>
+        <msg id="int.CHANGE">change</msg>
+        <msg id="int.HIGH">1</msg>
+        <msg id="int.LOW">0</msg>
+        <msg id="int.RISING">rising</msg>
+        <msg id="int.FALLING">falling</msg>
 
     </blocks>
     <errors>
@@ -268,7 +281,8 @@ Continuing?</msg>
         <msg id="err.DEFAULT_VALUE">Value not set</msg>
         <msg id="err.WRONG_SYSTEM">The sketch ist for # systems!</msg>
         <msg id="err.WRONG_SYSTEM_TITLE">Wrong system!</msg>
-     </errors>
+        <msg id="err.WRONG_NAME">Unknown</msg>
+</errors>
     <names>
         <msg id="arduino">Arduino compatible</msg>
         <msg id="calliope">Calliope Mini and micro:bit compatible</msg>

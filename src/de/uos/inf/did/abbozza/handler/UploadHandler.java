@@ -44,6 +44,7 @@ public class UploadHandler extends AbstractHandler {
     @Override
     public void handle(HttpExchange exchg) throws IOException {
         try {
+            /*
             BufferedReader in = new BufferedReader(new InputStreamReader(exchg.getRequestBody()));
             StringBuffer code = new StringBuffer();
             
@@ -51,7 +52,21 @@ public class UploadHandler extends AbstractHandler {
                 code.append(in.readLine());
                 code.append('\n');
             }
+            */
             
+            InputStreamReader isr =  new InputStreamReader(exchg.getRequestBody());
+            BufferedReader br = new BufferedReader(isr);
+            
+            int b;
+            StringBuilder buf = new StringBuilder(512);
+            while ((b = br.read()) != -1) {
+                buf.append((char) b);
+            }
+
+            br.close();
+            isr.close();
+            String code = buf.toString();
+
             String response = uploadCode(code.toString());
             if (response.equals("")) {
                 sendResponse(exchg, 200, "text/plain", AbbozzaLocale.entry("msg.done-compiling"));
@@ -71,11 +86,11 @@ public class UploadHandler extends AbstractHandler {
 
          String response;
 
-        response = _abbozzaServer.uploadCode(code);
+         System.err.println(code);
+         response = _abbozzaServer.uploadCode(code);
         
-        // response = AbbozzaLogger.getErr();
-
-        return response;
+         // response = AbbozzaLogger.getErr();
+         return response;
     }   
      
 }

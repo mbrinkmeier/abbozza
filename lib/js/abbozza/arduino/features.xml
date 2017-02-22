@@ -11,11 +11,29 @@
             <block type="loop_while"></block>
             <block type="loop_do_while"></block>
             <block type="loop_fixed"></block>
-            <block type="loop_count"></block>
+            <block type="loop_count_dir">
+                <value name="FROM">
+                    <block type="math_number"><field name="VALUE">0</field></block>
+                </value>   
+                <value name="TO">
+                    <block type="math_number"><field name="VALUE">42</field></block>
+                </value>   
+            </block>
+            <block type="loop_count_dir_step">
+                <value name="FROM">
+                    <block type="math_number"><field name="VALUE">0</field></block>
+                </value>   
+                <value name="TO">
+                    <block type="math_number"><field name="VALUE">42</field></block>
+                </value>   
+                <value name="STEP">
+                    <block type="math_number"><field name="VALUE">1</field></block>
+                </value>   
+            </block>
             <block type="loop_break"></block>
             <block type="loop_delay">
                 <value name="TIME">
-                    <block type="math_number"></block>
+                    <block type="math_number"><field name="VALUE">1000</field></block>
                 </value>
             </block>            
         </category>
@@ -50,12 +68,15 @@
             <block type="math_random2"></block>
             <block type="math_randomseed"></block>
             <block type="math_millis"></block>
+            <block type="math_constrain"></block>
+            <block type="math_scale"></block>
         </category>
 	    
         <category name="Text" id="cat.TEXT">
             <block type="text_const"></block>
             <block type="text_charat"></block>
             <block type="text_concat"></block>
+            <block type="text_from_number"></block>
         </category>
 
         <category name="Ein- und Ausgabe" id="cat.INOUT">
@@ -102,13 +123,10 @@
 	    
         <category id="cat.SERIAL">
         </category>
-	            
-        <!-- category name="Interrupts" id="cat.INT">
-            <block type="int_interrupts"></block>
-            <block type="int_no_interrupts"></block>
-            <block type="int_attach"></block>
-        </category -->
-                
+        
+        <category name="Interrupts" id="cat.INT">
+        </category>
+                         
         <!--category name="Test" id="cat.TEST">
             <block type="test"></block>
         </category-->
@@ -180,10 +198,13 @@
         </category> 		
     </feature>
 
-    <!-- feature id="feat.TEACHER" option="teacher">
-        <category name="Lehrer" id="cat.TEACHER">
-            <block type="teacher_text"></block>
+    <feature id ="feat.INT">
+        <category name="Interrupts" id="cat.INT">
+            <block type="int_interrupts"></block>
+            <block type="int_no_interrupts"></block>
+            <block type="int_attach"></block>
+            <block type="int_detach"></block>
+            <block type="int_isr"></block>
         </category>
-    </feature-->
-    
+    </feature>        
 </features>

@@ -44,6 +44,7 @@ public class JarDirHandler implements HttpHandler {
 
     // The vector of entries
     private Vector<URI> entries;
+    private String sketch;
 
     /**
      * Initialize the JarDirHandler
@@ -119,7 +120,7 @@ public class JarDirHandler implements HttpHandler {
         byte[] bytearray = getBytes(path);
 
         if (bytearray == null) {
-            String result = "abbozza! : " + path + " nicht gefunden!";
+            String result = "abbozza! : " + path + " not found!";
 
             exchg.sendResponseHeaders(400, result.length());
             os.write(result.getBytes());
@@ -128,7 +129,9 @@ public class JarDirHandler implements HttpHandler {
         }
 
         Headers responseHeaders = exchg.getResponseHeaders();
-        if (path.endsWith(".css")) {
+        if (path.equals("/")) {
+            responseHeaders.set("Content-Type", "text/html");
+        } else if (path.endsWith(".css")) {
             responseHeaders.set("Content-Type", "text/css");
         } else if (path.endsWith(".js")) {
             responseHeaders.set("Content-Type", "text/javascript");
@@ -165,6 +168,12 @@ public class JarDirHandler implements HttpHandler {
         byte[] bytearray = null;
         int tries = 0;
 
+        if ( path.equals("/") ) {
+            path = "/" + AbbozzaServer.getInstance().getSystem() + ".html";
+        }
+
+        AbbozzaLogger.out("JarDirHandler: Reading " + path, AbbozzaLogger.INFO);
+
         while ((tries < 3) && (bytearray == null)) {
 
             Enumeration<URI> uriIt = entries.elements();
@@ -184,7 +193,7 @@ public class JarDirHandler implements HttpHandler {
                         reads = inStream.read(); 
                     } 
                     bytearray = baos.toByteArray();   
-                    
+                                        
                 } catch (IOException ex) {
                     bytearray = null;
                 }

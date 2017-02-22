@@ -89,9 +89,10 @@ public abstract class AbbozzaServer implements HttpHandler {
     // Version
     public static final int VER_MAJOR = 0;
     public static final int VER_MINOR = 8;
-    public static final int VER_REV = 1;
+    public static final int VER_REV = 2;
+    public static final int VER_HOTFIX = 0;
     public static final String VER_REM = "";
-    public static final String VERSION = "" + VER_MAJOR + "." + VER_MINOR + "." + VER_REV + " " + VER_REM;
+    public static final String VERSION = "" + VER_MAJOR + "." + VER_MINOR + "." + VER_REV + "." + VER_HOTFIX + " " + VER_REM;
 
     // Instance
     private static AbbozzaServer instance;
@@ -285,11 +286,14 @@ public abstract class AbbozzaServer implements HttpHandler {
             os.write(result.getBytes());
             os.close();
         } else {
+            /*
             String line;
             BufferedReader in = new BufferedReader(new InputStreamReader(exchg.getRequestBody()));
             while (in.ready()) {
                 line = in.readLine();
             }
+            */
+            
             Headers responseHeaders = exchg.getResponseHeaders();
             responseHeaders.set("Content-Type", "text/plain");
             exchg.sendResponseHeaders(200, 0);
@@ -316,7 +320,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         int major;
         int minor;
         int rev;
-
+        int hotfix;
         
         // Retrieve the update version from <updateUrl>/VERSION
         try {
@@ -328,7 +332,9 @@ public abstract class AbbozzaServer implements HttpHandler {
             major = Integer.parseInt(version.substring(0, pos));
             int pos2 = version.indexOf('.', pos + 1);
             minor = Integer.parseInt(version.substring(pos + 1, pos2));
-            rev = Integer.parseInt(version.substring(pos2 + 1));
+            pos = version.indexOf('.',pos2 + 1);
+            rev = Integer.parseInt(version.substring(pos2 + 1,pos));
+            hotfix = Integer.parseInt(version.substring(pos + 1));
         } catch (Exception ex) {
             AbbozzaLogger.out("Could not check update version", AbbozzaLogger.INFO);
             return;
@@ -339,7 +345,8 @@ public abstract class AbbozzaServer implements HttpHandler {
         // Checking version of update
         if ((major > VER_MAJOR)
                 || ((major == VER_MAJOR) && (minor > VER_MINOR))
-                || ((major == VER_MAJOR) && (minor == VER_MINOR) && (rev > VER_REV))) {
+                || ((major == VER_MAJOR) && (minor == VER_MINOR) && (rev > VER_REV))
+                || ((major == VER_MAJOR) && (minor == VER_MINOR) && (rev > VER_REV) && (hotfix > VER_HOTFIX)) ) {
             AbbozzaLogger.out("New version found", AbbozzaLogger.INFO);
             int res = JOptionPane.showOptionDialog(null, AbbozzaLocale.entry("gui.new_version", version), AbbozzaLocale.entry("gui.new_version_title"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
             if (res == JOptionPane.NO_OPTION) {
@@ -591,7 +598,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         dialog.setModal(true);
         dialog.toFront();
         dialog.setVisible(true);
-        toolIconify();
+        toolIconify();        
         if (dialog.getState() == 0) {
             config.set(dialog.getConfiguration());
             AbbozzaLocale.setLocale(config.getLocale());

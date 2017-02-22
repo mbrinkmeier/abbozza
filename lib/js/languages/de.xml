@@ -88,6 +88,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.unprotect_block">Erlaube das Löschen des Blocks</msg>
         <msg id="gui.block_id">Setze Block ID</msg>
         <msg id="gui.ask_for_id">ID des Blocks:</msg>
+        <msg id="gui.interrupts">Interrupts</msg>        
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
@@ -137,6 +138,7 @@ Trotzdem fortfahren?</msg>
         <msg id="var.GLOBAL">global</msg>
 		
         <msg id="txt.LETTERAT">Zeichen Nr. # aus</msg>
+        <msg id="txt.FROMNUMBER">Wandle # in Text um</msg>
 		
         <msg id="math.MIN">Minimum</msg>
         <msg id="math.MAX">Maximum</msg>
@@ -151,6 +153,8 @@ Trotzdem fortfahren?</msg>
         <msg id="math.RANDOM0">Zufallszahl zwischen 0 und</msg>
         <msg id="math.RANDOM">Zufallszahl zwischen # und </msg>
         <msg id="math.INITRAND">Initialisiere Zufallsgenerator mit</msg>
+        <msg id="math.CONSTRAIN">Beschränke # zwischen # und</msg>
+        <msg id="math.SCALE">Skaliere # von (#,#) auf (#,#)</msg>
 
         <msg id="loop.ENDLESS">Wiederhole fortlaufend</msg>
         <msg id="loop.WHILE">Wiederhole solange</msg>
@@ -161,6 +165,8 @@ Trotzdem fortfahren?</msg>
         <msg id="loop.COUNT">Zähle # von # bis # mit Schrittweite</msg>
         <msg id="loop.WAITFOR">Warte</msg>
         <msg id="loop.WAITFOR_MS">ms</msg>
+        <msg id="loop.ASCENDING">aufsteigend</msg>
+        <msg id="loop.DESCENDING">absteigend</msg>
 		
         <msg id="logic.TRUE">wahr</msg>
         <msg id="logic.FALSE">falsch</msg>
@@ -250,7 +256,8 @@ Trotzdem fortfahren?</msg>
         
         <msg id="int.INTERRUPTS">Aktiviere Interrupts</msg>
         <msg id="int.NOINTERRUPTS">Deaktiviere Interrupts</msg>
-        <msg id="int.ATTACH">Interrupt an Pin # bei</msg>
+        <msg id="int.ATTACH">Interrupt an Pin # führt # aus bei</msg>
+        <msg id="int.DETACH">Ignoriere Interrupt an Pin</msg>
         <msg id="int.CHANGE">Änderung</msg>
         <msg id="int.HIGH">1</msg>
         <msg id="int.LOW">0</msg>
@@ -273,6 +280,7 @@ Trotzdem fortfahren?</msg>
         <msg id="err.DEFAULT_VALUE">Wert nicht gesetzt</msg>
         <msg id="err.WRONG_SYSTEM">Der Sketch ist für # Systeme!</msg>
         <msg id="err.WRONG_SYSTEM_TITLE">Falsches System!</msg>
+        <msg id="err.WRONG_NAME">Unbekannter Name</msg>
     </errors>
     <names>
         <msg id="arduino">Arduino kompatible</msg>
