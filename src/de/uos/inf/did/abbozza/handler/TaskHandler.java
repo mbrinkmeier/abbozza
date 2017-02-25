@@ -94,18 +94,17 @@ public class TaskHandler extends AbstractHandler {
         OutputStream os = exchg.getResponseBody();
         InputStream is = sketch.openStream();
 
-        byte[] bytearray;
-        
-        if ( is != null ) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream(1024);
+        byte[] bytearray = null;
 
-            // pump bytes from input to output
-            while ( reader.ready() ) {
-                int b = reader.read();
-                buffer.write(b);
-            }
-            bytearray = buffer.toByteArray();
+        if ( is != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            int reads = is.read(); 
+            while(reads != -1){ 
+                baos.write(reads); 
+                reads = is.read(); 
+            } 
+            bytearray = baos.toByteArray();   
+                    
             AbbozzaLogger.out("TaskHandler: " + sketch.toString() + " received", AbbozzaLogger.INFO);
         } else {
             /*

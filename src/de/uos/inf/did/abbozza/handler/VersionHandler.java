@@ -22,6 +22,7 @@
  */
 package de.uos.inf.did.abbozza.handler;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.handler.AbstractHandler;
@@ -39,7 +40,9 @@ public class VersionHandler extends AbstractHandler {
 
     @Override
     public void handle(HttpExchange exchg) throws IOException {
-        sendResponse(exchg, 200, "text/plain", _abbozzaServer.VERSION);
+        Headers headers = exchg.getResponseHeaders();
+        headers.add("Access-Control-Allow-Origin", "*");
+        sendResponse(exchg, 200, "text/plain", "abbozza! " + _abbozzaServer.VERSION);
     }
     
 }
