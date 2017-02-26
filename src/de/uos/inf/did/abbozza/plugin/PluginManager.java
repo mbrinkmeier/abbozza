@@ -48,6 +48,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import processing.app.Base;
 
 /**
  *
@@ -57,6 +58,7 @@ public class PluginManager implements HttpHandler {
 
     private AbbozzaServer _abbozza;
     private Hashtable<String,Plugin> _plugins;
+   
     
     
     public PluginManager(AbbozzaServer server) {
@@ -124,7 +126,12 @@ public class PluginManager implements HttpHandler {
                         plugin = new Plugin(dirs[i].toURI().toURL(),pluginXml);
                         if (plugin.getId() != null ) {
                             AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " found in " + dirs[i].toString() ,AbbozzaLogger.INFO);
-                            this._plugins.put(plugin.getId(), plugin);
+                            if ( checkRequirements(plugin) ) {
+                                AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " loaded",AbbozzaLogger.INFO);
+                                this._plugins.put(plugin.getId(), plugin);
+                            } else {
+                                
+                            }
                         }
                     }
                 } catch (MalformedURLException ex) {
@@ -148,7 +155,10 @@ public class PluginManager implements HttpHandler {
                         plugin = new Plugin(pluginUrl,pluginXml);
                         if (plugin.getId() != null ) {
                             AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " found in " + jars[i].toString() ,AbbozzaLogger.INFO);
-                            this._plugins.put(plugin.getId(), plugin);
+                            if ( checkRequirements(plugin)) {
+                                AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " loaded",AbbozzaLogger.INFO);
+                                this._plugins.put(plugin.getId(), plugin);
+                            }
                         }
                     }
                 } catch (MalformedURLException ex) {
@@ -296,5 +306,24 @@ public class PluginManager implements HttpHandler {
             AbbozzaLogger.err("PluginManager: Could not find " + pluginUrl + "/plugin.xml");
         }
         return pluginXml;        
+    }
+
+    private boolean checkRequirements(Plugin plugin) {
+        boolean foundAll = true;
+        Node requirements = plugin.getRequirements();
+        if ( requirements == null ) return true;
+        Node child = requirements.getFirstChild();
+        while ( child != null) {
+            if ( child.getNodeName().equals("library")) {
+                String name = child.getAttributes().getNamedItem("name").getNodeValue();
+                // If a required library is not found, reject the plugin
+                if ( !this._abbozza.checkLibrary(name) ) {
+                    AbbozzaLogger.out("PluginManager: Plugin " + plugin.getId() + " : required library " + name + " not found",AbbozzaLogger.INFO);
+                    foundAll = false;
+                }
+            }
+            child = child.getNextSibling();
+        }
+        return foundAll;
     }
 }

@@ -62,8 +62,10 @@ public class Plugin {
     private Node _options;
     private Node _feature;
     private Node _locales;
+    private Node _requirements;
     private PluginHandler _handler;
     
+   
         
     /**
      * Instantiate the pugin. 
@@ -100,6 +102,10 @@ public class Plugin {
                     // Get the display name
                     if (childName.equals("name")) {
                         this._name = child.getTextContent();
+                    
+                    // Get the requriements
+                    } else if (childName.equals("requirements")) {
+                        this._requirements = child.cloneNode(true);
                         
                     // Get the description
                     } else if (childName.equals("description")) {
@@ -246,4 +252,7 @@ public class Plugin {
         return (Element) foundElement.cloneNode(true);
     }
 
+    Node getRequirements() {
+        return this._requirements;
+    }
 }

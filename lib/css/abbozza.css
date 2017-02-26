@@ -100,11 +100,13 @@ DIV.topButton {
 	border-bottom-left-radius: 5px;
 	opacity: 0.4;
         z-index: 41;
+        overflow: hidden;
 }
 
 DIV.topButton:hover {
 	opacity: 1.0;
-	height: 50px;
+	height: auto;
+        padding-top: 15px;
 }
 
 DIV.topButton IMG {
@@ -114,13 +116,38 @@ DIV.topButton IMG {
 }
 
 DIV.topButton:hover IMG {
-	width: 30px;
-	height: 30px;
-	padding: 5px;
-	padding-top: 15px;
+	width: 40px;
+	height: 40px;
+	padding: 0px;
 }
 
-DIV.status_div {
+DIV.toolButton {
+    padding: 0px;
+    margin: 0px;
+    width: 40px;
+    height: 40px;
+}
+
+DIV.toolButton IMG {
+    padding: 5px;
+    margin: 0pt;
+    width: 30px;
+    height: 30px;
+}
+
+DIV.topButton:hover DIV.toolButton IMG {
+	padding: 5px;
+	width: 30px;
+	height: 30px;
+}
+
+DIV.topButton:hover DIV.toolButton:hover IMG {
+    padding: 0px;
+    width: 40px;
+    height: 40px;
+}
+
+DIV.status_div IMG {
    width: 400px;
    height: 200px;
    padding: 5px;
@@ -171,8 +198,8 @@ DIV.license_div A {
   right: 220px;
 }
 
-#serial {
-	right: 170px;
+#tools {
+   right: 170px;
 }
 
 #connect {

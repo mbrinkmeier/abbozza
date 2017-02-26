@@ -700,6 +700,11 @@ public abstract class AbbozzaServer implements HttpHandler {
             ex.printStackTrace(System.out);
         }
     }
+    
+    
+    public boolean checkLibrary(String name) {
+            return false;
+    }
 
 
 }

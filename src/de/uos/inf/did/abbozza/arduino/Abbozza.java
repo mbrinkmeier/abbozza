@@ -53,6 +53,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,9 +65,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import processing.app.Base;
 import processing.app.BaseNoGui;
 import processing.app.debug.RunnerException;
 import processing.app.helpers.PreferencesMapException;
+import processing.app.packages.LibraryList;
+import processing.app.packages.UserLibrary;
 
 public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
 
@@ -92,7 +96,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         AbbozzaLogger.out("Found arduino version " + arduino_major + "." +arduino_minor + "." + arduino_rev,AbbozzaLogger.INFO);
         
         this.editor = editor;
-        super.init("arduino");        
+        super.init("arduino");                
     }
 
     @Override
@@ -294,6 +298,11 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
                 
         return errMsg;
     }
-    
+
+    public boolean checkLibrary(String name) {
+        UserLibrary lib = Base.getLibraries().getByName(name);
+        if ( lib != null ) return true;
+        return false;
+    }
 }
 

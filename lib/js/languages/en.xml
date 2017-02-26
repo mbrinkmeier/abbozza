@@ -34,7 +34,7 @@ Continuing?</msg>
         <msg id="gui.new_button">New Sketch</msg>
         <msg id="gui.load_button">Load Sketch</msg>
         <msg id="gui.save_button">Save Sketch</msg>
-        <msg id="gui.serial_button">Serial Plotter</msg>
+        <msg id="gui.serial_button">Serial Monitor</msg>
         <msg id="gui.connect_button">Connect to board</msg>
         <msg id="gui.config_button">Settings</msg>
         <msg id="gui.info_button">Tasks and information</msg>        

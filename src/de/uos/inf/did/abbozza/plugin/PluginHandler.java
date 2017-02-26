@@ -53,7 +53,7 @@ public class PluginHandler implements HttpHandler {
             Headers responseHeaders = exchg.getResponseHeaders();
             String response = this._plugin.getId() + " is deactivated";
             responseHeaders.set("Content-Type", "text/plain");
-            exchg.sendResponseHeaders(200, response.length());
+            exchg.sendResponseHeaders(404, response.length());
             os.write(response.getBytes());
             os.close();
         } else {
