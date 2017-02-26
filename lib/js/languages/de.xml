@@ -89,6 +89,8 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.block_id">Setze Block ID</msg>
         <msg id="gui.ask_for_id">ID des Blocks:</msg>
         <msg id="gui.interrupts">Interrupts</msg>        
+        <msg id="gui.plugin_deactivated">Plugin # deaktiviert</msg>
+        <msg id="gui.unknown_blocks">Unbekannte Blöcke!&#10;Sind alle notwendigen Plugins aktiviert?</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
