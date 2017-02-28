@@ -141,6 +141,8 @@ Trotzdem fortfahren?</msg>
 		
         <msg id="txt.LETTERAT">Zeichen Nr. # aus</msg>
         <msg id="txt.FROMNUMBER">Wandle # in Text um</msg>
+        <msg id="txt.TEXTFROMASCII">Zeichen mit ASCII-Code</msg>
+        <msg id="txt.ASCIIFROMTEXT">ASCII-Code von</msg>
 		
         <msg id="math.MIN">Minimum</msg>
         <msg id="math.MAX">Maximum</msg>
