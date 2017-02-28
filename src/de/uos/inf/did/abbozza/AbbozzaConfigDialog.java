@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
@@ -22,7 +23,15 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -510,63 +519,58 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_taskPathButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    /* public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                AbbozzaConfigDialog dialog = new AbbozzaConfigDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
-    */
     
-    private void parseOptionNode(Node node, DefaultMutableTreeNode root) {
+    private void parseOptionNode(Node node, DefaultMutableTreeNode root, String prefix) {
         String type = node.getNodeName();
         if (type.equals("group")) {
             String groupName = node.getAttributes().getNamedItem("name").getNodeValue();
             DefaultMutableTreeNode group = new DefaultMutableTreeNode(AbbozzaLocale.entry(groupName));
             NodeList children = node.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
-                parseOptionNode(children.item(i),group);
+                parseOptionNode(children.item(i),group, prefix);
             }
             root.add(group);
         } else if (type.equals("item")) {
             String optionName  = node.getAttributes().getNamedItem("option").getNodeValue(); 
             String itemName = node.getAttributes().getNamedItem("name").getNodeValue();
-            CheckBoxNode treeNode = new CheckBoxNode(config,optionName, AbbozzaLocale.entry(itemName));
+            CheckBoxNode treeNode = new CheckBoxNode(config,prefix+optionName, AbbozzaLocale.entry(itemName));
             root.add(new DefaultMutableTreeNode(treeNode));
         } else if (type.equals("choice")) {
             String optionName  = node.getAttributes().getNamedItem("option").getNodeValue(); 
             String itemName = node.getAttributes().getNamedItem("name").getNodeValue();
-            RadioButtonNode treeNode = new RadioButtonNode(config,optionName, AbbozzaLocale.entry(itemName));
+            RadioButtonNode treeNode = new RadioButtonNode(config,prefix+optionName, AbbozzaLocale.entry(itemName));
             root.add(new DefaultMutableTreeNode(treeNode));
+        } else if (type.equals("options")) {
+            // Plugin Options found
+            String pluginName = node.getAttributes().getNamedItem("plugin").getNodeValue();
+            CheckBoxNode pluginNode = new CheckBoxNode(config, pluginName+".enabled", AbbozzaServer.getPlugin(pluginName).getName());
+            DefaultMutableTreeNode group = new DefaultMutableTreeNode(pluginNode);
+            NodeList children = node.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                parseOptionNode(children.item(i),group,pluginName+".");
+            }
+            root.add(group);
         }
     }
     
-    
+        
     public DefaultTreeModel buildOptionTree() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(AbbozzaLocale.entry("gui.options"));
         optionTree = new DefaultTreeModel(root);
+                
         
         // Read DOM from options.xml
         Document optionXml = AbbozzaServer.getInstance().getOptionTree();
+
         NodeList roots = optionXml.getElementsByTagName("options");
-        for (int i = 0; i < roots.getLength(); i++) {
+        for (int i = 0; i < roots.getLength(); i++) {   
             Node node = roots.item(i);
-            NodeList children = node.getChildNodes();
-            for (int j = 0; j < children.getLength(); j++) {
-                Node child = children.item(j);
-                parseOptionNode(child,root);
+            if ( node.getAttributes().getNamedItem("plugin") == null) {
+                NodeList children = node.getChildNodes();
+                for (int j = 0; j < children.getLength(); j++) {
+                    Node child = children.item(j);
+                    parseOptionNode(child,root,"");
+                }
             }
         }
 
@@ -577,6 +581,7 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
         return optionTree;
     }
 
+    
     public void storeOptions() {
         // Iterate through optionTree
 
@@ -595,6 +600,10 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
                     cbn.storeOption(config);
                 }
             } else {
+                if (node.getUserObject() instanceof CheckBoxNode) {
+                    CheckBoxNode cbn = (CheckBoxNode) node.getUserObject();
+                    cbn.storeOption(config);                    
+                }
                 Enumeration<DefaultMutableTreeNode> it = node.children();
                 while (it.hasMoreElements()) {
                     DefaultMutableTreeNode child = (DefaultMutableTreeNode) it.nextElement();

@@ -48,9 +48,9 @@ public class FeatureCellRenderer extends DefaultTreeCellRenderer {
             int row,
             boolean hasFocus) {
 		
-		if ( !leaf ) {
-			return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-		} else {
+		// if ( !leaf ) {
+		// 	return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+		// } else {
 			DefaultMutableTreeNode tn = (DefaultMutableTreeNode) value;
 			if ( tn.getUserObject() instanceof RadioButtonNode ) {
 				RadioButtonNode rbn = (RadioButtonNode) tn.getUserObject();
@@ -59,7 +59,8 @@ public class FeatureCellRenderer extends DefaultTreeCellRenderer {
 				CheckBoxNode cbn = (CheckBoxNode) tn.getUserObject();
 				return new JCheckBox(cbn.getText(),cbn.isSelected());
 			}
-			return new JLabel(tn.toString());
-		}
+                        return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+                        // return new JLabel(tn.toString());
+		//}
 	}
 }

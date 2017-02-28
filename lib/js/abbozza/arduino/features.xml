@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <features>
-
     <feature id="feat.BASE">
         <category name="Entscheidungen" id="cat.COND">
             <block type="cond_if"></block>
@@ -134,7 +134,7 @@
         </category-->
     </feature>
 		
-    <feature id="feat.FUNC">
+    <feature id="feat.FUNC" option="operations">
         <category id="cat.FUNC">
             <block type="func_decl"></block>
             <block type="func_call"></block>
@@ -142,7 +142,7 @@
         </category>
     </feature>
 	
-    <feature id="feat.SERIAL">
+    <feature id="feat.SERIAL" option="serial">
         <category id="cat.SERIAL">
             <block type="serial_println"></block>
             <block type="serial_readln"></block>
@@ -166,16 +166,19 @@
         </category>
     </feature>
 
-    <feature id="feat.MISC">
+    <feature id="feat.MISC" option="lcd">
         <category name="LCD" id="cat.LCD">
             <block type="dev_lcd"></block>
         </category>
     </feature>
                 
-    <feature id="feat.DEVICES">
+    <feature id="feat.DEVICES" option="devices">
         <category name="Aktuatoren" id="cat.DEVOUT">
             <block type="dev_led"></block>
             <block type="dev_led_on"></block>
+            <block type="dev_rgb_led"></block>
+            <block type="dev_rgb_led_set_color"></block>
+            <block type="dev_rgb_led_set_color2"></block>
             <block type="dev_servo"></block>
             <block type="dev_servo_set">
                 <value name="VALUE">
@@ -208,6 +211,5 @@
             <block type="int_detach"></block>
             <block type="int_isr"></block>
         </category>
-    </feature>
-        
+    </feature>        
 </features>

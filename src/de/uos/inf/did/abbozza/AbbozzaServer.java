@@ -29,26 +29,27 @@ import com.sun.net.httpserver.HttpServer;
 import de.uos.inf.did.abbozza.handler.CheckHandler;
 import de.uos.inf.did.abbozza.handler.ConfigDialogHandler;
 import de.uos.inf.did.abbozza.handler.ConfigHandler;
+import de.uos.inf.did.abbozza.handler.FeatureHandler;
 import de.uos.inf.did.abbozza.handler.JarDirHandler;
 import de.uos.inf.did.abbozza.handler.LoadHandler;
+import de.uos.inf.did.abbozza.handler.LocaleHandler;
 import de.uos.inf.did.abbozza.handler.MonitorHandler;
 import de.uos.inf.did.abbozza.handler.SaveHandler;
 import de.uos.inf.did.abbozza.handler.TaskHandler;
 import de.uos.inf.did.abbozza.handler.UploadHandler;
 import de.uos.inf.did.abbozza.handler.VersionHandler;
+import de.uos.inf.did.abbozza.plugin.PluginManager;
+import de.uos.inf.did.abbozza.plugin.Plugin;
 import java.awt.Desktop;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.StringWriter;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -57,6 +58,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -65,7 +67,15 @@ import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -96,6 +106,7 @@ public abstract class AbbozzaServer implements HttpHandler {
     // several attributes
     protected String system;                // the name of the system (used for paths)
     protected JarDirHandler jarHandler;
+
     protected AbbozzaConfig config = null;
     private boolean isStarted = false;      // true if the server was started
     // public ByteArrayOutputStream logger;
@@ -106,6 +117,9 @@ public abstract class AbbozzaServer implements HttpHandler {
     public MonitorHandler monitorHandler;
     private URL _lastSketchFile = null;
     private URL _taskContext;
+    protected String globalPluginPath;
+    protected String localPluginPath;
+    private PluginManager pluginManager;
 
     /**
      * The system independent initialization of the server
@@ -141,7 +155,10 @@ public abstract class AbbozzaServer implements HttpHandler {
         configPath = System.getProperty("user.home") + "/.abbozza/" + this.system + "/abbozza.cfg";
         System.out.println("Reading config from " + configPath);
         config = new AbbozzaConfig(configPath);
-        
+
+        // Load plugins
+        pluginManager = new PluginManager(this);
+                
         AbbozzaLocale.setLocale(config.getLocale());
 
         AbbozzaLogger.out("Version " + VERSION, AbbozzaLogger.INFO);
@@ -182,6 +199,9 @@ public abstract class AbbozzaServer implements HttpHandler {
         int  p = url.getPath().lastIndexOf("/");
         globalJarPath = url.getPath().substring(0, p+1);
         // globalJarPath = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        
+        localPluginPath = localJarPath + "/plugins";
+        globalPluginPath = globalJarPath + "/plugins";
     }
 
     public String getSketchbookPath() {
@@ -198,6 +218,14 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     public String getLocalJarPath() {
         return localJarPath;
+    }
+    
+    public String getGlobalPluginPath() {
+        return globalPluginPath;
+    }
+    
+    public String getLocalPluginPath() {
+        return localPluginPath;
     }
     
     public String getSystem() {
@@ -224,17 +252,21 @@ public abstract class AbbozzaServer implements HttpHandler {
         httpServer.createContext("/abbozza/upload", new UploadHandler(this));
         httpServer.createContext("/abbozza/config", new ConfigHandler(this));
         httpServer.createContext("/abbozza/frame", new ConfigDialogHandler(this));
-        // httpServer.createContext("/abbozza/board", new BoardHandler(this, false));
-        // httpServer.createContext("/abbozza/queryboard", new BoardHandler(this, true));
+        httpServer.createContext("/abbozza/features", new FeatureHandler(this));
+        httpServer.createContext("/abbozza/locale", new LocaleHandler(this));
+
         this.monitorHandler = new MonitorHandler(this);
         httpServer.createContext("/abbozza/monitor", monitorHandler);
         httpServer.createContext("/abbozza/monitorresume", monitorHandler);
         httpServer.createContext("/abbozza/version", new VersionHandler(this));
+        httpServer.createContext("/abbozza/plugins",  this.pluginManager);
         httpServer.createContext("/abbozza/", this /* handler */);
         httpServer.createContext("/task/", new TaskHandler(this, jarHandler));
         httpServer.createContext("/", jarHandler);
+        
+        this.pluginManager.registerPluginHandlers(httpServer);
     }
-
+    
     /**
      * Request handling
      *
@@ -246,7 +278,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         String path = exchg.getRequestURI().getPath();
         OutputStream os = exchg.getResponseBody();
 
-        AbbozzaLogger.out(path + " requested");
+        AbbozzaLogger.out(path + " requested", AbbozzaLogger.DEBUG);
 
         if (!path.startsWith("/" + system)) {
             String result = AbbozzaLocale.entry("msg.not_found", path);
@@ -367,8 +399,8 @@ public abstract class AbbozzaServer implements HttpHandler {
 
             this.isStarted = true;
 
-            AbbozzaLogger.out("Duplexer Started ... ",4);
-            AbbozzaLogger.out("Starting ... ",4);
+            AbbozzaLogger.out("Duplexer Started ... ",AbbozzaLogger.INFO);
+            AbbozzaLogger.out("Starting ... ",AbbozzaLogger.INFO);
 
             serverPort = config.getServerPort();
             while (httpServer == null) {
@@ -378,7 +410,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                     httpServer.start();
                     AbbozzaLogger.out("Http-server started on port: " + serverPort, AbbozzaLogger.INFO);
                 } catch (Exception e) {
-                    e.printStackTrace(System.err);
+                    AbbozzaLogger.stackTrace(e);
                     AbbozzaLogger.out("Port " + serverPort + " failed", AbbozzaLogger.INFO);
                     serverPort++;
                     httpServer = null;
@@ -513,10 +545,18 @@ public abstract class AbbozzaServer implements HttpHandler {
     }
 
     
-    // @TODO Change file
+    /**
+     * This operation constructs the option tree from the global
+     * options.xml and the option tag inside all plugins.
+     * 
+     * @return The XML-document containing the option tree
+     */
     public Document getOptionTree() {
         Document optionsXml = null;
+        
         if (jarHandler != null) {
+            
+            // Retreive the global option tree
             try {
                 byte[] bytes = jarHandler.getBytes("/js/abbozza/" + system +"/options.xml");
                 if (bytes != null) {
@@ -527,8 +567,23 @@ public abstract class AbbozzaServer implements HttpHandler {
                     ByteArrayInputStream input = new ByteArrayInputStream(bytes);
                     optionsXml = builder.parse(input);
                 }
-            } catch (IOException | SAXException | ParserConfigurationException ex) {
-                AbbozzaLogger.out("Could not find /js/abbozza/" + system +"/options.xml", AbbozzaLogger.ERROR);
+                // printXML(optionsXml);
+                
+                // If successful, add the plugin trees
+                Node root = optionsXml.getElementsByTagName("options").item(0);
+                Enumeration<Plugin> plugins = this.pluginManager.plugins();
+                while ( plugins.hasMoreElements() ) {
+                    Plugin plugin = plugins.nextElement();
+                    Node pluginOpts = plugin.getOptions();
+                   
+                    ((Element) pluginOpts).setAttribute("plugin", plugin.getId());
+                    
+                    optionsXml.adoptNode(pluginOpts);
+                    root.appendChild(pluginOpts);
+                }
+                               
+            } catch (Exception ex) {
+                ex.printStackTrace(System.out);
             }
         }
         return optionsXml;
@@ -589,12 +644,24 @@ public abstract class AbbozzaServer implements HttpHandler {
     public URL getTaskContext () {
         return _taskContext;
     }
-    
+
+    public JarDirHandler getJarHandler() {
+        return jarHandler;
+    }
+        
     /*
     public int getRunningServerPort() {
         return serverPort;
     }
     */
+    
+    public static PluginManager getPluginManager() {
+        return instance.pluginManager;
+    }
+    
+    public static Plugin getPlugin(String id) {
+        return instance.pluginManager.getPlugin(id);
+    }
     
     public static AbbozzaServer getInstance() {
         return instance;
@@ -602,6 +669,41 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     public static AbbozzaConfig getConfig() {
         return getInstance().config;
+    }
+
+    public static void printXML(Node node) {
+        StringWriter sw = new StringWriter();
+        try {
+            Transformer t = TransformerFactory.newInstance().newTransformer();
+            t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            t.transform(new DOMSource(node.cloneNode(true)), new StreamResult(sw));
+        } catch (Exception te) {
+            System.out.println("nodeToString Transformer Exception");
+        }
+        System.out.println(sw.toString());
+    }
+    
+    public static void printXML(Document doc) {
+        try {
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            //initialize StreamResult with File object to save to file
+            StreamResult result = new StreamResult(new StringWriter());
+            DOMSource source = new DOMSource(doc);
+            transformer.transform(source, result);
+            String xmlString = result.getWriter().toString();
+            System.out.println(xmlString);
+        } catch (TransformerConfigurationException ex) {
+            ex.printStackTrace(System.out);
+        } catch (TransformerException ex) {
+            ex.printStackTrace(System.out);
+        }
+    }
+    
+    
+    public boolean checkLibrary(String name) {
+            return false;
     }
 
 }

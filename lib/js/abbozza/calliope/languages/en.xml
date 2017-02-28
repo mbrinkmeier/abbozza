@@ -1,4 +1,5 @@
-<language id="en_EN">
+<?xml version="1.0" encoding="UTF-8"?>
+<language id="en">
     <blocks>
         <msg id="block.MAIN">Main program</msg> 
         <msg id="block.led">Led Zeile: # Spalte: #</msg>

@@ -23,10 +23,12 @@
  */
 package de.uos.inf.did.abbozza;
 
+import java.util.Enumeration;
 import javax.swing.AbstractButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
 
 public class CheckBoxNode implements ChangeListener {
 
@@ -73,7 +75,7 @@ public class CheckBoxNode implements ChangeListener {
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		setSelected(((AbstractButton) e.getSource()).isSelected());
+            setSelected(((AbstractButton) e.getSource()).isSelected());
 	}
 
 	public DefaultMutableTreeNode getNode() {
@@ -83,5 +85,5 @@ public class CheckBoxNode implements ChangeListener {
 	public void setNode(DefaultMutableTreeNode node) {
 		this.node = node;
 	}
-	
+        
 }

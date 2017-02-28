@@ -65,9 +65,9 @@ public class FeatureCellEditor extends DefaultTreeCellEditor implements ChangeLi
             boolean expanded,
             boolean leaf,
             int row) {
-		if (!leaf) {
-			return null;
-		} else {
+//		if (!leaf) {
+//			return null;
+//		} else {
 			DefaultMutableTreeNode tn = (DefaultMutableTreeNode) value;
 			if ( tn.getUserObject() instanceof RadioButtonNode ) {
 				RadioButtonNode rbn = (RadioButtonNode) tn.getUserObject();
@@ -85,13 +85,19 @@ public class FeatureCellEditor extends DefaultTreeCellEditor implements ChangeLi
 				return jcbn;
 			}
 			return new JLabel(tn.toString());
-		}
+//		}
 	}
 
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		tree.repaint();
+            if (e.getSource() instanceof JCheckBox) {
+                JCheckBox cb = (JCheckBox) e.getSource();
+                if (!cb.isSelected()) {
+                    tree.collapsePath(tree.getSelectionPath());
+                }
+            }
+            tree.repaint();
 	}
 	
 }

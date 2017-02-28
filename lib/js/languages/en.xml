@@ -1,4 +1,5 @@
-<language id="en_EN">	
+<?xml version="1.0" encoding="UTF-8"?>
+<language id="en">	
     <messages>
         <msg id="msg.loaded">Locale en_EN loaded</msg> 
         <msg id="msg.server_started">Server started on port #</msg> 
@@ -33,7 +34,7 @@ Continuing?</msg>
         <msg id="gui.new_button">New Sketch</msg>
         <msg id="gui.load_button">Load Sketch</msg>
         <msg id="gui.save_button">Save Sketch</msg>
-        <msg id="gui.serial_button">Serial Plotter</msg>
+        <msg id="gui.serial_button">Serial Monitor</msg>
         <msg id="gui.connect_button">Connect to board</msg>
         <msg id="gui.config_button">Settings</msg>
         <msg id="gui.info_button">Tasks and information</msg>        
@@ -88,6 +89,8 @@ Continuing?</msg>
         <msg id="gui.block_id">Set block ID</msg>
         <msg id="gui.ask_for_id">Block ID:</msg>
         <msg id="gui.interrupts">Interrupts</msg>
+        <msg id="gui.plugin_deactivated">Plugin # deactivated</msg>
+        <msg id="gui.unknown_blocks">Unknown blocks!&#10;Are all required plugins activated?</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>
@@ -216,6 +219,16 @@ Continuing?</msg>
         <msg id="dev.ON">on</msg>
         <msg id="dev.OFF">off</msg>
         <msg id="dev.LED">LED</msg>
+        <msg id="dev.RGBLED">RGB-LED</msg>
+        <msg id="dev.REDPIN">Pin for red</msg>
+        <msg id="dev.GREENPIN">Pin for green</msg>
+        <msg id="dev.BLUEPIN">Pin for blue</msg>
+        <msg id="dev.RED">red</msg>
+        <msg id="dev.GREEN">green</msg>
+        <msg id="dev.BLUE">blue</msg>
+        <msg id="dev.SETRGBLED">Set RGB-LED # to</msg>        
+        <msg id="dev.COMMON_CATHODE">Common cathode(-)</msg>
+        <msg id="dev.COMMON_ANODE">Common anode(+)</msg>
         <msg id="dev.AT">at Pin</msg>
         <msg id="dev.BUTTON">Button</msg>
         <msg id="dev.PRESSED">pressed</msg>

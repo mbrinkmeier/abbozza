@@ -13,16 +13,14 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="NetBeansProjects"/>
         <group>
-            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/AbbozzaServer.java</file>
-            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/JarDirHandler.java</file>
-            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/Connection.js</file>
-            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/arduino.html</file>
-            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/gui/field_nameinput.js</file>
-            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
-        </group>
-        <group>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/ToolboxMgr.js</file>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/arduino/Boards.js</file>
+        </group>
+        <group>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/arduino/Boards.js</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/src/de/uos/inf/did/abbozza/handler/AbstractHandler.java</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/gui/field_pindropdown.js</file>
+            <file>file:/home/mbrinkmeier/Projekte/abbozza/lib/js/abbozza/arduino/features.xml</file>
         </group>
     </open-files>
 </project-private>
