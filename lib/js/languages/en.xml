@@ -217,6 +217,16 @@ Continuing?</msg>
         <msg id="dev.ON">on</msg>
         <msg id="dev.OFF">off</msg>
         <msg id="dev.LED">LED</msg>
+        <msg id="dev.RGBLED">RGB-LED</msg>
+        <msg id="dev.REDPIN">Pin for red</msg>
+        <msg id="dev.GREENPIN">Pin for green</msg>
+        <msg id="dev.BLUEPIN">Pin for blue</msg>
+        <msg id="dev.RED">red</msg>
+        <msg id="dev.GREEN">green</msg>
+        <msg id="dev.BLUE">blue</msg>
+        <msg id="dev.SETRGBLED">Set RGB-LED # to</msg>        
+        <msg id="dev.COMMON_CATHODE">Common cathode(-)</msg>
+        <msg id="dev.COMMON_ANODE">Common anode(+)</msg>
         <msg id="dev.AT">at Pin</msg>
         <msg id="dev.BUTTON">Button</msg>
         <msg id="dev.PRESSED">pressed</msg>
