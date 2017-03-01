@@ -46,9 +46,9 @@ public class AbbozzaCalliopeInstaller extends javax.swing.JFrame {
      */
     public AbbozzaCalliopeInstaller() {
         initComponents();
-        
+
         String osname = System.getProperty("os.name").toLowerCase();
-        if ( osname.contains("mac") ) {
+        if (osname.contains("mac")) {
             // OsX only requires the command 'open'
             browserField.setText("open");
             browserField.setEnabled(false);
@@ -72,12 +72,13 @@ public class AbbozzaCalliopeInstaller extends javax.swing.JFrame {
             if (result == JOptionPane.NO_OPTION) {
                 System.exit(1);
             }
-            File prefFile = new File(abbozzaDir+"/abbozza.cfg");
+            File prefFile = new File(abbozzaDir + "/abbozza.cfg");
             Properties config = new Properties();
             try {
                 config.load(new FileInputStream(prefFile));
                 browserField.setText(config.getProperty("browserPath"));
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
     }
 
@@ -245,98 +246,105 @@ public class AbbozzaCalliopeInstaller extends javax.swing.JFrame {
     private void installButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_installButtonActionPerformed
         File installDir = new File(installField.getText());
         File browserFile = new File(browserField.getText());
-        // Find Jar for installation
-        File file = new File(System.getProperty("user.dir"), "Abbozza.jar");
-        if (file.exists()) {
-            // Create abbozza Dir
-            abbozzaDir = installDir.getAbsolutePath();
-            File abzDir = new File(abbozzaDir);
-            abzDir.mkdirs();
-            // Copy jar file to install dir
-            File jar = new File(abbozzaDir + "/Abbozza.jar");
-            File backup = new File(abbozzaDir + "/Abbozza_" + System.currentTimeMillis() + ".jar_");
-            try {
-                if (jar.exists()) {
-                    Files.move(jar.toPath(), backup.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                }
-                jar.createNewFile();
-                Files.copy(file.toPath(), jar.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                
+        try {
+            // Find jar used to install
+            File file = new File(AbbozzaInstaller.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            // If file exists
+            if (file.exists()) {
+                // Create abbozza Dir
+                abbozzaDir = installDir.getAbsolutePath();
+                File abzDir = new File(abbozzaDir);
+                abzDir.mkdirs();
+                // Copy jar file to install dir
+                File jar = new File(abbozzaDir + "/Abbozza.jar");
+                File backup = new File(abbozzaDir + "/Abbozza_" + System.currentTimeMillis() + ".jar_");
+                try {
+                    if (jar.exists()) {
+                        Files.move(jar.toPath(), backup.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    }
+                    jar.createNewFile();
+                    Files.copy(file.toPath(), jar.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
                 // Extract scripts
                 /*
-                JarFile jarFile = new JarFile(jar);
-                File libDir = new File(sketchbookDir + "/libraries/Abbozza/");
-                libDir.mkdirs();
+                     JarFile jarFile = new JarFile(jar);
+                     File libDir = new File(sketchbookDir + "/libraries/Abbozza/");
+                     libDir.mkdirs();
                 
-                JarEntry entry = jarFile.getJarEntry("libraries/Abbozza/abbozza.h");
-                File target = new File(sketchbookDir + "/libraries/Abbozza/abbozza.h");
-                Files.copy(jarFile.getInputStream(entry), target.toPath(),StandardCopyOption.REPLACE_EXISTING);
+                     JarEntry entry = jarFile.getJarEntry("libraries/Abbozza/abbozza.h");
+                     File target = new File(sketchbookDir + "/libraries/Abbozza/abbozza.h");
+                     Files.copy(jarFile.getInputStream(entry), target.toPath(),StandardCopyOption.REPLACE_EXISTING);
                 
-                entry = jarFile.getJarEntry("libraries/Abbozza/abbozza.cpp");
-                target = new File(sketchbookDir + "/libraries/Abbozza/abbozza.cpp");
-                Files.copy(jarFile.getInputStream(entry),target.toPath(),StandardCopyOption.REPLACE_EXISTING);
-                */
-                
-                // Standardkonfiguration
-                File prefFile = new File(System.getProperty("user.home")+"/.abbozza/calliope/");
-                prefFile.mkdirs();                
-                prefFile = new File(System.getProperty("user.home")+"/.abbozza/calliope/abbozza.cfg"); 
-                prefFile.createNewFile();
-		Properties config = new Properties();
+                     entry = jarFile.getJarEntry("libraries/Abbozza/abbozza.cpp");
+                     target = new File(sketchbookDir + "/libraries/Abbozza/abbozza.cpp");
+                     Files.copy(jarFile.getInputStream(entry),target.toPath(),StandardCopyOption.REPLACE_EXISTING);
+                     */
+                    // Standardkonfiguration
+                    File prefFile = new File(System.getProperty("user.home") + "/.abbozza/calliope/");
+                    prefFile.mkdirs();
+                    prefFile = new File(System.getProperty("user.home") + "/.abbozza/calliope/abbozza.cfg");
+                    prefFile.createNewFile();
+                    Properties config = new Properties();
 
-                config.setProperty("freshInstall","true");
-                config.setProperty("browserPath", browserField.getText());
+                    config.setProperty("freshInstall", "true");
+                    config.setProperty("browserPath", browserField.getText());
 
-                config.store(new FileOutputStream(prefFile), "abbozza! preferences");
-    
-            // Create Script
-            } catch (IOException e1) {
-                JOptionPane.showMessageDialog(this,"Error during installation of abbozza!\n" 
-                        + e1.getLocalizedMessage(),"abbozza! Error",JOptionPane.ERROR_MESSAGE);
+                    config.store(new FileOutputStream(prefFile), "abbozza! preferences");
+
+                    // Create Script
+                } catch (IOException e1) {
+                    JOptionPane.showMessageDialog(this, "Error during installation of abbozza!\n"
+                            + e1.getLocalizedMessage(), "abbozza! Error", JOptionPane.ERROR_MESSAGE);
+                    this.setVisible(false);
+                    System.exit(1);
+                }
+
+                try {
+                    File scriptFile;
+                    String osname = System.getProperty("os.name").toLowerCase();
+                    if (osname.contains("linux") || osname.contains("mac")) {
+                        // The script for Linux and Mac OsX are identical
+                        AbbozzaLogger.out("Writing " + abbozzaDir + "/abbozzaCalliope.sh", AbbozzaLogger.INFO);
+                        scriptFile = new File(abbozzaDir + "/abbozzaCalliope.sh");
+                        scriptFile.createNewFile();
+                        PrintWriter writer = new PrintWriter(scriptFile);
+                        writer.println("#!/bin/sh ");
+                        writer.println("cd " + abbozzaDir);
+                        writer.println("java -jar Abbozza.jar calliope");
+                        scriptFile.setExecutable(true);
+                        writer.flush();
+                        writer.close();
+                    } else if (osname.contains("win")) {
+                        scriptFile = new File(abbozzaDir + "\\abbozzaCalliope.bat");
+                        scriptFile.createNewFile();
+                        PrintWriter writer = new PrintWriter(scriptFile);
+                        writer.println("cd " + abbozzaDir);
+                        writer.println("java -jar Abbozza.jar calliope");
+                        scriptFile.setExecutable(true);
+                        writer.flush();
+                        writer.close();
+                    }
+
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(this, "Das Start-Skript konnte nicht geschrieben werden: " + abbozzaDir + "\\abbozzaCalliope.bat", "Fehler bei der Installation", JOptionPane.INFORMATION_MESSAGE);
+                    this.setVisible(false);
+                    System.exit(1);
+                }
+
+                JOptionPane.showMessageDialog(this, "Die Installation war erfolgreich!", "abbozza! Calliope installiert", JOptionPane.INFORMATION_MESSAGE);
                 this.setVisible(false);
+                System.exit(0);
+            } else {
+                JOptionPane.showMessageDialog(this, "Abbozza.jar nicht gefunden!", "abbozza! Installationsfehler ",
+                        JOptionPane.ERROR_MESSAGE);
                 System.exit(1);
             }
-
-            try {
-                File scriptFile;
-                String osname = System.getProperty("os.name").toLowerCase();
-                if ( osname.contains("linux") || osname.contains("mac") ) {
-                    // The script for Linux and Mac OsX are identical
-                    AbbozzaLogger.out("Writing " + abbozzaDir + "/abbozzaCalliope.sh",AbbozzaLogger.INFO);
-                    scriptFile = new File(abbozzaDir + "/abbozzaCalliope.sh");
-                    scriptFile.createNewFile();
-                    PrintWriter writer = new PrintWriter(scriptFile);
-                    writer.println("#!/bin/sh ");
-                    writer.println("cd " + abbozzaDir);
-                    writer.println("java -jar Abbozza.jar calliope");
-                    scriptFile.setExecutable(true);
-                    writer.flush();
-                    writer.close();
-                } else if ( osname.contains("win")) {
-                    scriptFile = new File(abbozzaDir + "\\abbozzaCalliope.bat");                    
-                    scriptFile.createNewFile();
-                    PrintWriter writer = new PrintWriter(scriptFile);
-                    writer.println("cd " + abbozzaDir);
-                    writer.println("java -jar Abbozza.jar calliope");
-                    scriptFile.setExecutable(true);
-                    writer.flush();
-                    writer.close();
-                }
-                    
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Das Start-Skript konnte nicht geschrieben werden: " + abbozzaDir + "\\abbozzaCalliope.bat","Fehler bei der Installation",JOptionPane.INFORMATION_MESSAGE);
-                this.setVisible(false);
-                System.exit(1);    
-            }
-                
-            JOptionPane.showMessageDialog(this, "Die Installation war erfolgreich!","abbozza! Calliope installiert",JOptionPane.INFORMATION_MESSAGE);
-            this.setVisible(false);
-            System.exit(0);
-        } else {
-            JOptionPane.showMessageDialog(this, "Abbozza.jar nicht gefunden!", "abbozza! Installationsfehler ",
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Jar nicht gefunden!", "abbozza! Installationsfehler ",
                     JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
+
     }//GEN-LAST:event_installButtonActionPerformed
 
     private void installDirButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_installDirButtonActionPerformed
