@@ -123,25 +123,25 @@ public abstract class AbbozzaServer implements HttpHandler {
 
     /**
      * The system independent initialization of the server
-     * 
-     * @param system 
+     *
+     * @param system
      */
     public void init(String system) {
         // If there is already an Abbozza instance, silently die
         if (instance != null) {
             return;
         }
-        
+
         // Set the system name
         this.system = system;
-        
+
         // Initialize the logger
         AbbozzaLogger.init();
         AbbozzaLogger.setLevel(AbbozzaLogger.DEBUG);
-                
+
         // Set static instance
         instance = this;
-        
+
         AbbozzaLogger.out("Setting paths");
         setPaths();
 
@@ -158,7 +158,7 @@ public abstract class AbbozzaServer implements HttpHandler {
 
         // Load plugins
         pluginManager = new PluginManager(this);
-                
+
         AbbozzaLocale.setLocale(config.getLocale());
 
         AbbozzaLogger.out("Version " + VERSION, AbbozzaLogger.INFO);
@@ -172,7 +172,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         } catch (MalformedURLException ex) {
             this._taskContext = null;
         }
-        
+
         // AbbozzaLocale.setLocale("de_DE");
         AbbozzaLogger.out(AbbozzaLocale.entry("msg.loaded"), AbbozzaLogger.INFO);
 
@@ -181,12 +181,11 @@ public abstract class AbbozzaServer implements HttpHandler {
         if (config.startAutomatically()) {
             this.startServer();
             if (config.startBrowser()) {
-                this.startBrowser(system+".html");
+                this.startBrowser(system + ".html");
             }
         }
 
     }
-    
 
     public void setPaths() {
         // Sketchbook is in <user.home>
@@ -196,10 +195,10 @@ public abstract class AbbozzaServer implements HttpHandler {
         // Local Jar file is found in the current directory
         localJarPath = System.getProperty("user.dir");
         URL url = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation();
-        int  p = url.getPath().lastIndexOf("/");
-        globalJarPath = url.getPath().substring(0, p+1);
+        int p = url.getPath().lastIndexOf("/");
+        globalJarPath = url.getPath().substring(0, p + 1);
         // globalJarPath = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        
+
         localPluginPath = localJarPath + "/plugins";
         globalPluginPath = globalJarPath + "/plugins";
     }
@@ -219,19 +218,19 @@ public abstract class AbbozzaServer implements HttpHandler {
     public String getLocalJarPath() {
         return localJarPath;
     }
-    
+
     public String getGlobalPluginPath() {
         return globalPluginPath;
     }
-    
+
     public String getLocalPluginPath() {
         return localPluginPath;
     }
-    
+
     public String getSystem() {
         return this.system;
     }
-    
+
     public void findJarsAndDirs(JarDirHandler jarHandler) {
         jarHandler.clear();
         jarHandler.addDir(localJarPath, "Local directory");
@@ -240,10 +239,9 @@ public abstract class AbbozzaServer implements HttpHandler {
         jarHandler.addJar(globalJarPath + "/Abbozza.jar", "Global jar");
     }
 
-    
     // Must be overriden to register the system specific handlers
     public abstract void registerSystemHandlers();
-        
+
     public void registerHandlers() {
         registerSystemHandlers();
         httpServer.createContext("/abbozza/load", new LoadHandler(this));
@@ -259,14 +257,14 @@ public abstract class AbbozzaServer implements HttpHandler {
         httpServer.createContext("/abbozza/monitor", monitorHandler);
         httpServer.createContext("/abbozza/monitorresume", monitorHandler);
         httpServer.createContext("/abbozza/version", new VersionHandler(this));
-        httpServer.createContext("/abbozza/plugins",  this.pluginManager);
+        httpServer.createContext("/abbozza/plugins", this.pluginManager);
         httpServer.createContext("/abbozza/", this /* handler */);
         httpServer.createContext("/task/", new TaskHandler(this, jarHandler));
         httpServer.createContext("/", jarHandler);
-        
+
         this.pluginManager.registerPluginHandlers(httpServer);
     }
-    
+
     /**
      * Request handling
      *
@@ -292,8 +290,8 @@ public abstract class AbbozzaServer implements HttpHandler {
             while (in.ready()) {
                 line = in.readLine();
             }
-            */
-            
+             */
+
             Headers responseHeaders = exchg.getResponseHeaders();
             responseHeaders.set("Content-Type", "text/plain");
             exchg.sendResponseHeaders(200, 0);
@@ -304,92 +302,97 @@ public abstract class AbbozzaServer implements HttpHandler {
     // Tool handling
     // Moves a tool to the back
     public abstract void toolToBack();
+
     public abstract void toolSetCode(String code);
+
     public abstract void toolIconify();
 
     public abstract String compileCode(String code);
+
     public abstract String uploadCode(String code);
-    
-    
-    
+
     public void checkForUpdate(boolean reportNoUpdate) {
         // TODO !!!
         String updateUrl = AbbozzaServer.getConfig().getUpdateUrl();
         String version = "";
 
-        int major;
-        int minor;
-        int rev;
-        int hotfix;
-        
+        int major = 0;
+        int minor = 0;
+        int rev = 0;
+        int hotfix = 0;
+
         // Retrieve the update version from <updateUrl>/VERSION
+        URL url;
         try {
-            URL url = new URL(updateUrl + "VERSION");
+            url = new URL(updateUrl + "VERSION");
             BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
             version = br.readLine();
             br.close();
             int pos = version.indexOf('.');
-            major = Integer.parseInt(version.substring(0, pos));
-            int pos2 = version.indexOf('.', pos + 1);
-            minor = Integer.parseInt(version.substring(pos + 1, pos2));
-            pos = version.indexOf('.',pos2 + 1);
-            rev = Integer.parseInt(version.substring(pos2 + 1,pos));
-            hotfix = Integer.parseInt(version.substring(pos + 1));
-        } catch (Exception ex) {
-            AbbozzaLogger.out("Could not check update version", AbbozzaLogger.INFO);
-            return;
-        }
-        AbbozzaLogger.out("Checking for update at " + updateUrl, AbbozzaLogger.INFO);
-        AbbozzaLogger.out("Update version " + major + "." + minor + "." + rev, AbbozzaLogger.INFO);
-
-        // Checking version of update
-        if ((major > VER_MAJOR)
-                || ((major == VER_MAJOR) && (minor > VER_MINOR))
-                || ((major == VER_MAJOR) && (minor == VER_MINOR) && (rev > VER_REV))
-                || ((major == VER_MAJOR) && (minor == VER_MINOR) && (rev > VER_REV) && (hotfix > VER_HOTFIX)) ) {
-            AbbozzaLogger.out("New version found", AbbozzaLogger.INFO);
-            int res = JOptionPane.showOptionDialog(null, AbbozzaLocale.entry("gui.new_version", version), AbbozzaLocale.entry("gui.new_version_title"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-            if (res == JOptionPane.NO_OPTION) {
-                return;
-            }
-            URL url;
             try {
-                // Rename current jar
-                // AbbozzaLogger.out(this.getSketchbookPath(),AbbozzaLogger.ALL);
-                URL curUrl = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation();
-                File cur = new File(curUrl.toURI());
-                AbbozzaLogger.out("Current jar found at " + cur.getAbsolutePath(),AbbozzaLogger.INFO);
-                SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-                String today = format.format(new Date());
-                File dir = new File(cur.getParentFile().getAbsolutePath());
-                if (!dir.exists()) {
-                    AbbozzaLogger.out("Creating directory " + dir.getPath(), AbbozzaLogger.INFO);
-                    dir.mkdir();
-                }
-                AbbozzaLogger.out("Moving old version to " + dir.getPath() + "/Abbozza." + today + ".jar", AbbozzaLogger.INFO);
-                cur.renameTo(new File(dir.getPath() + "/Abbozza." + today + ".jar"));
-                AbbozzaLogger.out("Downloading version " + version, AbbozzaLogger.INFO);
-                url = new URL(updateUrl + "Abbozza.jar");
-                URLConnection conn = url.openConnection();
-                byte buffer[] = new byte[4096];
-                int n = -1;
-                InputStream ir = conn.getInputStream();
-                FileOutputStream ow = new FileOutputStream(new File(curUrl.toURI()));
-                while ((n = ir.read(buffer)) != -1) {
-                    ow.write(buffer, 0, n);
-                }
-                ow.close();
-                ir.close();
-                AbbozzaLogger.out("Stopping arduino", AbbozzaLogger.INFO);
-                System.exit(0);
-            } catch (Exception ex) {
-                Logger.getLogger(AbbozzaServer.class.getName()).log(Level.SEVERE, null, ex);
+                major = Integer.parseInt(version.substring(0, pos));
+                int pos2 = version.indexOf('.', pos + 1);
+                minor = Integer.parseInt(version.substring(pos + 1, pos2));
+                pos = version.indexOf('.', pos2 + 1);
+                rev = Integer.parseInt(version.substring(pos2 + 1, pos));
+                hotfix = Integer.parseInt(version.substring(pos + 1));
+            } catch (NumberFormatException ex) {
             }
-        } else {
-            AbbozzaLogger.out(AbbozzaLocale.entry("gui.no_update"), AbbozzaLogger.INFO);
-            if (reportNoUpdate) {
-                JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("gui.no_update"));
+            AbbozzaLogger.out("Checking for update at " + updateUrl, AbbozzaLogger.INFO);
+            AbbozzaLogger.out("Update version " + major + "." + minor + "." + rev, AbbozzaLogger.INFO);
+
+            // Checking version of update
+            if ((major > VER_MAJOR)
+                    || ((major == VER_MAJOR) && (minor > VER_MINOR))
+                    || ((major == VER_MAJOR) && (minor == VER_MINOR) && (rev > VER_REV))
+                    || ((major == VER_MAJOR) && (minor == VER_MINOR) && (rev > VER_REV) && (hotfix > VER_HOTFIX))) {
+                AbbozzaLogger.out("New version found", AbbozzaLogger.INFO);
+                int res = JOptionPane.showOptionDialog(null, AbbozzaLocale.entry("gui.new_version", version), AbbozzaLocale.entry("gui.new_version_title"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                if (res == JOptionPane.NO_OPTION) {
+                    return;
+                }
+                try {
+                    // Rename current jar
+                    // AbbozzaLogger.out(this.getSketchbookPath(),AbbozzaLogger.ALL);
+                    URL curUrl = AbbozzaServer.class.getProtectionDomain().getCodeSource().getLocation();
+                    File cur = new File(curUrl.toURI());
+                    AbbozzaLogger.out("Current jar found at " + cur.getAbsolutePath(), AbbozzaLogger.INFO);
+                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+                    String today = format.format(new Date());
+                    File dir = new File(cur.getParentFile().getAbsolutePath());
+                    if (!dir.exists()) {
+                        AbbozzaLogger.out("Creating directory " + dir.getPath(), AbbozzaLogger.INFO);
+                        dir.mkdir();
+                    }
+                    AbbozzaLogger.out("Moving old version to " + dir.getPath() + "/Abbozza." + today + ".jar", AbbozzaLogger.INFO);
+                    cur.renameTo(new File(dir.getPath() + "/Abbozza." + today + ".jar"));
+                    AbbozzaLogger.out("Downloading version " + version, AbbozzaLogger.INFO);
+                    url = new URL(updateUrl + "Abbozza.jar");
+                    URLConnection conn = url.openConnection();
+                    byte buffer[] = new byte[4096];
+                    int n = -1;
+                    InputStream ir = conn.getInputStream();
+                    FileOutputStream ow = new FileOutputStream(new File(curUrl.toURI()));
+                    while ((n = ir.read(buffer)) != -1) {
+                        ow.write(buffer, 0, n);
+                    }
+                    ow.close();
+                    ir.close();
+                    AbbozzaLogger.out("Stopping arduino", AbbozzaLogger.INFO);
+                    System.exit(0);
+                } catch (Exception ex) {
+                    Logger.getLogger(AbbozzaServer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                AbbozzaLogger.out(AbbozzaLocale.entry("gui.no_update"), AbbozzaLogger.INFO);
+                if (reportNoUpdate) {
+                    JOptionPane.showMessageDialog(null, AbbozzaLocale.entry("gui.no_update"));
+                }
             }
+        } catch (MalformedURLException ex) {
+            AbbozzaLogger.err("Malformed URL for update: " + updateUrl);
+        } catch (IOException ex) {
+            AbbozzaLogger.err("VERSION file not found");
         }
     }
 
@@ -399,8 +402,8 @@ public abstract class AbbozzaServer implements HttpHandler {
 
             this.isStarted = true;
 
-            AbbozzaLogger.out("Duplexer Started ... ",AbbozzaLogger.INFO);
-            AbbozzaLogger.out("Starting ... ",AbbozzaLogger.INFO);
+            AbbozzaLogger.out("Duplexer Started ... ", AbbozzaLogger.INFO);
+            AbbozzaLogger.out("Starting ... ", AbbozzaLogger.INFO);
 
             serverPort = config.getServerPort();
             while (httpServer == null) {
@@ -417,7 +420,7 @@ public abstract class AbbozzaServer implements HttpHandler {
                 }
             }
 
-            AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_started", Integer.toString(config.getServerPort())),4);
+            AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_started", Integer.toString(config.getServerPort())), 4);
 
             String url = "http://localhost:" + config.getServerPort() + "/" + system + ".html";
             AbbozzaLogger.out("abbozza: " + AbbozzaLocale.entry("msg.server_reachable", url));
@@ -445,7 +448,7 @@ public abstract class AbbozzaServer implements HttpHandler {
             switch (selected.toString()) {
                 case "0":
                     AbbozzaLogger.out("Aborted by user");
-                    System.exit(0);                    
+                    System.exit(0);
                     break;
                 case "1":
                     boolean failed = false;
@@ -494,7 +497,7 @@ public abstract class AbbozzaServer implements HttpHandler {
             }
         }
     }
-    
+
     // @TODO Change the path
     /*
     public byte[] getLocaleBytes(String locale) throws IOException {
@@ -509,8 +512,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         AbbozzaLogger.out("Could not find /js/languages/" + locale + ".xml", AbbozzaLogger.ERROR);
         return null;
     }
-    */
-    
+     */
     // @TODO change path
     public Vector getLocales() {
         Vector locales = new Vector();
@@ -544,21 +546,20 @@ public abstract class AbbozzaServer implements HttpHandler {
         return locales;
     }
 
-    
     /**
-     * This operation constructs the option tree from the global
-     * options.xml and the option tag inside all plugins.
-     * 
+     * This operation constructs the option tree from the global options.xml and
+     * the option tag inside all plugins.
+     *
      * @return The XML-document containing the option tree
      */
     public Document getOptionTree() {
         Document optionsXml = null;
-        
+
         if (jarHandler != null) {
-            
+
             // Retreive the global option tree
             try {
-                byte[] bytes = jarHandler.getBytes("/js/abbozza/" + system +"/options.xml");
+                byte[] bytes = jarHandler.getBytes("/js/abbozza/" + system + "/options.xml");
                 if (bytes != null) {
                     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                     DocumentBuilder builder;
@@ -568,27 +569,26 @@ public abstract class AbbozzaServer implements HttpHandler {
                     optionsXml = builder.parse(input);
                 }
                 // printXML(optionsXml);
-                
+
                 // If successful, add the plugin trees
                 Node root = optionsXml.getElementsByTagName("options").item(0);
                 Enumeration<Plugin> plugins = this.pluginManager.plugins();
-                while ( plugins.hasMoreElements() ) {
+                while (plugins.hasMoreElements()) {
                     Plugin plugin = plugins.nextElement();
                     Node pluginOpts = plugin.getOptions();
-                   
+
                     ((Element) pluginOpts).setAttribute("plugin", plugin.getId());
-                    
+
                     optionsXml.adoptNode(pluginOpts);
                     root.appendChild(pluginOpts);
                 }
-                               
+
             } catch (Exception ex) {
                 ex.printStackTrace(System.out);
             }
         }
         return optionsXml;
     }
-
 
     public int openConfigDialog() {
         AbbozzaConfig config = this.getConfiguration();
@@ -598,7 +598,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         dialog.setModal(true);
         dialog.toFront();
         dialog.setVisible(true);
-        toolIconify();        
+        toolIconify();
         if (dialog.getState() == 0) {
             config.set(dialog.getConfiguration());
             AbbozzaLocale.setLocale(config.getLocale());
@@ -612,11 +612,11 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
 
     }
-    
+
     public void monitorIsClosed() {
         this.monitorHandler.close();
     }
-    
+
     public AbbozzaConfig getConfiguration() {
         return config;
     }
@@ -635,34 +635,33 @@ public abstract class AbbozzaServer implements HttpHandler {
     public void setLastSketchFile(URL lastSketchFile) {
         this._lastSketchFile = lastSketchFile;
     }
-    
+
     public void setTaskContext(URL context) {
         _taskContext = context;
-        AbbozzaLogger.out("Task context set to " + _taskContext,AbbozzaLogger.DEBUG);
+        AbbozzaLogger.out("Task context set to " + _taskContext, AbbozzaLogger.DEBUG);
     }
-    
-    public URL getTaskContext () {
+
+    public URL getTaskContext() {
         return _taskContext;
     }
 
     public JarDirHandler getJarHandler() {
         return jarHandler;
     }
-        
+
     /*
     public int getRunningServerPort() {
         return serverPort;
     }
-    */
-    
+     */
     public static PluginManager getPluginManager() {
         return instance.pluginManager;
     }
-    
+
     public static Plugin getPlugin(String id) {
         return instance.pluginManager.getPlugin(id);
     }
-    
+
     public static AbbozzaServer getInstance() {
         return instance;
     }
@@ -682,7 +681,7 @@ public abstract class AbbozzaServer implements HttpHandler {
         }
         System.out.println(sw.toString());
     }
-    
+
     public static void printXML(Document doc) {
         try {
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -700,10 +699,9 @@ public abstract class AbbozzaServer implements HttpHandler {
             ex.printStackTrace(System.out);
         }
     }
-    
-    
+
     public boolean checkLibrary(String name) {
-            return false;
+        return false;
     }
 
 }
