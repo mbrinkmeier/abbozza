@@ -90,6 +90,7 @@ Continuing?</msg>
         <msg id="gui.ask_for_id">Block ID:</msg>
         <msg id="gui.interrupts">Interrupts</msg>
         <msg id="gui.plugin_deactivated">Plugin # deactivated</msg>
+        <msg id="gui.unknown_block">Unknown block</msg>
         <msg id="gui.unknown_blocks">Unknown blocks!&#10;Are all required plugins activated?</msg>
     </gui>
     <menu>
