@@ -149,6 +149,10 @@ public abstract class AbbozzaServer implements HttpHandler {
         jarHandler = new JarDirHandler();
         findJarsAndDirs(jarHandler);
 
+        // Load plugins
+        pluginManager = new PluginManager(this);
+               
+
         /**
          * Read the configuration from <user.home>/.abbozza/<system>/abbozza.cfg
          */
@@ -156,9 +160,6 @@ public abstract class AbbozzaServer implements HttpHandler {
         System.out.println("Reading config from " + configPath);
         config = new AbbozzaConfig(configPath);
 
-        // Load plugins
-        pluginManager = new PluginManager(this);
-                
         AbbozzaLocale.setLocale(config.getLocale());
 
         AbbozzaLogger.out("Version " + VERSION, AbbozzaLogger.INFO);
@@ -567,19 +568,23 @@ public abstract class AbbozzaServer implements HttpHandler {
                     ByteArrayInputStream input = new ByteArrayInputStream(bytes);
                     optionsXml = builder.parse(input);
                 }
-                // printXML(optionsXml);
                 
                 // If successful, add the plugin trees
-                Node root = optionsXml.getElementsByTagName("options").item(0);
-                Enumeration<Plugin> plugins = this.pluginManager.plugins();
-                while ( plugins.hasMoreElements() ) {
-                    Plugin plugin = plugins.nextElement();
-                    Node pluginOpts = plugin.getOptions();
+                if (optionsXml != null) {
+                    printXML(optionsXml);
+                    Node root = optionsXml.getElementsByTagName("options").item(0);
+                    Enumeration<Plugin> plugins = this.pluginManager.plugins();
+                    AbbozzaLogger.err("Hier2");
+                    while ( plugins.hasMoreElements() ) {
+                        Plugin plugin = plugins.nextElement();
+                        Node pluginOpts = plugin.getOptions();
                    
-                    ((Element) pluginOpts).setAttribute("plugin", plugin.getId());
+                        ((Element) pluginOpts).setAttribute("plugin", plugin.getId());
                     
-                    optionsXml.adoptNode(pluginOpts);
-                    root.appendChild(pluginOpts);
+                        optionsXml.adoptNode(pluginOpts);
+                        root.appendChild(pluginOpts);
+                    }   
+                    AbbozzaLogger.err("Da");
                 }
                                
             } catch (Exception ex) {
