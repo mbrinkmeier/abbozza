@@ -149,15 +149,16 @@ public abstract class AbbozzaServer implements HttpHandler {
         jarHandler = new JarDirHandler();
         findJarsAndDirs(jarHandler);
 
+        // Load plugins
+        pluginManager = new PluginManager(this);
+               
+
         /**
          * Read the configuration from <user.home>/.abbozza/<system>/abbozza.cfg
          */
         configPath = System.getProperty("user.home") + "/.abbozza/" + this.system + "/abbozza.cfg";
         System.out.println("Reading config from " + configPath);
         config = new AbbozzaConfig(configPath);
-
-        // Load plugins
-        pluginManager = new PluginManager(this);
 
         AbbozzaLocale.setLocale(config.getLocale());
 
@@ -568,8 +569,6 @@ public abstract class AbbozzaServer implements HttpHandler {
                     ByteArrayInputStream input = new ByteArrayInputStream(bytes);
                     optionsXml = builder.parse(input);
                 }
-                // printXML(optionsXml);
-
                 // If successful, add the plugin trees
                 Node root = optionsXml.getElementsByTagName("options").item(0);
                 Enumeration<Plugin> plugins = this.pluginManager.plugins();
