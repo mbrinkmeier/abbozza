@@ -15,9 +15,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -314,25 +316,33 @@ public class AbbozzaInstaller extends javax.swing.JFrame {
                     this.setVisible(false);
                     System.exit(1);
                 }
-                /*
-                 try {
-                 // Install libraries
-                 JarFile jarFile = new JarFile(jar);
-                 File libDir = new File(sketchbookDir + "/libraries/Abbozza/");
-                 libDir.mkdirs();
+                
+                try {
+                    // Install libraries
+                    JarFile jarFile = new JarFile(jar);
+                    File libDir = new File(sketchbookDir + "/libraries/Abbozza/");
+                    libDir.mkdirs();
 
-                 JarEntry entry = jarFile.getJarEntry("libraries/Abbozza/abbozza.h");
-                 File target = new File(sketchbookDir + "/libraries/Abbozza/abbozza.h");
-                 Files.copy(jarFile.getInputStream(entry), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-                 entry = jarFile.getJarEntry("libraries/Abbozza/abbozza.cpp");
-                 target = new File(sketchbookDir + "/libraries/Abbozza/abbozza.cpp");
-                 Files.copy(jarFile.getInputStream(entry), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                 } (catch IOException ex) {
-                    
-                 }
-                 */
-
+                    JarEntry entry;
+                    Enumeration<JarEntry> entries = jarFile.entries();
+                    File dir = new File(sketchbookDir + "/libraries/Abbozza/");
+                    try {
+                        Files.createDirectory(dir.toPath());
+                    } catch (FileAlreadyExistsException ex) {}              
+                    while (entries.hasMoreElements()) {
+                        entry = entries.nextElement();
+                        if (entry.getName().startsWith("libraries/Abbozza/")) {
+                            String name = entry.getName().replace("libraries/Abbozza/", "");
+                            if ( name.length() > 0 ) {
+                                File target = new File(sketchbookDir + "/libraries/Abbozza/" + name);
+                                Files.copy(jarFile.getInputStream(entry), target.toPath(), StandardCopyOption.REPLACE_EXISTING);            
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace(System.err);
+                }
+                
                 // Create configuration file
                 try {
                     File prefFile = new File(System.getProperty("user.home") + "/.abbozza/arduino/abbozza.cfg");

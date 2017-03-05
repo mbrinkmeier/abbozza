@@ -90,6 +90,9 @@
             </Container>
             <Component class="javax.swing.JButton" name="sendButton">
               <Properties>
+                <Property name="mnemonic" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="KeyEvent.VK_ENTER" type="code"/>
+                </Property>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="AbbozzaLocale.entry(&quot;gui.send&quot;)" type="code"/>
                 </Property>

@@ -5,16 +5,14 @@
             <url>lib/js/abbozza/ToolboxMgr.js</url>
             <bookmark id="1">
                 <name/>
-                <line>80</line>
+                <line>79</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="NetBeansProjects"/>
-        <group>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/blocks/devices/RGB_LED.js</file>
-        </group>
+        <group/>
         <group/>
     </open-files>
 </project-private>

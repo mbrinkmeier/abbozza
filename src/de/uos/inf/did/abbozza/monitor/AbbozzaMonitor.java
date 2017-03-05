@@ -33,11 +33,14 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -188,6 +191,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel1.add(textPane, gridBagConstraints);
 
+        sendButton.setMnemonic(KeyEvent.VK_ENTER);
         sendButton.setText(AbbozzaLocale.entry("gui.send"));
         sendButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -437,4 +441,5 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         }
     }
 
+  
 }

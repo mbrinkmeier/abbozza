@@ -63,6 +63,7 @@ public class Plugin {
     private Node _feature;
     private Node _locales;
     private Node _requirements;
+    private String _system;
     private PluginHandler _handler;
     
    
@@ -93,6 +94,7 @@ public class Plugin {
             if ( plugins.getLength() > 0) {
                 Node root = plugins.item(0);
                 this._id = root.getAttributes().getNamedItem("id").getNodeValue();
+                this._system = root.getAttributes().getNamedItem("system").getNodeValue();
                 NodeList children = root.getChildNodes();
                 Node child;
                 for ( int i = 0; i < children.getLength(); i++) {
@@ -185,6 +187,14 @@ public class Plugin {
         return this._description;
     }
     
+    /**
+     * Returns the system for which this plugin is written.
+     * 
+     * @return the system id
+     */
+    public String getSystem() {
+        return this._system;
+    }
     /**
      * Returns a concatenation of all javascript files belonging to the plugin
      * 

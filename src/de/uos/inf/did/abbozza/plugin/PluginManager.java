@@ -309,6 +309,9 @@ public class PluginManager implements HttpHandler {
     }
 
     private boolean checkRequirements(Plugin plugin) {
+        if ( !plugin.getSystem().equals( this._abbozza.getSystem()) ) {
+            return false;
+        }
         boolean foundAll = true;
         Node requirements = plugin.getRequirements();
         if ( requirements == null ) return true;
