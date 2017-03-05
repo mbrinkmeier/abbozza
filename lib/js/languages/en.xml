@@ -192,9 +192,9 @@ Continuing?</msg>
         <msg id ="io.HIGH">high</msg>
         <msg id ="io.LOW">low</msg>
         <msg id ="io.READDPIN">Digital value of pin</msg>
-        <msg id ="io.SETDPIN">Set digital pin # to</msg>
+        <msg id ="io.SETDPIN">Set pin # to digital value</msg>
         <msg id ="io.READAPIN">Analog value of pin</msg>
-        <msg id ="io.SETAPIN">Set analog pin # to</msg>
+        <msg id ="io.SETAPIN">Set pin # to analog value</msg>
 		
         <msg id ="serial.BEGINRATE">Start communication with the computer with # baud</msg>
         <msg id ="serial.BEGIN">Start communication with the computer</msg>
