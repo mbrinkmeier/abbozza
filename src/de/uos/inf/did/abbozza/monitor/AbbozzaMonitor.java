@@ -38,7 +38,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.AbstractQueue;
 import java.util.HashMap;
+import java.util.concurrent.ArrayBlockingQueue;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JDialog;
@@ -61,6 +63,9 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
     private Serial serial;
     private StringBuffer unprocessedMsg;    
     private HashMap<String,MonitorPanel> panels;
+    protected ArrayBlockingQueue<Message> _msgQueue;
+    private Sender _sender;
+    
     // private AbbozzaMonitorPanel monitor = null;
 
     /**
@@ -69,11 +74,12 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
      * @param boardport
      */
     public AbbozzaMonitor(BoardPort boardport) {
-        // System.out.println("AbbozzaMonitor start");
         setBoardPort(boardport);
-        // System.out.println("AbbozzaMonitor " + boardport);
+        _msgQueue = new ArrayBlockingQueue<Message>(10);
+        _sender = new Sender(this);
+        _sender.start();
+        
         initComponents();
-        // System.out.println("AbbozzaMonitor after init");
 
         this.sendText.getEditor().addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -84,6 +90,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent event) {
                 try {
+                    _sender.stopIt();
                     closed = true;
                     close();
                     AbbozzaServer.getInstance().monitorIsClosed();
@@ -286,33 +293,25 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         }
 
         // Default handling
-        textArea.append(s);
+        appendText(s);
 
         // Send to all monitor panels
-        processMessage(s);
-        
-        /* if (monitor != null) {
-            monitor.processMessage(s);
-        }*/
-        
-        // Now check line by line by prefix
-
-        //System.out.println("gui append " + s.length());
-        /*
-         if (autoscrollBox.isSelected()) {
-         textArea.appendTrim(s);
-         textArea.setCaretPosition(textArea.getDocument().getLength());
-         } else {
-         textArea.appendNoTrim(s);
-         }
-         */
+        processMessage(s);        
+    }
+    
+    protected void writeMessage(String msg) {
+        serial.write(msg);
+        appendText("-> " + msg + "\n");
     }
     
     private void sendMessage(String msg) {
-        serial.write(msg+'\n');
-        this.textArea.append(">>> " + msg+'\n');
+        _msgQueue.add(new Message(Message.MSG_SEND_AND_FORGET,"",msg));
     }
 
+    protected void appendText(String msg) {
+        this.textArea.append(msg);
+    }
+    
     private void processMessage(String s) {
         unprocessedMsg.append(s);
         

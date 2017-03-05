@@ -8,36 +8,50 @@ AbbozzaParser::AbbozzaParser() {
 
 
 void AbbozzaParser::check() {
+    int start, end;
     String newBuf;
+    String prefix;
     if ( Serial.available() ) {
         // append string to buffer
         newBuf = Serial.readString();
         buffer.concat(newBuf);
+        Serial.println("Buffer : '" + buffer + "'");
         // find next line
-        int pos = buffer.indexOf('\n');
-        while ( pos >= 0 ) {
-            currentLine = buffer.substring(0,pos);
-            buffer.remove(0,pos+1);
-            if ( (currentLine.charAt(0) == '>') && (currentLine.charAt(1) == '>')) {
-                currentLine.remove(0,2);
-                execute();
+        do {
+            currentLine = "";
+            start = buffer.indexOf("[[");
+            if ( start >= 0 ) {
+                end = buffer.indexOf("]]");
+                if ( end >= 0 ) {
+                    prefix = buffer.substring(0,start);
+                    currentLine = buffer.substring(start+2,end);
+                    currentLine.replace('\n',' ');
+                    currentLine.replace('\t',' ');
+                    buffer.remove(0,end+2);
+                    Serial.println("executing '" + currentLine + "'");
+                    execute();                    
+                }
             }
-            pos = buffer.indexOf('\n');
-        }
+        } while ( currentLine.length() > 0 );
     }
 }
 
 String AbbozzaParser::parseWord() {
-    int pos = line.indexOf(' ');
-    String command = line.substring(0,pos);
+    int pos = currentLine.indexOf(' ');
+    String command = currentLine.substring(0,pos);
     currentLine.remove(0,pos);
     currentLine.trim();    
     return command;
 }
 
 int AbbozzaParser::parseInt() {
-    String word = getWord();
+    String word = parseWord();
     return word.toInt();
+}
+
+int AbbozzaParser::parseFloat() {
+    String word = parseWord();
+    return word.toFloat();
 }
 
 void AbbozzaParser::execute() {
