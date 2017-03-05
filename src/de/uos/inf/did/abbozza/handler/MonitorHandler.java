@@ -107,4 +107,7 @@ public class MonitorHandler extends AbstractHandler {
         monitor = null;
     }
 
+    public AbbozzaMonitor getMonitor() {
+        return monitor;
+    }
 }

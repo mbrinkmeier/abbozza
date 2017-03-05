@@ -39,6 +39,7 @@ import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.arduino.handler.BoardHandler;
+import de.uos.inf.did.abbozza.arduino.handler.SerialHandler;
 import de.uos.inf.did.abbozza.handler.CheckHandler;
 import de.uos.inf.did.abbozza.handler.ConfigDialogHandler;
 import de.uos.inf.did.abbozza.handler.ConfigHandler;
@@ -129,6 +130,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
     public void registerSystemHandlers() {
         httpServer.createContext("/abbozza/board", new BoardHandler(this, false));
         httpServer.createContext("/abbozza/queryboard", new BoardHandler(this, true));
+        httpServer.createContext("/abbozza/serial", new SerialHandler(this));
     }
 
     

@@ -22,6 +22,8 @@
  */
 package de.uos.inf.did.abbozza.monitor;
 
+import com.sun.net.httpserver.HttpExchange;
+
 /**
  *
  * @author michael
@@ -29,15 +31,25 @@ package de.uos.inf.did.abbozza.monitor;
 public class Message {
     
     public final static int MSG_SEND_AND_FORGET = 0;
+    public final static int MSG_WAIT_FOR_RESPONSE = 1;
     
     private String _id;
     private String _msg;
     private int _type;
+    private HttpExchange _exchg;
     
     public Message(int type, String id, String msg) {
         _id = id;
         _msg = msg;
         _type = type;
+        _exchg = null;
+    }
+
+    public Message(int type, String id, String msg, HttpExchange exchg) {
+        _id = id;
+        _msg = msg;
+        _type = type;
+        _exchg = exchg;
     }
     
     public String getMsg() {

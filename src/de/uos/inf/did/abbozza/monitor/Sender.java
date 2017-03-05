@@ -67,6 +67,8 @@ public class Sender extends Thread {
             case Message.MSG_SEND_AND_FORGET :
                 _monitor.writeMessage(msg.toString());  
                 break;
+            case Message.MSG_WAIT_FOR_RESPONSE :
+                break;
         }
     }
  

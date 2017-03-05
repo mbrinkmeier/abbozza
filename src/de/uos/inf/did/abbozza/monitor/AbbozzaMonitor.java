@@ -26,6 +26,7 @@
 package de.uos.inf.did.abbozza.monitor;
 
 import cc.arduino.packages.BoardPort;
+import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaServer;
@@ -304,8 +305,12 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         appendText("-> " + msg + "\n");
     }
     
-    private void sendMessage(String msg) {
+    public void sendMessage(String msg) {
         _msgQueue.add(new Message(Message.MSG_SEND_AND_FORGET,"",msg));
+    }
+
+    public void sendMessage(String msg, HttpExchange exchg) {
+        _msgQueue.add(new Message(Message.MSG_SEND_AND_FORGET,"",msg,exchg));
     }
 
     protected void appendText(String msg) {
