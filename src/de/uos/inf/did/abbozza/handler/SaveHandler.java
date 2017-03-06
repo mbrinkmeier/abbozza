@@ -136,7 +136,11 @@ public class SaveHandler extends AbstractHandler {
 
             // Prepare File filters
             chooser.setFileFilter(new FileNameExtensionFilter("abbozza! (*.abz)", "abz", "ABZ"));
-            chooser.setSelectedFile(lastSketchFile);
+            if ( lastSketchFile.isDirectory() ) {
+                chooser.setCurrentDirectory(lastSketchFile);            
+            } else {
+                chooser.setSelectedFile(lastSketchFile);
+            }
 
             // Show FileChooser
             if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {

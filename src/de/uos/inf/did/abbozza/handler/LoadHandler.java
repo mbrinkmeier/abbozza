@@ -88,7 +88,7 @@ public class LoadHandler extends AbstractHandler {
         }
         AbbozzaLogger.out("LoadHandler: last sketch " + lastSketchFile.getCanonicalPath(),AbbozzaLogger.DEBUG);
         BufferedReader reader;
-        String path = ((lastSketchFile != null) ? lastSketchFile.getAbsolutePath() : _abbozzaServer.getSketchbookPath());
+        String path = ((lastSketchFile != null) ? lastSketchFile.getCanonicalPath() : _abbozzaServer.getSketchbookPath());
         JFileChooser chooser = new JFileChooser(path) {
             protected JDialog createDialog(Component parent) throws HeadlessException {
                 JDialog dialog = super.createDialog(parent);
@@ -106,7 +106,11 @@ public class LoadHandler extends AbstractHandler {
         chooser.addPropertyChangeListener(panel);
 
         chooser.setFileFilter(new FileNameExtensionFilter("abbozza! Sketches und Aufgabenarchive (*.abz, *.abj)", "abz","abj"));
-        chooser.setSelectedFile(lastSketchFile);
+        if ( lastSketchFile.isDirectory() ) {
+            chooser.setCurrentDirectory(lastSketchFile);            
+        } else {
+            chooser.setSelectedFile(lastSketchFile);
+        }
         int choice = chooser.showOpenDialog(null);
         if ((choice == JFileChooser.APPROVE_OPTION) || (panel.getUrl() != null)) {
             URL url;
