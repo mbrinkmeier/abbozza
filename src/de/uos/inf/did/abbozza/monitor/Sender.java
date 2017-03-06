@@ -67,26 +67,31 @@ public class Sender extends Thread {
     }
     
     private void sendMsg(Message msg) {
-        /*
-        if (_monitor.getBoardPort() == null ) {
-            SerialHandler handler = msg.getHandler();
-            if (handler != null) {
-                try {
-                    handler.sendResponse(msg.getHttpExchange(), 400, "text/plain", "No board connected!");
-                } catch (IOException ex) {
-                    Logger.getLogger(Sender.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            return;
-        } 
-        */
         
-        if (msg.getTimeout() == 0) {
+        // Check if web message
+        if ( msg.getHandler() == null ) {
+            // If not, simply write it
             _monitor.writeMessage(msg.toString());  
         } else {
-            System.err.println(msg.toString());
-            msg.startTimeOut();
-            _monitor.addWaitingMsg(msg);
+            // Otherwise        
+            if (_monitor.getBoardPort() == null ) {
+                SerialHandler handler = msg.getHandler();
+                if (handler != null) {
+                    try {
+                        handler.sendResponse(msg.getHttpExchange(), 400, "text/plain", "No board connected!");
+                    } catch (IOException ex) {
+                        Logger.getLogger(Sender.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            } else {        
+                if (msg.getTimeout() == 0) {
+                    _monitor.writeMessage("[[" + msg.toString() + "]]");  
+                } else {
+                    _monitor.writeMessage("[[" + msg.toString() + "]]");  
+                    msg.startTimeOut();
+                    _monitor.addWaitingMsg(msg);
+                }
+            }
         }
     }
  

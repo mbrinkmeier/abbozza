@@ -27,6 +27,8 @@ import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.handler.AbstractHandler;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
 import java.io.IOException;
+import java.io.StringReader;
+import java.util.Properties;
 
 /**
  *
@@ -43,9 +45,16 @@ public class SerialHandler extends AbstractHandler {
         String query = he.getRequestURI().getQuery();
         // msg=<msg>&timeout=<time>
         // No timeout means that the request is not waitung
+        query = query.replace('&', '\n');
+        Properties props = new Properties();
+        props.load(new StringReader(query));
+        long timeout = 0;
+        if ( props.get("timeout") != null ) {
+            timeout = Long.parseLong((String) props.get("timeout"));
+        }
         AbbozzaMonitor monitor = this._abbozzaServer.monitorHandler.getMonitor();
         if ( monitor != null ) {
-           monitor.sendMessage(query, he, this, 30000);
+           monitor.sendMessage((String) props.get("msg"), he, this, timeout);
         } else {
            sendResponse(he, 400, "text/plain", "No board listens!"); 
         }

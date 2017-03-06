@@ -342,7 +342,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
 
     public void sendMessage(String msg, HttpExchange exchg, SerialHandler handler, long timeout) {
         String id = "_" + Long.toHexString(System.currentTimeMillis());
-        _msgQueue.add(new Message(id,msg,exchg,handler,timeout));
+        Message _msg = new Message(id,msg,exchg,handler,timeout); 
+        _msgQueue.add(_msg);
     }
 
     protected void appendText(String msg) {
@@ -367,14 +368,37 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
                     int space = cmd.indexOf(' ');
                     if ( space >= 0 ) {
                         prefix = cmd.substring(0,space);
-                        cmd = cmd.substring(space+1,cmd.length());
-                        
                         MonitorPanel panel = panels.get(prefix);
-                        if (panel != null) panel.processMessage(cmd);
+                        if (panel != null) {
+                            cmd = cmd.substring(space+1,cmd.length());
+                            panel.processMessage(cmd);
+                        } else {
+                            respondTo(cmd);
+                        }
                     }
                 }
             }
         } while( (start != -1) && (end != -1) );
+    }
+    
+    private void respondTo(String msg) {
+        int pos;
+        Message _msg;
+        msg = msg.trim();
+        if ( msg.startsWith("_") ) {
+            pos = msg.indexOf(' ');
+            String id = msg.substring(0, pos);
+            msg = msg.substring(pos).trim();
+            _msg = _waitingMsg.get(id);
+            if ( _msg != null ) {
+                _waitingMsg.remove(id);
+                try {
+                    _msg.getHandler().sendResponse(_msg.getHttpExchange(), 200, "text/plain", msg);
+                } catch (IOException ex) {
+                    Logger.getLogger(AbbozzaMonitor.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
     
     
