@@ -30,6 +30,7 @@ import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaServer;
+import de.uos.inf.did.abbozza.arduino.handler.SerialHandler;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -39,9 +40,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.AbstractQueue;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JDialog;
@@ -65,6 +72,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
     private StringBuffer unprocessedMsg;    
     private HashMap<String,MonitorPanel> panels;
     protected ArrayBlockingQueue<Message> _msgQueue;
+    protected HashMap<String,Message> _waitingMsg;
     private Sender _sender;
     
     // private AbbozzaMonitorPanel monitor = null;
@@ -77,6 +85,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
     public AbbozzaMonitor(BoardPort boardport) {
         setBoardPort(boardport);
         _msgQueue = new ArrayBlockingQueue<Message>(10);
+        _waitingMsg = new HashMap<String,Message>();
+        
         _sender = new Sender(this);
         _sender.start();
         
@@ -287,6 +297,24 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        // Check waiting messages
+        if ( !_waitingMsg.isEmpty() ) {
+            Set<String> keys = _waitingMsg.keySet();
+            Iterator<String> it = keys.iterator();
+            while (it.hasNext()) {
+                String key = it.next();
+                Message msg = _waitingMsg.get(key);
+                if ( msg.isTimedOut() ) {
+                    _waitingMsg.remove(key);
+                    try {
+                        msg.getHandler().sendResponse(msg.getHttpExchange(), 400, "text/plain", "query timed out!");
+                    } catch (IOException ex) {
+                        Logger.getLogger(AbbozzaMonitor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+
         String s = consumeUpdateBuffer();
 
         if (s.isEmpty()) {
@@ -298,6 +326,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
 
         // Send to all monitor panels
         processMessage(s);        
+
     }
     
     protected void writeMessage(String msg) {
@@ -306,11 +335,14 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
     }
     
     public void sendMessage(String msg) {
-        _msgQueue.add(new Message(Message.MSG_SEND_AND_FORGET,"",msg));
+        if ( this.boardPort != null ) {
+            _msgQueue.add(new Message("",msg));
+        }
     }
 
-    public void sendMessage(String msg, HttpExchange exchg) {
-        _msgQueue.add(new Message(Message.MSG_SEND_AND_FORGET,"",msg,exchg));
+    public void sendMessage(String msg, HttpExchange exchg, SerialHandler handler, long timeout) {
+        String id = "_" + Long.toHexString(System.currentTimeMillis());
+        _msgQueue.add(new Message(id,msg,exchg,handler,timeout));
     }
 
     protected void appendText(String msg) {
@@ -425,7 +457,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
                 }
             };
         } else {
-            String msg = "Kein Board angeschlossen!";
+            String msg = "No board connected!";
             addToUpdateBuffer(msg.toCharArray(),msg.length());
         }
 
@@ -433,7 +465,6 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         int x = (screen.width - this.getWidth()) / 2;
         int y = (screen.height - this.getHeight()) / 2;
         this.setLocation(x, y);
-
     }
 
     public void close() throws Exception {
@@ -445,5 +476,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         }
     }
 
-  
+    public void addWaitingMsg(Message msg) {
+        _waitingMsg.put(msg.getID(), msg);
+    }
+    
 }

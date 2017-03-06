@@ -23,33 +23,35 @@
 package de.uos.inf.did.abbozza.monitor;
 
 import com.sun.net.httpserver.HttpExchange;
+import de.uos.inf.did.abbozza.arduino.handler.SerialHandler;
 
 /**
  *
  * @author michael
  */
 public class Message {
-    
-    public final static int MSG_SEND_AND_FORGET = 0;
-    public final static int MSG_WAIT_FOR_RESPONSE = 1;
-    
+                
     private String _id;
     private String _msg;
-    private int _type;
     private HttpExchange _exchg;
+    private SerialHandler _handler;
+    private long _timeout;
+    private long _stoptime;
     
-    public Message(int type, String id, String msg) {
+    public Message(String id, String msg) {
         _id = id;
         _msg = msg;
-        _type = type;
         _exchg = null;
+        _handler = null;
+        _timeout = 0;
     }
 
-    public Message(int type, String id, String msg, HttpExchange exchg) {
+    public Message(String id, String msg, HttpExchange exchg, SerialHandler handler, long timeout) {
         _id = id;
         _msg = msg;
-        _type = type;
         _exchg = exchg;
+        _handler = handler;
+        _timeout = timeout;
     }
     
     public String getMsg() {
@@ -60,10 +62,6 @@ public class Message {
         return _id;
     }
 
-    public int getType() {
-        return _type;
-    }
-    
     public String toString() {
         if ( _id.length() > 0 ) {
             return _id + " " + _msg;
@@ -71,4 +69,23 @@ public class Message {
         return _msg;
     }
 
+    public HttpExchange getHttpExchange() {
+        return _exchg;
+    }
+    
+    public SerialHandler getHandler() {
+        return _handler;
+    }
+
+    public long getTimeout() {
+        return _timeout;
+    }
+    
+    public void startTimeOut() {
+        _stoptime = System.currentTimeMillis() + _timeout;
+    }
+    
+    public boolean isTimedOut() {
+        return (System.currentTimeMillis() > _stoptime );
+    }
 }

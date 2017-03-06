@@ -25,6 +25,10 @@
 package de.uos.inf.did.abbozza.monitor;
 
 import cc.arduino.packages.BoardPort;
+import de.uos.inf.did.abbozza.arduino.handler.SerialHandler;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -63,12 +67,26 @@ public class Sender extends Thread {
     }
     
     private void sendMsg(Message msg) {
-        switch (msg.getType()) {
-            case Message.MSG_SEND_AND_FORGET :
-                _monitor.writeMessage(msg.toString());  
-                break;
-            case Message.MSG_WAIT_FOR_RESPONSE :
-                break;
+        /*
+        if (_monitor.getBoardPort() == null ) {
+            SerialHandler handler = msg.getHandler();
+            if (handler != null) {
+                try {
+                    handler.sendResponse(msg.getHttpExchange(), 400, "text/plain", "No board connected!");
+                } catch (IOException ex) {
+                    Logger.getLogger(Sender.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            return;
+        } 
+        */
+        
+        if (msg.getTimeout() == 0) {
+            _monitor.writeMessage(msg.toString());  
+        } else {
+            System.err.println(msg.toString());
+            msg.startTimeOut();
+            _monitor.addWaitingMsg(msg);
         }
     }
  

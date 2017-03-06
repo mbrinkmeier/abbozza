@@ -41,9 +41,13 @@ public class SerialHandler extends AbstractHandler {
     @Override
     public void handle(HttpExchange he) throws IOException {
         String query = he.getRequestURI().getQuery();
+        // msg=<msg>&timeout=<time>
+        // No timeout means that the request is not waitung
         AbbozzaMonitor monitor = this._abbozzaServer.monitorHandler.getMonitor();
         if ( monitor != null ) {
-            monitor.sendMessage(query, he);
+           monitor.sendMessage(query, he, this, 30000);
+        } else {
+           sendResponse(he, 400, "text/plain", "No board listens!"); 
         }
     }
     
