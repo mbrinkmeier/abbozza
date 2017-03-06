@@ -220,6 +220,8 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.ON">an</msg>
         <msg id="dev.OFF">aus</msg>
         <msg id="dev.LED">LED</msg>
+        <msg id="dev.DIMLED">Dimmbare LED</msg>
+        <msg id="dev.SETDIMLED">Setze dimmbare LED # auf</msg>
         <msg id="dev.RGBLED">RGB-LED</msg>
         <msg id="dev.REDPIN">Pin für Rot</msg>
         <msg id="dev.GREENPIN">Pin für Grün</msg>
