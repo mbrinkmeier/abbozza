@@ -92,6 +92,8 @@ Continuing?</msg>
         <msg id="gui.plugin_deactivated">Plugin # deactivated</msg>
         <msg id="gui.unknown_block">Unknown block</msg>
         <msg id="gui.unknown_blocks">Unknown blocks!&#10;Are all required plugins activated?</msg>
+        <msg id="gui.use_long">Use long integers (32 Bit)</msg>
+        <msg id="gui.use_double">Use more precise decimals (64 Bit)</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Fold blocks</msg>

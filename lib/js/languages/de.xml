@@ -92,6 +92,8 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.plugin_deactivated">Plugin # deaktiviert</msg>
         <msg id="gui.unknown_block">Unbekannter Block</msg>
         <msg id="gui.unknown_blocks">Unbekannte Blöcke!&#10;Sind alle notwendigen Plugins aktiviert?</msg>
+        <msg id="gui.use_long">Verwende lange Zahlen (32 Bit)</msg>
+        <msg id="gui.use_double">Verwende präzisere Dezimalzahlen (64 Bit)</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
