@@ -176,6 +176,8 @@
         <category name="Aktuatoren" id="cat.DEVOUT">
             <block type="dev_led"></block>
             <block type="dev_led_on"></block>
+            <block type="dev_led_dim"></block>
+            <block type="dev_led_dim_on"></block>
             <block type="dev_rgb_led"></block>
             <block type="dev_rgb_led_set_color"></block>
             <block type="dev_rgb_led_set_color2"></block>

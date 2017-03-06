@@ -6,6 +6,8 @@
         <item name="gui.devices" option="devices" default="true"/>
         <item name="gui.serial_communication" option="serial" default="true"/>
         <item name="gui.interrupts" option="interrupts" default="true"/>
+        <item name="gui.use_long" option="use_long" default="false"/>
+        <item name="gui.use_double" option="use_double" default="false"/>
         <group name="gui.arrays">
             <choice name="gui.no_arrays" option="noArrays" default="false"/> 
             <choice name="gui.lin_arrays" option="linArrays" default="false"/> 

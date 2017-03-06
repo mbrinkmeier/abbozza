@@ -92,6 +92,8 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.plugin_deactivated">Plugin # deaktiviert</msg>
         <msg id="gui.unknown_block">Unbekannter Block</msg>
         <msg id="gui.unknown_blocks">Unbekannte Blöcke!&#10;Sind alle notwendigen Plugins aktiviert?</msg>
+        <msg id="gui.use_long">Verwende lange Zahlen (32 Bit)</msg>
+        <msg id="gui.use_double">Verwende präzisere Dezimalzahlen (64 Bit)</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
@@ -220,6 +222,8 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.ON">an</msg>
         <msg id="dev.OFF">aus</msg>
         <msg id="dev.LED">LED</msg>
+        <msg id="dev.DIMLED">Dimmbare LED</msg>
+        <msg id="dev.SETDIMLED">Setze dimmbare LED # auf</msg>
         <msg id="dev.RGBLED">RGB-LED</msg>
         <msg id="dev.REDPIN">Pin für Rot</msg>
         <msg id="dev.GREENPIN">Pin für Grün</msg>
