@@ -341,9 +341,19 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
     }
 
     public void sendMessage(String msg, HttpExchange exchg, SerialHandler handler, long timeout) {
-        String id = "_" + Long.toHexString(System.currentTimeMillis());
-        Message _msg = new Message(id,msg,exchg,handler,timeout); 
-        _msgQueue.add(_msg);
+        if ( this.boardPort == null ) return;
+        if ( timeout > 0 ) {
+            String id = "_" + Long.toHexString(System.currentTimeMillis());
+            Message _msg = new Message(id,msg,exchg,handler,timeout); 
+            _msgQueue.add(_msg);
+        } else {
+            sendMessage(msg);
+            try {
+                handler.sendResponse(exchg, 200, "text/plain", "");
+            } catch (IOException ex) {
+                Logger.getLogger(AbbozzaMonitor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     protected void appendText(String msg) {
