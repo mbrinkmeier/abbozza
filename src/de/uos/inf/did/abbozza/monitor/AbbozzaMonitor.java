@@ -297,13 +297,14 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Check waiting messages
+        // Check waiting messages for timed out requests
         if ( !_waitingMsg.isEmpty() ) {
             Set<String> keys = _waitingMsg.keySet();
             Iterator<String> it = keys.iterator();
             while (it.hasNext()) {
                 String key = it.next();
                 Message msg = _waitingMsg.get(key);
+                // Remove timed out requests
                 if ( msg.isTimedOut() ) {
                     _waitingMsg.remove(key);
                     try {
@@ -315,6 +316,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
             }
         }
 
+        // Check update buffer
         String s = consumeUpdateBuffer();
 
         if (s.isEmpty()) {
@@ -329,17 +331,36 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
 
     }
     
+    /**
+     * Write a message to the serial port
+     * 
+     * @param msg The message
+     */
     protected void writeMessage(String msg) {
         serial.write(msg);
         appendText("-> " + msg + "\n");
     }
     
+    /**
+     * Enque a message for sending without timeout and without waiting for it.
+     * 
+     * @param msg The message
+     */
     public void sendMessage(String msg) {
         if ( this.boardPort != null ) {
             _msgQueue.add(new Message("",msg));
         }
     }
 
+    /**
+     * Enque a message from a HTTP-request for sending. Assign an ID to it
+     * and wait for a response, if the timeout is positive.
+     * 
+     * @param msg The message to be send
+     * @param exchg The HttpExchange object representing the request
+     * @param handler The Handler handling the request
+     * @param timeout The timeout for the response (if greater than zero)
+     */
     public void sendMessage(String msg, HttpExchange exchg, SerialHandler handler, long timeout) {
         if ( this.boardPort == null ) return;
         if ( timeout > 0 ) {
@@ -356,10 +377,23 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         }
     }
 
+    /**
+     * Append a text to the textfield showing the communication.
+     * 
+     * @param msg The text to be appended
+     */
     protected void appendText(String msg) {
         this.textArea.append(msg);
     }
     
+    /**
+     * Process a message received from the board. If it is enclose
+     * double brackets [[ <prefix> <msg> ]]. Check the <prefix> and send it 
+     * to the appropriate Panel. If <prefix> is of the form _.* it is
+     * processed by the Monitor itself, since it is an answer to a request.
+     * 
+     * @param s The string received
+     */
     private void processMessage(String s) {
         unprocessedMsg.append(s);
         
@@ -391,6 +425,11 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         } while( (start != -1) && (end != -1) );
     }
     
+    /**
+     * This method responds to a received message wih leading id.
+     * 
+     * @param msg The message
+     */
     private void respondTo(String msg) {
         int pos;
         Message _msg;
@@ -411,7 +450,13 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         }
     }
     
-    
+    /**
+     * Add a Panel to the Monitor. Messages enclosed in double brackets 
+     * of the form [[ <prefix> <msg> ]] are send to the panel.
+     * 
+     * @param panel The panel to be added
+     * @param prefix The prefix of messages handled by the panel
+     */
     private void addMonitorPanel(MonitorPanel panel, String prefix) {
         if (panel != null) {
             tabPanel.add(panel, 0);
@@ -419,7 +464,10 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         }        
     }
 
-    
+    /**
+     * Returns the current port is a board is connected, null otherwise.
+     * @return 
+     */
     public BoardPort getBoardPort() {
         return boardPort;
     }
