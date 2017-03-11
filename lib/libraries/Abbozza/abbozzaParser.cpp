@@ -3,54 +3,104 @@
 
 AbbozzaParser::AbbozzaParser() {
     buffer = "";
+    currentCommand = "";
+    remainder = "";
     Serial.begin(9600);
 }
 
 
 void AbbozzaParser::check() {
     int start, end;
+
     String newBuf;
     String prefix;
+    String currentLine;
     if ( Serial.available() ) {
         // append string to buffer
         newBuf = Serial.readString();
         buffer.concat(newBuf);
         Serial.println("Buffer : '" + buffer + "'");
-        // find next line
-        do {
-            currentLine = "";
-            start = buffer.indexOf("[[");
-            if ( start >= 0 ) {
-                end = buffer.indexOf("]]");
-                if ( end >= 0 ) {
-                    prefix = buffer.substring(0,start);
-                    currentLine = buffer.substring(start+2,end);
-                    currentLine.replace('\n',' ');
-                    currentLine.replace('\t',' ');
-                    buffer.remove(0,end+2);
-                    Serial.println("executing '" + currentLine + "'");
-                    execute();                    
-                }
+        // find next command
+        currentLine = "";
+        start = buffer.indexOf("[[");
+        if ( start >= 0 ) {
+            end = buffer.indexOf("]]");
+            if ( end >= 0 ) {
+                prefix = buffer.substring(0,start);
+                remainder.concat(prefix);
+                currentLine = buffer.substring(start+2,end);
+                currentLine.replace('\n',' ');
+                currentLine.replace('\t',' ');
+                currentLine.trim();
+                buffer.remove(0,end+2);
+                setCommand(currentLine);
             }
-        } while ( currentLine.length() > 0 );
+        }
     }
 }
 
-String AbbozzaParser::parseWord() {
-    int pos = currentLine.indexOf(' ');
-    String command = currentLine.substring(0,pos);
-    currentLine.remove(0,pos);
-    currentLine.trim();    
-    return command;
+
+void AbbozzaParser::setCommand(String cmd) {
+    currentCommand = cmd;
+    cmdId = "";
+    cmd = "";
+    if ( currentCommand.charAt(0) == '_' ) {
+        cmdId = parse_word();
+    }
+    cmd = parse_word();
+    cmd.toUpperCase();
 }
 
-int AbbozzaParser::parseInt() {
-    String word = parseWord();
+
+void AbbozzaParser::sendResponse(String resp) {
+   resp = "[[ " + cmdId + " " + resp + " ]]";
+   Serial.println(resp);
+   cmdId = "";
+}
+
+
+String AbbozzaParser::parse_word() {
+    int pos = currentCommand.indexOf(' ');
+    String word = currentCommand.substring(0,pos);
+    currentCommand.remove(0,pos);
+    currentCommand.trim();    
+    return word;
+}
+
+String AbbozzaParser::parse_string() {
+    int pos;
+    String result = "";
+    if ( currentCommand.charAt(0) != '"') return "";
+    do {
+        pos = currentCommand.indexOf('"',pos+1);
+    } while ( (pos != -1) && (currentCommand.charAt(pos-1) == '\\' ));
+    if ( pos == -1 ) pos = currentCommand.length();
+    result = currentCommand.substring(1,pos);
+    currentCommand.remove(0,pos+1);
+    return result;
+}
+
+
+String AbbozzaParser::getCmd() {
+    return cmd;
+}
+int AbbozzaParser::parse_int() {
+    String word = parse_word();
+    return (int) word.toInt();
+}
+
+long AbbozzaParser::parse_long() {
+    String word = parse_word();
     return word.toInt();
 }
 
-int AbbozzaParser::parseFloat() {
-    String word = parseWord();
+float AbbozzaParser::parse_float() {
+    String word = parse_word();
+    return word.toFloat();
+}
+
+double AbbozzaParser::parse_double() {
+    String word = parse_word();
     return word.toFloat();
 }
 
@@ -58,31 +108,11 @@ void AbbozzaParser::execute() {
   String command;
   String arg;
   int pos, pin, value;
-  // Get commamd from string
-  currentLine.trim();
 
-  // pos = line.indexOf(' ');
-  // command = line.substring(0,pos);
-  // line.remove(0,pos);
-  // line.trim();
-
-  command = parseWord();
-  command.toUpperCase();
-  
-  if ( command.equals("DSET") ) {
-    // pos = line.indexOf(' ');
-    // arg = line.substring(0,pos);
-    // line.remove(0,pos);
-    // line.trim();    
-    // pin = arg.toInt();
-    pin = parseInt();
+  if ( cmd.equals("DSET") ) {
+    pin = parse_int();
         
-    // pos = line.indexOf(' ');
-    // arg = line.substring(0,pos);
-    // line.remove(0,pos);
-    // line.trim();    
-    // value = arg.toInt();
-    value = parseInt();
+    value = parse_int();
     
     pinMode(pin,OUTPUT);
     if ( value > 0 ) {
@@ -90,44 +120,24 @@ void AbbozzaParser::execute() {
     } else {
       digitalWrite(pin,LOW);
     }
-  } else if ( command.equals("ASET") ) {
-    // pos = line.indexOf(' ');
-    // arg = line.substring(0,pos);
-    // line.remove(0,pos);
-    // line.trim();    
-    // pin = arg.toInt();
-      pin = parseInt();
+  } else if ( cmd.equals("ASET") ) {
+      pin = parse_int();
 
-    // pos = line.indexOf(' ');
-    // arg = line.substring(0,pos);
-    // line.remove(0,pos);
-    // line.trim();    
-    // value = arg.toInt();
-      value = parseInt();
+      value = parse_int();
 
     pinMode(pin,OUTPUT);
     analogWrite(pin,value);
-  } else if ( command.equals("DGET") ) {
-    // pos = line.indexOf(' ');
-    // arg = line.substring(0,pos);
-    // line.remove(0,pos);
-    // line.trim();    
-    // pin = arg.toInt();
-      pin = parseInt();
+  } else if ( cmd.equals("DGET") ) {
+      pin = parse_int();
 
     pinMode(pin,INPUT);
     value = digitalRead(pin) > 0 ? 1 : 0;
-    Serial.println("<< DVAL " + String(pin) + " " + String(value));
-  }  else if ( command.equals("AGET") ) {
-    // pos = line.indexOf(' ');
-    // arg = line.substring(0,pos);
-    // line.remove(0,pos);
-    // line.trim();    
-    // pin = arg.toInt();
-      pin = parseInt();
+    sendResponse("DVAL " + String(pin) + " " + String(value));
+  }  else if ( cmd.equals("AGET") ) {
+    pin = parse_int();
 
     pinMode(pin,INPUT);
     value = analogRead(pin);
-    Serial.println("<< AVAL " + String(pin) + " " + String(value));
+    sendResponse("AVAL " + String(pin) + " " + String(value));
   }
 }

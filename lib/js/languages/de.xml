@@ -282,6 +282,17 @@ Trotzdem fortfahren?</msg>
         <msg id="int.LOW">0</msg>
         <msg id="int.RISING">Anstieg</msg>
         <msg id="int.FALLING">Abfall</msg>
+        
+        <msg id="cat.PARSE">Nachrichten</msg>
+        <msg id="parse.EXECUTE_MSG">Prüfe Nachrichten</msg>
+        <msg id="parse.COMMAND">Falls # empfangen</msg>
+        <msg id="parse.COMMANDS">Nachrichten</msg>
+        <msg id="parse.CMD">Nachricht</msg>
+        <msg id="parse.NUMBER">Lese Zahl</msg>
+        <msg id="parse.DECIMAL">Lese Dezimalzahl</msg>
+        <msg id="parse.WORD">Lese Wort</msg>
+        <msg id="parse.STRING">Lese Text</msg>
+        <msg id="parse.SEND_RESPONSE">Sende Antwort</msg>
     </blocks>
     <errors>
         <msg id="default.NAME">&lt;name&gt;</msg>

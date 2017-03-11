@@ -214,4 +214,15 @@
             <block type="int_isr"></block>
         </category>
     </feature>        
+    
+    <feature id="feat.PARSE">
+        <category name="Nachrichten" id ="cat.PARSE">
+            <block type="parse_parse"></block>
+            <block type="parse_number"></block>
+            <block type="parse_decimal"></block>
+            <block type="parse_word"></block>
+            <block type="parse_string"></block>
+            <block type="parse_response"></block>
+        </category>
+    </feature>
 </features>

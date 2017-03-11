@@ -283,6 +283,16 @@ Continuing?</msg>
         <msg id="int.RISING">rising</msg>
         <msg id="int.FALLING">falling</msg>
 
+        <msg id="cat.PARSE">Messages</msg>
+        <msg id="parse.EXECUTE_MSG">Check Messages</msg>
+        <msg id="parse.COMMAND">If # received</msg>
+        <msg id="parse.COMMANDS">Messages</msg>
+        <msg id="parse.CMD">Message</msg>
+        <msg id="parse.NUMBER">Parse number</msg>
+        <msg id="parse.DECIMAL">Parse decimal</msg>
+        <msg id="parse.WORD">Parse word</msg>
+        <msg id="parse.STRING">Parse string</msg>
+        <msg id="parse.SEND_RESPONSE">Send response</msg>
     </blocks>
     <errors>
         <msg id="default.NAME">&lt;name&gt;</msg>

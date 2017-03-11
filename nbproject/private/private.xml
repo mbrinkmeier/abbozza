@@ -13,15 +13,16 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="NetBeansProjects"/>
         <group>
-            <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/monitor/Sender.java</file>
             <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/monitor/AbbozzaMonitor.java</file>
-            <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/arduino/Abbozza.java</file>
             <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/arduino/handler/SerialHandler.java</file>
-            <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/monitor/Message.java</file>
         </group>
         <group>
-            <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/monitor/AbbozzaMonitor.java</file>
-            <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/arduino/handler/SerialHandler.java</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/blocks/Messages.js</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/blocks/VariableDecl.js</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/arduino.html</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Tools.js</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/arduino/features.xml</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
         </group>
     </open-files>
 </project-private>
