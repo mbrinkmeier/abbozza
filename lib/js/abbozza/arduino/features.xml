@@ -217,7 +217,12 @@
     
     <feature id="feat.PARSE">
         <category name="Nachrichten" id ="cat.PARSE">
-            <block type="parse_parse"></block>
+            <block type="parse_parse">
+                <value name="COMMANDS">
+                <block type="parse_cmd_decl"></block>
+                </value>
+            </block>
+            <block type="parse_cmd_decl"></block>
             <block type="parse_number"></block>
             <block type="parse_decimal"></block>
             <block type="parse_word"></block>

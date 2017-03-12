@@ -5,7 +5,7 @@ AbbozzaParser::AbbozzaParser() {
     buffer = "";
     currentCommand = "";
     remainder = "";
-    Serial.begin(9600);
+    debug = false;
 }
 
 
@@ -15,11 +15,16 @@ void AbbozzaParser::check() {
     String newBuf;
     String prefix;
     String currentLine;
+    
+    currentCommand = "";
+    cmd = "";
+    cmdId = "";
+    
     if ( Serial.available() ) {
         // append string to buffer
         newBuf = Serial.readString();
         buffer.concat(newBuf);
-        Serial.println("Buffer : '" + buffer + "'");
+        if (debug) Serial.println("Buffer : '" + buffer + "'");
         // find next command
         currentLine = "";
         start = buffer.indexOf("[[");
@@ -40,8 +45,9 @@ void AbbozzaParser::check() {
 }
 
 
-void AbbozzaParser::setCommand(String cmd) {
-    currentCommand = cmd;
+void AbbozzaParser::setCommand(String line) {
+    if (debug) Serial.println("-> executing " + line);
+    currentCommand = line;
     cmdId = "";
     cmd = "";
     if ( currentCommand.charAt(0) == '_' ) {
@@ -53,7 +59,11 @@ void AbbozzaParser::setCommand(String cmd) {
 
 
 void AbbozzaParser::sendResponse(String resp) {
-   resp = "[[ " + cmdId + " " + resp + " ]]";
+    if ( !cmdId.equals("") ) {
+        resp = "[[" + cmdId + " " + resp + "]]";
+    } else {
+        resp = "[["+resp+"]]";
+    }
    Serial.println(resp);
    cmdId = "";
 }
@@ -70,7 +80,7 @@ String AbbozzaParser::parse_word() {
 String AbbozzaParser::parse_string() {
     int pos;
     String result = "";
-    if ( currentCommand.charAt(0) != '"') return "";
+    if ( currentCommand.charAt(0) != '"') return parse_word();
     do {
         pos = currentCommand.indexOf('"',pos+1);
     } while ( (pos != -1) && (currentCommand.charAt(pos-1) == '\\' ));
@@ -139,5 +149,12 @@ void AbbozzaParser::execute() {
     pinMode(pin,INPUT);
     value = analogRead(pin);
     sendResponse("AVAL " + String(pin) + " " + String(value));
+  } else if ( cmd.equals("DEBUG") ) {
+      value = parse_int();
+      if ( value == 0) {
+          debug = false;
+      } else {
+          debug = true;
+      }
   }
 }

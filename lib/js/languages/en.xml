@@ -285,9 +285,10 @@ Continuing?</msg>
 
         <msg id="cat.PARSE">Messages</msg>
         <msg id="parse.EXECUTE_MSG">Check Messages</msg>
+        <msg id="parse.STD_CMD">Check for standard messages</msg>
         <msg id="parse.COMMAND">If # received</msg>
         <msg id="parse.COMMANDS">Messages</msg>
-        <msg id="parse.CMD">Message</msg>
+        <msg id="parse.CMD">On message # do</msg>
         <msg id="parse.NUMBER">Parse number</msg>
         <msg id="parse.DECIMAL">Parse decimal</msg>
         <msg id="parse.WORD">Parse word</msg>

@@ -1,8 +1,6 @@
 #ifndef AbbozzaParser_h
 #define AbbozzaParser_h
 
-#include "Arduino.h"
-
 class AbbozzaParser {
     
 public:
@@ -27,6 +25,7 @@ private:
     String remainder;
     String cmdId;
     String cmd;
+    boolean debug;
 };
 
 #endif

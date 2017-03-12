@@ -55,6 +55,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.Timer;
+import javax.swing.text.DefaultCaret;
 import processing.app.Serial;
 
 /**
@@ -91,6 +92,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         _sender.start();
         
         initComponents();
+        DefaultCaret caret = (DefaultCaret)textArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         this.sendText.getEditor().addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
