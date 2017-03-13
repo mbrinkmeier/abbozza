@@ -94,6 +94,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.unknown_blocks">Unbekannte Blöcke!&#10;Sind alle notwendigen Plugins aktiviert?</msg>
         <msg id="gui.use_long">Verwende lange Zahlen (32 Bit)</msg>
         <msg id="gui.use_double">Verwende präzisere Dezimalzahlen (64 Bit)</msg>
+        <msg id="gui.usb">USB Kommunikation</msg>        
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>
@@ -130,7 +131,8 @@ Trotzdem fortfahren?</msg>
         <msg id="cat.MISC">Verschiedenes</msg>
         <msg id="cat.INT">Interrupts</msg>
         <msg id="cat.TEACHER">Lehrer</msg>
-    </categories>
+        <msg id="cat.USB">USB Kommunikation</msg>        
+</categories>
     <blocks>
         <msg id="STRING">Text</msg>
         <msg id="DECIMAL">Dezimalzahl</msg>

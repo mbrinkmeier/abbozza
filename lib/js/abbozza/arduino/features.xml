@@ -142,13 +142,35 @@
         </category>
     </feature>
 	
-    <feature id="feat.SERIAL" option="serial">
-        <category id="cat.SERIAL">
+    <feature id="feat.USB" option="usb">
+        <category id="cat.USB">
             <block type="serial_println"></block>
             <block type="serial_readln"></block>
             <block type="serial_available"></block>
             <!--block type="serial_write_byte"></block -->
             <block type="serial_table"></block>
+        </category>
+    </feature>
+        
+    <feature id="feat.MESSAGE" option="messages">
+        <category id ="cat.USB">
+            <block type="message_parse">
+                <value name="COMMANDS">
+                <block type="message_cmd_decl"></block>
+                </value>
+            </block>
+            <block type="message_cmd_decl"></block>
+            <block type="message_number"></block>
+            <block type="message_decimal"></block>
+            <block type="message_word"></block>
+            <block type="message_string"></block>
+            <block type="message_response"></block>
+        </category>
+    </feature>        
+    
+    
+    <feature id="feat.SERIAL" option="serial">
+        <category id="cat.SERIAL">
             <block type="dev_serial"></block>
             <block type="dev_serial_write">
                 <value name="VALUE">
@@ -205,7 +227,7 @@
         </category> 		
     </feature>
 
-    <feature id ="feat.INT">
+    <feature id ="feat.INT" option="interrupts">
         <category name="Interrupts" id="cat.INT">
             <block type="int_interrupts"></block>
             <block type="int_no_interrupts"></block>
@@ -215,19 +237,5 @@
         </category>
     </feature>        
     
-    <feature id="feat.PARSE">
-        <category name="Nachrichten" id ="cat.PARSE">
-            <block type="parse_parse">
-                <value name="COMMANDS">
-                <block type="parse_cmd_decl"></block>
-                </value>
-            </block>
-            <block type="parse_cmd_decl"></block>
-            <block type="parse_number"></block>
-            <block type="parse_decimal"></block>
-            <block type="parse_word"></block>
-            <block type="parse_string"></block>
-            <block type="parse_response"></block>
-        </category>
-    </feature>
+
 </features>

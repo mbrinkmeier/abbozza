@@ -62,7 +62,25 @@ public class CheckBoxNode implements ChangeListener {
 	}
 	
 	public void setSelected(boolean selected) {
-		this.selected = selected;
+            this.selected = selected;
+            if ( (this.node != null) && selected ) {
+                if ( (this.node.getParent() != null) && ( this.node.getParent() instanceof DefaultMutableTreeNode) ) {
+                    Object userObj = ((DefaultMutableTreeNode) this.node.getParent()).getUserObject();
+                    if ( userObj instanceof CheckBoxNode ) {
+                        ((CheckBoxNode) userObj).setSelected(selected);
+                    }
+                }
+            }
+            if ( (this.node != null) && !selected ) {
+                Enumeration children = this.node.children();
+                while (children.hasMoreElements()) {
+                    DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
+                    Object userObj = child.getUserObject();
+                    if ( userObj instanceof CheckBoxNode ) {
+                        ((CheckBoxNode) userObj).setSelected(selected);
+                    }
+                }
+            }
 	}
 	
 	public String getOption() {

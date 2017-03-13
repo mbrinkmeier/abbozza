@@ -534,7 +534,12 @@ public class AbbozzaConfigDialog extends javax.swing.JDialog {
             String optionName  = node.getAttributes().getNamedItem("option").getNodeValue(); 
             String itemName = node.getAttributes().getNamedItem("name").getNodeValue();
             CheckBoxNode treeNode = new CheckBoxNode(config,prefix+optionName, AbbozzaLocale.entry(itemName));
-            root.add(new DefaultMutableTreeNode(treeNode));
+            DefaultMutableTreeNode group = new DefaultMutableTreeNode(treeNode);
+            NodeList children = node.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                parseOptionNode(children.item(i),group,prefix);
+            }
+            root.add(group);
         } else if (type.equals("choice")) {
             String optionName  = node.getAttributes().getNamedItem("option").getNodeValue(); 
             String itemName = node.getAttributes().getNamedItem("name").getNodeValue();

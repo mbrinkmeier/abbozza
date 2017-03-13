@@ -45,13 +45,14 @@ public class FeatureCellEditor extends DefaultTreeCellEditor implements ChangeLi
 	
 	 public boolean isCellEditable(EventObject event) {
 		    boolean returnValue = super.isCellEditable(event);
+                    /*
 		    if (returnValue) {
 		      Object node = tree.getLastSelectedPathComponent();
 		      if ((node != null) && (node instanceof TreeNode)) {
 		        TreeNode treeNode = (TreeNode) node;
 		        returnValue = treeNode.isLeaf();
 		      }
-		    }
+		    }*/
 		    return returnValue;
 		  }
 	 
@@ -94,7 +95,8 @@ public class FeatureCellEditor extends DefaultTreeCellEditor implements ChangeLi
             if (e.getSource() instanceof JCheckBox) {
                 JCheckBox cb = (JCheckBox) e.getSource();
                 if (!cb.isSelected()) {
-                    tree.collapsePath(tree.getSelectionPath());
+                    // tree.collapsePath(tree.getSelectionPath());
+                } else {
                 }
             }
             tree.repaint();

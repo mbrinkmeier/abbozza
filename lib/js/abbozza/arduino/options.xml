@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <options>
     <group name="gui.blocks">
-        <item name="gui.operations" option="operations" default="true"/>
-        <item name="gui.local_variables" option="localVars" default="true"/>
-        <item name="gui.devices" option="devices" default="true"/>
-        <item name="gui.serial_communication" option="serial" default="true"/>
+        <item name="gui.operations" option="operations" default="true">
+            <item name="gui.local_variables" option="localVars" default="true"/>
+        </item>
+        <item name="gui.devices" option="devices" default="true">
+            <item name="gui.serial_communication" option="serial" default="true"/>
+        </item>
+        <item name="gui.usb" option="usb" default="true">
+            <item name="gui.messages" option="messages" default="true"/>
+        </item>
         <item name="gui.interrupts" option="interrupts" default="true"/>
         <item name="gui.use_long" option="use_long" default="false"/>
         <item name="gui.use_double" option="use_double" default="false"/>
