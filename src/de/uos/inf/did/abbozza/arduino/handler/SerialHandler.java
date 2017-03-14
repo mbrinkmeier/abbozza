@@ -23,6 +23,7 @@
 package de.uos.inf.did.abbozza.arduino.handler;
 
 import com.sun.net.httpserver.HttpExchange;
+import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.handler.AbstractHandler;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
@@ -38,6 +39,7 @@ public class SerialHandler extends AbstractHandler {
 
     public SerialHandler(AbbozzaServer abbozza) {
         super(abbozza);
+        AbbozzaLogger.out("SerialHandler registered",AbbozzaLogger.DEBUG);
     }
     
     @Override
@@ -45,6 +47,9 @@ public class SerialHandler extends AbstractHandler {
         String query = he.getRequestURI().getQuery();
         // msg=<msg>&timeout=<time>
         // No timeout means that the request is not waitung
+        query = query.replace("%20"," ");
+        AbbozzaLogger.out("SerialHandler: received " + he.getRequestURI().toString(),AbbozzaLogger.DEBUG);
+        AbbozzaLogger.out("SerialHandler: received " + query,AbbozzaLogger.DEBUG);
         query = query.replace('&', '\n');
         Properties props = new Properties();
         props.load(new StringReader(query));

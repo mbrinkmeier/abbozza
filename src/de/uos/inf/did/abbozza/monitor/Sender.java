@@ -25,6 +25,7 @@
 package de.uos.inf.did.abbozza.monitor;
 
 import cc.arduino.packages.BoardPort;
+import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.arduino.handler.SerialHandler;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -71,6 +72,7 @@ public class Sender extends Thread {
         // Check if web message
         if ( msg.getHandler() == null ) {
             // If not, simply write it
+            AbbozzaLogger.out("AbbozzaMonitor: Sending " + msg.toString() + " to board",AbbozzaLogger.DEBUG);            
             _monitor.writeMessage(msg.toString());  
         } else {
             // Otherwise        
@@ -84,10 +86,11 @@ public class Sender extends Thread {
                     }
                 }
             } else {        
+                AbbozzaLogger.out("AbbozzaMonitor: Sending " + msg.toString() + " to board",AbbozzaLogger.DEBUG);            
                 if (msg.getTimeout() == 0) {
-                    _monitor.writeMessage("[[" + msg.toString() + "]]");  
+                    _monitor.writeMessage(msg.toString());  
                 } else {
-                    _monitor.writeMessage("[[" + msg.toString() + "]]");  
+                    _monitor.writeMessage(msg.toString());  
                     msg.startTimeOut();
                     _monitor.addWaitingMsg(msg);
                 }

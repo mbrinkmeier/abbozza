@@ -64,7 +64,7 @@ public class Message {
 
     public String toString() {
         if ( _id.length() > 0 ) {
-            return _id + " " + _msg;
+            return _msg.replace("[[","[[" + _id + " ");
         }
         return _msg;
     }

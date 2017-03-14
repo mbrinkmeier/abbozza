@@ -29,6 +29,7 @@ import cc.arduino.packages.BoardPort;
 import com.sun.net.httpserver.HttpExchange;
 import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
+import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.arduino.handler.SerialHandler;
 import java.awt.Dimension;
