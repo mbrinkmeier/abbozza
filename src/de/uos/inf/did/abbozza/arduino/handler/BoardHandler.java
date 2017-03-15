@@ -79,6 +79,18 @@ public class BoardHandler extends AbstractHandler {
                         BaseNoGui.selectBoard(targetBoard);
                     }
                 }
+                
+                // Now check all additionally installed packages
+                for (TargetPackage targetPackage : BaseNoGui.packages.values()) {
+                    for (TargetPlatform targetPlatform : targetPackage.platforms()) {
+                        for (TargetBoard targetBoard : targetPlatform.getBoards().values()) {
+                            AbbozzaLogger.out(">> " + targetBoard.getName() + " == " + board);
+                            if (targetBoard.getName().equals(board)) {
+                                BaseNoGui.selectBoard(targetBoard);
+                            }
+                        }                        
+                    }
+                }
 
                 Base.INSTANCE.onBoardOrPortChange();
             }

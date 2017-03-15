@@ -95,7 +95,7 @@ Trotzdem fortfahren?</msg>
         <msg id="gui.use_long">Verwende lange Zahlen (32 Bit)</msg>
         <msg id="gui.use_double">Verwende präzisere Dezimalzahlen (64 Bit)</msg>
         <msg id="gui.usb">USB Kommunikation</msg>        
-        <msg id="gui.messages">NAchrichten</msg>
+        <msg id="gui.messages">Nachrichten</msg>
     </gui>
     <menu>
         <msg id="menu.collapse_blocks">Falte Blöcke zusammen</msg>

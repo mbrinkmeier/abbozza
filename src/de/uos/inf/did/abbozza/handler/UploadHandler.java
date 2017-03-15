@@ -68,6 +68,7 @@ public class UploadHandler extends AbstractHandler {
             String code = buf.toString();
 
             String response = uploadCode(code.toString());
+            response = response.trim();
             if (response.equals("")) {
                 sendResponse(exchg, 200, "text/plain", AbbozzaLocale.entry("msg.done-compiling"));
             } else {
@@ -88,6 +89,7 @@ public class UploadHandler extends AbstractHandler {
 
          System.err.println(code);
          response = _abbozzaServer.uploadCode(code);
+         AbbozzaLogger.out("Compileing response : \"" + response +"\"",AbbozzaLogger.INFO);
         
          // response = AbbozzaLogger.getErr();
          return response;

@@ -256,9 +256,9 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         System.setErr(newErr);
         
         try {
-            editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.compiling"));
+            AbbozzaLogger.out(AbbozzaLocale.entry("msg.compiling"),AbbozzaLogger.INFO);
             editor.handleExport(false);
-            editor.statusNotice("abbozza!: " + AbbozzaLocale.entry("msg.done_compiling"));
+            AbbozzaLogger.out(AbbozzaLocale.entry("msg.done_compiling"),AbbozzaLogger.INFO);
         } catch (Exception e) {
             editor.statusError(e);
             AbbozzaLogger.out(AbbozzaLocale.entry("msg.error_compiling"), AbbozzaLogger.INFO);
@@ -286,7 +286,10 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
         }
         
         // Wait for the termination of the export thread
-        while ((last != null) && (last.isAlive())) {}
+        AbbozzaLogger.out("Waiting for upload",AbbozzaLogger.INFO);
+        while ((last != null) && (last.isAlive())) {
+        }
+        AbbozzaLogger.out("Upload ended",AbbozzaLogger.INFO);
         
         PreferencesData.setBoolean("editor.save_on_verify", flag);
 
@@ -296,7 +299,7 @@ public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {
   
         // Fetch response
         String errMsg = buffer.toString();
-        System.err.println(errMsg);
+        AbbozzaLogger.out(errMsg,AbbozzaLogger.INFO);
                 
         return errMsg;
     }

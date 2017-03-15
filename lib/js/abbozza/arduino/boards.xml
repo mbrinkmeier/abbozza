@@ -159,4 +159,12 @@
 		<rx>0</rx>
 		<tx>1</tx>
 	</board>
+        <board id="flora8">
+            <name>Adafruit Flora</name>
+            <pins digital="13" analogin="0" analogout="0" led="7"/>
+            <pwm>3,6,9,10</pwm>
+            <interrupts></interrupts>
+            <rx>0</rx>
+            <tx>1</tx>
+        </board>
 </abbozza>
