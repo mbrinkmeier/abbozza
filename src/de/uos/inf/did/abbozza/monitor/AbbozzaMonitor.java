@@ -441,7 +441,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         if ( msg.startsWith("_") ) {
             pos = msg.indexOf(' ');
             String id = msg.substring(0, pos);
-            msg = msg.substring(pos).trim();
+            msg = "[["+ msg.substring(pos).trim() +"]]";
             _msg = _waitingMsg.get(id);
             if ( _msg != null ) {
                 _waitingMsg.remove(id);

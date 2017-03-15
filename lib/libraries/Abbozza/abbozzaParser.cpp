@@ -24,7 +24,12 @@ void AbbozzaParser::check() {
         // append string to buffer
         newBuf = Serial.readString();
         buffer.concat(newBuf);
-        if (debug) Serial.println("Buffer : '" + buffer + "'");
+        if (debug) {
+            String buf = String(buffer);
+            buf.replace("[[","[_[");
+            buf.replace("]]","]_]");
+            Serial.println("Buffer : '" + buf + "'");
+        }
         // find next command
         currentLine = "";
         start = buffer.indexOf("[[");
