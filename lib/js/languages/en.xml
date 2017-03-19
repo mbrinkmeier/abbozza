@@ -255,6 +255,8 @@ Continuing?</msg>
         <msg id="dev.WRITEBYTE">Write byte # to </msg>
         <msg id="dev.READFROMLINE">Read byte from</msg>
         <msg id="dev.LINEAVAILABLE">Byte available at #</msg>
+        <msg id="dev.LINELISTENING">Listening on #</msg>
+        <msg id="dev.LINELISTEN">Listen on</msg>
         <msg id="dev.MOTOR">Motor # Direction # Speed</msg>
         <msg id="dev.MOTORDIR">Set direction of Motor # to</msg>
         <msg id="dev.MOTORSPEED">Set speed of Motor # to</msg>

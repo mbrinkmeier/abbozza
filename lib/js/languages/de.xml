@@ -255,6 +255,8 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.WRITEBYTE">Schreibe Byte # auf</msg>
         <msg id="dev.READFROMLINE">Lies Byte von</msg>
         <msg id="dev.LINEAVAILABLE">Byte an # verfügbar</msg>
+        <msg id="dev.LINELISTENING">Verbindung # ist aktiv</msg>
+        <msg id="dev.LINELISTEN">Aktiviere</msg>
         <msg id="dev.MOTOR">Motor # Richtung # Geschwindigkeit</msg>
         <msg id="dev.MOTORDIR">Setze Richtung von Motor # auf</msg>
         <msg id="dev.MOTORSPEED">Setze Geschwindigkeit von Motor # auf</msg>
