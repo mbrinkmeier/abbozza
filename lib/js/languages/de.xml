@@ -314,6 +314,7 @@ Trotzdem fortfahren?</msg>
         <msg id="err.UNKNOWN_DEVICE">Unbekanntes Gerät</msg>
         <msg id="err.ILLEGAL_PIN">Ungültiger Pin: #1</msg>
         <msg id="err.DEFAULT_VALUE">Wert nicht gesetzt</msg>
+        <msg id="err.ILLEGAL_ANALOG_PIN">Kein analoger Pin!</msg>
         <msg id="err.WRONG_SYSTEM">Der Sketch ist für # Systeme!</msg>
         <msg id="err.WRONG_SYSTEM_TITLE">Falsches System!</msg>
         <msg id="err.WRONG_NAME">Unbekannter Name</msg>

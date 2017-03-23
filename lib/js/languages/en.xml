@@ -309,6 +309,7 @@ Continuing?</msg>
         <msg id="err.NOINPUT">Input is missing!</msg>
         <msg id="err.NOVALUE">Value is missing!</msg>
         <msg id="err.EMPTYVALUE">Value contains no block!</msg>
+        <msg id="err.ILLEGAL_ANALOG_PIN">No analog pin!</msg>
         <msg id="err.NOVARIABLE">No varaible chosen!</msg>
         <msg id="err.UNKNOWNLANG">Unknown language entry: #1</msg>
         <msg id="err.UNKNOWN_DEVICE">Unknown device</msg>
