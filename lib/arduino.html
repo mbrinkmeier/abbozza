@@ -5,10 +5,17 @@
         <link rel="icon" type="image/png" href="img/abbozza_icon.png">
 
         <link rel="stylesheet" type="text/css" href="css/abbozza.css">
+        <link rel="stylesheet" type="text/css" href="js/Magnifier/magnifier.css">
 
         <title>abbozza!</title>
         
         <script src="js/polyfill/CustomElements.js"></script>
+        <script src="js/Event/Event.js"></script>
+        <script src="js/Magnifier/Magnifier.js"></script>
+        <script type="text/javascript">
+            var abbozzaEvent = new Event(),
+            abbozzaMagnifier = new Magnifier(abbozzaEvent);
+        </script>        
         <script src="js/blockly/blockly_compressed_new.js"></script>
 
         <!-- arduino specific classes -->
