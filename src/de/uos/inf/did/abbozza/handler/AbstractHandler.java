@@ -28,6 +28,7 @@ import com.sun.net.httpserver.HttpHandler;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 
 /**
  *
@@ -42,7 +43,7 @@ public abstract class AbstractHandler implements HttpHandler {
     }
     
     public void sendResponse(HttpExchange exchg, int code, String type, String response) throws IOException {
-        byte[] buf = response.getBytes();
+        byte[] buf = response.getBytes("UTF-8");
         OutputStream out = exchg.getResponseBody();
         Headers responseHeaders = exchg.getResponseHeaders();
         responseHeaders.set("Content-Type", type);
@@ -50,6 +51,5 @@ public abstract class AbstractHandler implements HttpHandler {
         exchg.sendResponseHeaders(code, buf.length);
         out.write(buf);
         out.close();
-    }
-    
+    }    
 }

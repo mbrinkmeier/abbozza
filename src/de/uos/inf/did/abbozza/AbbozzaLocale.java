@@ -81,7 +81,6 @@ public class AbbozzaLocale {
             Element root = localeXml.createElement("languages");
             localeXml.appendChild(root);
             
-            System.out.println(Tools.documentToString(localeXml.getDoctype()));
             String locale = AbbozzaLocale.locale;
             Document globalLocale = fetchLocale("/js/languages/" + locale + ".xml");
                     
@@ -124,20 +123,6 @@ public class AbbozzaLocale {
             // Add locales from Plugins
             AbbozzaServer.getPluginManager().addLocales(locale,root);
             
-            /*
-            if (pluginLocale != null ) {
-            System.out.println(Tools.documentToString(pluginLocale));
-            System.out.println("BB");
-            Node root = globalLocale.adoptNode(pluginLocale.getDocumentElement());
-            System.out.println("CC");
-            globalLocale.appendChild(root);
-            System.out.println("DD");
-            }
-            System.out.println("BBBB");
-            
-            System.out.println(Tools.documentToString(globalLocale));
-            System.out.println("CCCC");
-            */
             return localeXml;
         } catch (Exception ex) {
             AbbozzaLogger.stackTrace(ex);
