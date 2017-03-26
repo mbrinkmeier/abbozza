@@ -32,12 +32,14 @@ import de.uos.inf.did.abbozza.arduino.handler.SerialHandler;
 public class Message {
                 
     private String _id;
+    private String _idPostfix;
     private String _msg;
     private HttpExchange _exchg;
     private SerialHandler _handler;
     private long _timeout;
     private long _stoptime;
-    
+ 
+    /*
     public Message(String id, String msg) {
         _id = id;
         _msg = msg;
@@ -45,10 +47,20 @@ public class Message {
         _handler = null;
         _timeout = 0;
     }
-
+    */
+    
     public Message(String id, String msg, HttpExchange exchg, SerialHandler handler, long timeout) {
         _id = id;
         _msg = msg;
+        int a = _msg.indexOf('_');
+        int b = -1;
+        _idPostfix = "";
+        if ( a >= 0 ) {
+            b = _msg.indexOf(' ');
+            _idPostfix = _msg.substring(a,b);
+            _msg = _msg.replace(_idPostfix,"");
+        }
+        _id = _id + _idPostfix;
         _exchg = exchg;
         _handler = handler;
         _timeout = timeout;
@@ -64,7 +76,11 @@ public class Message {
 
     public String toString() {
         if ( _id.length() > 0 ) {
-            return _msg.replace("[[","[[" + _id + " ");
+            if ( _msg.contains("[[_")) {
+                return _msg.replace("[[_","[[" + _id + "_");
+            } else {
+                return _msg.replace("[[","[[" + _id + " ");
+            }
         }
         return _msg;
     }
@@ -87,5 +103,9 @@ public class Message {
     
     public boolean isTimedOut() {
         return (System.currentTimeMillis() > _stoptime );
+    }
+
+    String getIdPostfix() {
+        return this._idPostfix;
     }
 }

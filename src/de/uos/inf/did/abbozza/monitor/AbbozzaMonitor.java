@@ -352,7 +352,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
      */
     public void sendMessage(String msg) {
         if ( this.boardPort != null ) {
-            _msgQueue.add(new Message("",msg));
+            _msgQueue.add(new Message("",msg,null,null,0));
         }
     }
 
@@ -441,9 +441,9 @@ public class AbbozzaMonitor extends JFrame implements ActionListener {
         if ( msg.startsWith("_") ) {
             pos = msg.indexOf(' ');
             String id = msg.substring(0, pos);
-            msg = "[["+ msg.substring(pos).trim() +"]]";
             _msg = _waitingMsg.get(id);
             if ( _msg != null ) {
+                msg = "[["+ _msg.getIdPostfix() + " " + msg.substring(pos).trim() +"]]";
                 _waitingMsg.remove(id);
                 try {
                     _msg.getHandler().sendResponse(_msg.getHttpExchange(), 200, "text/plain", msg);
