@@ -38,6 +38,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -173,7 +174,10 @@ public class SaveHandler extends AbstractHandler {
                 // Write DOM to file via Transformer
                 Transformer transformer = TransformerFactory.newInstance().newTransformer();
                 // Do not add a surrounding xml tag
-                transformer.setOutputProperty("omit-xml-declaration", "yes");
+                transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+                transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");               
+                transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
                 transformer.transform(new DOMSource(xml), new StreamResult(file));
 
                 /*

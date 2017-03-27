@@ -130,23 +130,23 @@ public class JarDirHandler implements HttpHandler {
 
         Headers responseHeaders = exchg.getResponseHeaders();
         if (path.equals("/")) {
-            responseHeaders.set("Content-Type", "text/html");
+            responseHeaders.set("Content-Type", "text/html; charset=utf-8");
         } else if (path.endsWith(".css")) {
-            responseHeaders.set("Content-Type", "text/css");
+            responseHeaders.set("Content-Type", "text/css; charset=utf-8");
         } else if (path.endsWith(".js")) {
-            responseHeaders.set("Content-Type", "text/javascript");
+            responseHeaders.set("Content-Type", "text/javascript; charset=utf-8");
         } else if (path.endsWith(".xml")) {
-            responseHeaders.set("Content-Type", "text/xml");
+            responseHeaders.set("Content-Type", "text/xml; charset=utf-8");
         } else if (path.endsWith(".svg")) {
             responseHeaders.set("Content-Type", "image/svg+xml");            
         } else if (path.endsWith(".abz")) {
-            responseHeaders.set("Content-Type", "text/xml");            
+            responseHeaders.set("Content-Type", "text/xml; charset=utf-8");            
         } else if (path.endsWith(".png")) {
             responseHeaders.set("Content-Type", "image/png");
         } else if (path.endsWith(".html")) {
-            responseHeaders.set("Content-Type", "text/html");
+            responseHeaders.set("Content-Type", "text/html; charset=utf-8");
         } else {
-            responseHeaders.set("Content-Type", "text/text");            
+            responseHeaders.set("Content-Type", "text/text; charset=utf-8");            
         }
 
         // ok, we are ready to send the response.
