@@ -39,6 +39,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
@@ -180,7 +181,7 @@ public class LoadHandler extends AbstractHandler {
         URLConnection conn = url.openConnection();
         InputStream inStream = conn.getInputStream();
         
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inStream,"utf-8"));
         
         while (reader.ready()) {
             result = result + reader.readLine()+"\n";
@@ -196,7 +197,7 @@ public class LoadHandler extends AbstractHandler {
             URL url = new URL("jar:" + abj.toString() + "!/start.abz");
             AbbozzaLogger.out("LoadHandler: Open abj " + url.toString(),AbbozzaLogger.DEBUG);
             URLConnection conn = url.openConnection();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(),"utf-8"));
             while (reader.ready()) {
                  result = result + reader.readLine() + '\n';
              }
@@ -213,7 +214,7 @@ public class LoadHandler extends AbstractHandler {
 
     private String getSketchFromFile(URL abz) throws FileNotFoundException, IOException {
         String result = "";
-        BufferedReader reader = new BufferedReader(new InputStreamReader(abz.openStream()));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(abz.openStream(),"utf-8"));
         while (reader.ready()) {
             result = result + reader.readLine() + '\n';
         }
@@ -230,7 +231,7 @@ public class LoadHandler extends AbstractHandler {
             URL url = new URL("jar:file://" + file.getCanonicalPath() + "!/start.abz");
             AbbozzaLogger.out("LoadHandler: Open abj " + url.toString(),AbbozzaLogger.DEBUG);
             URLConnection conn = url.openConnection();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(),"utf-8"));
             while (reader.ready()) {
                  result = result + reader.readLine() + '\n';
              }
