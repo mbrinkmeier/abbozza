@@ -70,7 +70,7 @@ public class JarDirHandler implements HttpHandler {
     public void addDir(String path, String name) {
         File file = new File(path);
         if (!file.exists()) {
-            AbbozzaLogger.err("JarHandler: " + name + " : " + file.toURI().toString() + " not found");
+            AbbozzaLogger.out("JarHandler: " + name + " : " + file.toURI().toString() + " not found",AbbozzaLogger.DEBUG);
         } else {
             AbbozzaLogger.out("JarHandler: " + name + " : " + file.toURI().toString() ,AbbozzaLogger.DEBUG);
         }
@@ -99,7 +99,7 @@ public class JarDirHandler implements HttpHandler {
             uri = new URI("jar:"+ jarUri.toString() +"!");
             AbbozzaLogger.out("JarHandler: " + name + " : " + uri.toString(),AbbozzaLogger.DEBUG);
         } catch (URISyntaxException e) {
-            AbbozzaLogger.err("JarHandler: " + name + " not found (" + path + ")");
+            AbbozzaLogger.out("JarHandler: " + name + " not found (" + path + ")",AbbozzaLogger.DEBUG);
             return;
         }        
         entries.add(uri);

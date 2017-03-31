@@ -64,6 +64,7 @@ public class Plugin {
     private Node _locales;
     private Node _requirements;
     private String _system;
+    private String _parentOption;
     private PluginHandler _handler;
     
    
@@ -95,6 +96,7 @@ public class Plugin {
                 Node root = plugins.item(0);
                 this._id = root.getAttributes().getNamedItem("id").getNodeValue();
                 this._system = root.getAttributes().getNamedItem("system").getNodeValue();
+                this._parentOption = root.getAttributes().getNamedItem("parent").getNodeValue();
                 NodeList children = root.getChildNodes();
                 Node child;
                 for ( int i = 0; i < children.getLength(); i++) {
@@ -264,5 +266,9 @@ public class Plugin {
 
     Node getRequirements() {
         return this._requirements;
+    }
+
+    public String getParentOption() {
+        return this._parentOption;
     }
 }

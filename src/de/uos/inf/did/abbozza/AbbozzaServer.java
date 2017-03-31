@@ -578,8 +578,26 @@ public abstract class AbbozzaServer implements HttpHandler {
 
                     ((Element) pluginOpts).setAttribute("plugin", plugin.getId());
 
+                    Node parent = null;
+                    String parentName = plugin.getParentOption();
+                    NodeList nodes = optionsXml.getElementsByTagName("item");
+                    for (int i = 0 ; i < nodes.getLength(); i++) {
+                        String name = null;
+                        Node node = (Node) nodes.item(i);
+                        if ( node.getAttributes().getNamedItem("option") != null ) {
+                            name = node.getAttributes().getNamedItem("option").getTextContent();
+                            if ( name.equals(parentName) ) {
+                                parent = node;
+                            }
+                        }
+                    }
                     optionsXml.adoptNode(pluginOpts);
-                    root.appendChild(pluginOpts);
+
+                    if ( parent != null ) {
+                        parent.appendChild(pluginOpts);
+                    } else {                 
+                        root.appendChild(pluginOpts);
+                    }
                 }
 
             } catch (Exception ex) {
