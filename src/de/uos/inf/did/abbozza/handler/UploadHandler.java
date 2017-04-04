@@ -89,7 +89,7 @@ public class UploadHandler extends AbstractHandler {
 
          System.err.println(code);
          response = _abbozzaServer.uploadCode(code);
-         AbbozzaLogger.out("Compileing response : \"" + response +"\"",AbbozzaLogger.INFO);
+         AbbozzaLogger.out("Compiling response : \"" + response +"\"",AbbozzaLogger.INFO);
         
          // response = AbbozzaLogger.getErr();
          return response;

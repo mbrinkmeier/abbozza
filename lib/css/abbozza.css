@@ -559,3 +559,10 @@ div[role="treeitem"]:hover {
     background-color : #f0f0f0;
     padding: 30px;
 }
+
+#overlay_err {
+   text-align: left;
+   font-size: 80%;
+   font: monospace;
+   display: inline-block;
+}
