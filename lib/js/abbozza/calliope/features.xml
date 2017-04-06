@@ -19,9 +19,6 @@
             </block>            
         </category>
 
-        <category id="cat.FUNC">
-        </category>
-        
         <category name="Variablen" id="cat.VAR">
             <block type="var_block"></block>
             <block type="var_assign">
