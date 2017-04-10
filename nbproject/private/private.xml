@@ -13,12 +13,21 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="NetBeansProjects"/>
         <group>
-            <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/AbbozzaServer.java</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliope/Code.js</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/micropython/blocks/Main.js</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/calliope.html</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/micropython/blocks/Text.js</file>
             <file>file:/home/michael/Projekte/abbozza/lib/arduino.html</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliope/features.xml</file>
         </group>
         <group>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/Abbozza.js</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliope/Code.js</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/calliope.html</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/micropython/blocks/Buttons.js</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/micropython/blocks/Text.js</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/arduino.html</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliope/features.xml</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/micropython/blocks/Functions.js</file>
         </group>
     </open-files>
 </project-private>
