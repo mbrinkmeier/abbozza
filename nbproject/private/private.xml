@@ -14,11 +14,12 @@
         <group name="NetBeansProjects"/>
         <group>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliope/Code.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/micropython/blocks/Main.js</file>
             <file>file:/home/michael/Projekte/abbozza/lib/calliope.html</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/micropython/blocks/Buttons.js</file>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/micropython/blocks/Text.js</file>
             <file>file:/home/michael/Projekte/abbozza/lib/arduino.html</file>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliope/features.xml</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/micropython/blocks/Functions.js</file>
         </group>
         <group>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliope/Code.js</file>
