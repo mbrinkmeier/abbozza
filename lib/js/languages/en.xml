@@ -127,6 +127,7 @@ Continuing?</msg>
         <msg id="cat.FUNC">Operations</msg>
         <msg id="cat.DEVICES">Devices</msg>
         <msg id="cat.SERIAL">Communication</msg>
+        <msg id="cat.SOUND">Sound</msg>
         <msg id="cat.LCD">LCD</msg>
         <msg id="cat.TEST">Testblocks</msg>
         <msg id="cat.MISC">Misc</msg>
@@ -268,10 +269,9 @@ Continuing?</msg>
         <msg id="MICROS">Time in microseconds (µs)</msg>
 
         <msg id="dev.SPEAKER">Speaker</msg>
-        <msg id="dev.SPEAKER_PLAY">Play sound on # with frequency</msg>
-        <msg id="dev.SPEAKER_PLAY_DUR">Play sound on # with frequency # for # ms</msg>
-        <msg id="dev.SPEAKER_NOTE">Play on # the note # from the </msg>
-        <msg id="dev.SPEAKER_NOTE_DUR">Play on # the note # from the  # for # ms</msg>
+        <msg id="dev.SPEAKER_PLAY">Play sound on # Frequency</msg>
+        <msg id="dev.SPEAKER_PLAY_DUR">Play sound on # Frequency # Duration(ms)</msg>
+        <msg id="dev.SPEAKER_NOTE_INT">Note # from the </msg>
         <msg id="dev.OCTAVE_CONTRA">Contra-octave (very deep)</msg>
         <msg id="dev.OCTAVE_GREAT">great octave (deeper)</msg>
         <msg id="dev.OCTAVE_SMALL">small octave (deep)</msg>

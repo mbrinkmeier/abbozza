@@ -211,13 +211,6 @@
             <block type="dev_rgb_led"></block>
             <block type="dev_rgb_led_set_color"></block>
             <block type="dev_rgb_led_set_color2"></block>
-            <block type="dev_speaker"></block>
-            <block type="dev_speaker_play"></block>
-            <block type="dev_speaker_play_dur"></block>
-            <!-- block type="dev_speaker_note"></block>
-            <block type="dev_speaker_note_dur"></block -->
-            <block type="dev_speaker_note_int"></block>
-            <block type="dev_speaker_mute"></block>
             <block type="dev_servo"></block>
             <block type="dev_servo_set">
                 <value name="VALUE">
@@ -237,6 +230,16 @@
             <block type="dev_ir_read"></block>
             <block type="dev_ir_read_dist"></block>
         </category> 		
+        
+        <category name="Töne" id="cat.SOUND">
+            <block type="dev_speaker"></block>
+            <block type="dev_speaker_play"></block>
+            <block type="dev_speaker_play_dur"></block>
+            <!-- block type="dev_speaker_note"></block>
+            <block type="dev_speaker_note_dur"></block -->
+            <block type="dev_speaker_note_int"></block>
+            <block type="dev_speaker_mute"></block>
+        </category>
     </feature>
 
     <feature id ="feat.INT" option="interrupts">

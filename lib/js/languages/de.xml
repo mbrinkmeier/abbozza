@@ -127,6 +127,7 @@ Trotzdem fortfahren?</msg>
         <msg id="cat.FUNC">Operationen</msg>
         <msg id="cat.DEVICES">Geräte</msg>
         <msg id="cat.SERIAL">Kommunikation</msg>
+        <msg id="cat.SOUND">Töne</msg>
         <msg id="cat.LCD">LCD</msg>
         <msg id="cat.TEST">Testblöcke</msg>
         <msg id="cat.MISC">Verschiedenes</msg>
