@@ -72,7 +72,7 @@ public class PluginManager implements HttpHandler {
     private void detectPlugins() {
         // Check local dir
         File path = new File(this._abbozza.getGlobalPluginPath());
-        AbbozzaLogger.out("PluginManager: Checking local dir " + path,AbbozzaLogger.INFO);    
+        AbbozzaLogger.out("PluginManager: Checking global dir " + path,AbbozzaLogger.INFO);    
         File[] dirs = null;
         dirs = path.listFiles(new FileFilter() {
             public boolean accept(File pathname) {
@@ -94,7 +94,7 @@ public class PluginManager implements HttpHandler {
         
         // Check global dir
         path = new File(this._abbozza.getLocalPluginPath());
-        AbbozzaLogger.out("PluginManager: Checking global dir " + path,AbbozzaLogger.INFO);        
+        AbbozzaLogger.out("PluginManager: Checking local dir " + path,AbbozzaLogger.INFO);        
         dirs = path.listFiles(new FileFilter() {
             public boolean accept(File pathname) {
                 return pathname.isDirectory();
@@ -118,7 +118,7 @@ public class PluginManager implements HttpHandler {
         Plugin plugin;
         Document pluginXml;
         
-        if (dirs != null) {
+        if ((dirs != null) && (dirs.length > 0)) {
             for (int i=0; i < dirs.length; i++) {
                 try {
                     pluginXml = getPluginXml(dirs[i].toURI().toURL());
@@ -146,7 +146,7 @@ public class PluginManager implements HttpHandler {
         Document pluginXml;
         URL pluginUrl;
         
-        if (jars != null) {
+        if ((jars != null) && (jars.length > 0)) {
             for (int i=0; i < jars.length; i++) {
                 try {
                     pluginUrl = new URL("jar:" + jars[i].toURI().toString() + "!/");

@@ -175,6 +175,7 @@ Continuing?</msg>
         <msg id="loop.COUNT">Count with # from # to # by</msg>
         <msg id="loop.WAITFOR">Wait</msg>
         <msg id="loop.WAITFOR_MS">ms</msg>
+        <msg id="loop.WAITFOR_MICROS">µs</msg>
         <msg id="loop.ASCENDING">ascending</msg>
         <msg id="loop.DESCENDING">descending</msg>
 		
@@ -263,7 +264,21 @@ Continuing?</msg>
         <msg id="dev.FORWARD">forward</msg>
         <msg id="dev.BACKWARD">backward</msg>
         <msg id="AND">and</msg>
-        <msg id="MILLIS">Time in ms</msg>
+        <msg id="MILLIS">Time in milliseconds (ms)</msg>
+        <msg id="MICROS">Time in microseconds (µs)</msg>
+
+        <msg id="dev.SPEAKER">Speaker</msg>
+        <msg id="dev.SPEAKER_PLAY">Play sound on # with frequency</msg>
+        <msg id="dev.SPEAKER_PLAY_DUR">Play sound on # with frequency # for # ms</msg>
+        <msg id="dev.SPEAKER_NOTE">Play on # the note # from the </msg>
+        <msg id="dev.SPEAKER_NOTE_DUR">Play on # the note # from the  # for # ms</msg>
+        <msg id="dev.OCTAVE_CONTRA">Contra-octave (very deep)</msg>
+        <msg id="dev.OCTAVE_GREAT">great octave (deeper)</msg>
+        <msg id="dev.OCTAVE_SMALL">small octave (deep)</msg>
+        <msg id="dev.OCTAVE_ONE_LINE">one-line octave (regular)</msg>
+        <msg id="dev.OCTAVE_TWO_LINE">two-line octave (high)</msg>
+        <msg id="dev.OCTAVE_THREE_LINE">three-line octave (higher)</msg>
+        <msg id="dev.OCTAVE_FOUR_LINE">four-line octave (very high)</msg>
 			
         <msg id="SETUP">Setup</msg>
         <msg id="LOOP">Main loop</msg>

@@ -36,6 +36,11 @@
                     <block type="math_number"><field name="VALUE">1000</field></block>
                 </value>
             </block>            
+            <block type="loop_delay_micros">
+                <value name="TIME">
+                    <block type="math_number"><field name="VALUE">1000</field></block>
+                </value>
+            </block>            
         </category>
 
         <category id="cat.FUNC">
@@ -68,6 +73,7 @@
             <block type="math_random2"></block>
             <block type="math_randomseed"></block>
             <block type="math_millis"></block>
+            <block type="math_micros"></block>
             <block type="math_constrain"></block>
             <block type="math_scale"></block>
         </category>
@@ -205,15 +211,19 @@
             <block type="dev_rgb_led"></block>
             <block type="dev_rgb_led_set_color"></block>
             <block type="dev_rgb_led_set_color2"></block>
+            <block type="dev_speaker"></block>
+            <block type="dev_speaker_play"></block>
+            <block type="dev_speaker_play_dur"></block>
+            <!-- block type="dev_speaker_note"></block>
+            <block type="dev_speaker_note_dur"></block -->
+            <block type="dev_speaker_note_int"></block>
+            <block type="dev_speaker_mute"></block>
             <block type="dev_servo"></block>
             <block type="dev_servo_set">
                 <value name="VALUE">
                     <block type="math_number"></block>
                 </value>
             </block>
-            <!-- block type="dev_motor"></block>            
-            <block type="dev_motor_dir"></block>            
-            <block type="dev_motor_speed"></block-->            
         </category> 		
         <category name="Sensoren" id="cat.DEVIN">
             <block type="dev_button"></block>

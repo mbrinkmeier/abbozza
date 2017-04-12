@@ -145,8 +145,6 @@ public class Plugin {
             }
         } catch (Exception ex) {
             this._id = null;
-            AbbozzaLogger.err("Plugin: \n" + ex.toString());
-            AbbozzaLogger.stackTrace(ex);
         }
         
         if (_options == null) {
@@ -156,7 +154,8 @@ public class Plugin {
                 Document doc = builder.newDocument();
                 _options = doc.createElement("options");
             } catch (ParserConfigurationException ex) {
-                Logger.getLogger(Plugin.class.getName()).log(Level.SEVERE, null, ex);
+                AbbozzaLogger.err("Plugin: " + ex.toString());
+                AbbozzaLogger.stackTrace(ex);
             }
         }
     }

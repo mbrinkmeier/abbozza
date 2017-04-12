@@ -175,6 +175,7 @@ Trotzdem fortfahren?</msg>
         <msg id="loop.COUNT">Zähle # von # bis # mit Schrittweite</msg>
         <msg id="loop.WAITFOR">Warte</msg>
         <msg id="loop.WAITFOR_MS">ms</msg>
+        <msg id="loop.WAITFOR_MICROS">µs</msg>
         <msg id="loop.ASCENDING">aufsteigend</msg>
         <msg id="loop.DESCENDING">absteigend</msg>
 		
@@ -262,8 +263,25 @@ Trotzdem fortfahren?</msg>
         <msg id="dev.MOTORSPEED">Setze Geschwindigkeit von Motor # auf</msg>
         <msg id="dev.FORWARD">vorwärts</msg>
         <msg id="dev.BACKWARD">rückwärts</msg>
+        
+        <msg id="dev.SPEAKER">Lautsprecher</msg>
+        <msg id="dev.SPEAKER_MUTE">Lautsprecher # aus</msg>
+        <msg id="dev.SPEAKER_PLAY">Spiele auf # Frequenz</msg>
+        <msg id="dev.SPEAKER_PLAY_DUR">Spiele auf # Frequenz # Dauer (ms)</msg>
+        <msg id="dev.SPEAKER_NOTE">Spiele auf # Ton # Okatve </msg>
+        <msg id="dev.SPEAKER_NOTE_DUR">Spiele auf # Ton # Oktave # Dauer (ms)</msg>
+        <msg id="dev.SPEAKER_NOTE_INT">Ton # aus</msg>
+        <msg id="dev.OCTAVE_CONTRA">Kontra-Oktave (sehr tief)</msg>
+        <msg id="dev.OCTAVE_GREAT">großen Oktave (tiefer)</msg>
+        <msg id="dev.OCTAVE_SMALL">kleinen Oktave (tief)</msg>
+        <msg id="dev.OCTAVE_ONE_LINE">eingestrichenen Oktave (normal)</msg>
+        <msg id="dev.OCTAVE_TWO_LINE">zweigestrichenen Oktave (hoch)</msg>
+        <msg id="dev.OCTAVE_THREE_LINE">dreigestrichenen Oktave (höher)</msg>
+        <msg id="dev.OCTAVE_FOUR_LINE">viergestrichenen Oktave (sehr hoch)</msg>
+        
         <msg id="AND">und</msg>
-        <msg id="MILLIS">Zeit in ms</msg>
+        <msg id="MILLIS">Zeit in Millisekunden (ms)</msg>
+        <msg id="MICROS">Zeit in Mikroseconden (µs)</msg>
 			
         <msg id="SETUP">Vorbereitung</msg>
         <msg id="LOOP">Hauptschleife</msg>
