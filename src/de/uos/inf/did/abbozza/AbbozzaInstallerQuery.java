@@ -24,6 +24,7 @@ package de.uos.inf.did.abbozza;
 import de.uos.inf.did.abbozza.arduino.AbbozzaInstaller;
 import de.uos.inf.did.abbozza.arduino.Abbozza;
 import de.uos.inf.did.abbozza.calliope.AbbozzaCalliope;
+import de.uos.inf.did.abbozza.calliope.AbbozzaCalliopeC;
 import de.uos.inf.did.abbozza.calliope.AbbozzaCalliopeInstaller;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -208,6 +209,11 @@ public class AbbozzaInstallerQuery extends javax.swing.JDialog {
 
                 abbozza.startServer();
                 // abbozza.startBrowser("calliope.html");
+            } else if (cmd.equals("calliopeC")) {
+                AbbozzaCalliopeC abbozza = new AbbozzaCalliopeC();
+                abbozza.init("calliopeC");
+
+                abbozza.startServer();               
             }
         }
     }

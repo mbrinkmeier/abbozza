@@ -23,54 +23,26 @@ package de.uos.inf.did.abbozza.arduino;
 
 import de.uos.inf.did.abbozza.handler.JarDirHandler;
 import java.awt.Color;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 import processing.app.Editor;
 import processing.app.PreferencesData;
 import processing.app.tools.Tool;
 
 import com.sun.net.httpserver.*;
-import de.uos.inf.did.abbozza.AbbozzaConfig;
-import de.uos.inf.did.abbozza.AbbozzaConfigDialog;
 import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.arduino.handler.BoardHandler;
 import de.uos.inf.did.abbozza.arduino.handler.SerialHandler;
-import de.uos.inf.did.abbozza.handler.CheckHandler;
-import de.uos.inf.did.abbozza.handler.ConfigDialogHandler;
-import de.uos.inf.did.abbozza.handler.ConfigHandler;
-import de.uos.inf.did.abbozza.handler.LoadHandler;
-import de.uos.inf.did.abbozza.handler.MonitorHandler;
-import de.uos.inf.did.abbozza.handler.SaveHandler;
-import de.uos.inf.did.abbozza.handler.TaskHandler;
-import de.uos.inf.did.abbozza.handler.UploadHandler;
-import de.uos.inf.did.abbozza.handler.VersionHandler;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 import processing.app.Base;
 import processing.app.BaseNoGui;
-import processing.app.debug.RunnerException;
-import processing.app.helpers.PreferencesMapException;
-import processing.app.packages.LibraryList;
 import processing.app.packages.UserLibrary;
 
 public class Abbozza extends AbbozzaServer implements Tool, HttpHandler {

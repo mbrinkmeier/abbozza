@@ -23,28 +23,18 @@
 package de.uos.inf.did.abbozza.calliope;
 
 import com.sun.net.httpserver.HttpHandler;
-import de.uos.inf.did.abbozza.AbbozzaLocale;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.calliope.handler.BoardHandler;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Toolkit;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.filechooser.FileFilter;
 
 /**
  *
@@ -53,8 +43,8 @@ import javax.swing.filechooser.FileFilter;
 public class AbbozzaCalliope extends AbbozzaServer implements HttpHandler {
 
     private int _SCRIPT_ADDR = 0x3e000; 
-    private String _pathToBoard = "";
-    private AbbozzaCalliopeFrame frame;
+    protected String _pathToBoard = "";
+    protected AbbozzaCalliopeFrame frame;
 
     
     public static void main (String args[]) {

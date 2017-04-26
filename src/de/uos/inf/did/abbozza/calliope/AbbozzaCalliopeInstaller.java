@@ -314,12 +314,32 @@ public class AbbozzaCalliopeInstaller extends javax.swing.JFrame {
                         scriptFile.setExecutable(true);
                         writer.flush();
                         writer.close();
+                        // Writing start script for calliope C
+                        AbbozzaLogger.out("Writing " + abbozzaDir + "/abbozzaCalliopeC.sh", AbbozzaLogger.INFO);
+                        scriptFile = new File(abbozzaDir + "/abbozzaCalliopeC.sh");
+                        scriptFile.createNewFile();
+                        writer = new PrintWriter(scriptFile);
+                        writer.println("#!/bin/sh ");
+                        writer.println("cd " + abbozzaDir);
+                        writer.println("java -jar Abbozza.jar calliopeC");
+                        scriptFile.setExecutable(true);
+                        writer.flush();
+                        writer.close();
                     } else if (osname.contains("win")) {
                         scriptFile = new File(abbozzaDir + "\\abbozzaCalliope.bat");
                         scriptFile.createNewFile();
                         PrintWriter writer = new PrintWriter(scriptFile);
                         writer.println("cd " + abbozzaDir);
                         writer.println("java -jar Abbozza.jar calliope");
+                        scriptFile.setExecutable(true);
+                        writer.flush();
+                        writer.close();
+                        // Writing start script for Calliope C
+                        scriptFile = new File(abbozzaDir + "\\abbozzaCalliopeC.bat");
+                        scriptFile.createNewFile();
+                        writer = new PrintWriter(scriptFile);
+                        writer.println("cd " + abbozzaDir);
+                        writer.println("java -jar Abbozza.jar calliopeC");
                         scriptFile.setExecutable(true);
                         writer.flush();
                         writer.close();
