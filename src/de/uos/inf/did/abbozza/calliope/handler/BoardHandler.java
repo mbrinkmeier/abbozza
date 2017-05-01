@@ -39,13 +39,11 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
-import org.python.util.PythonInterpreter;
 
 
 public class BoardHandler extends AbstractHandler {
 
     private boolean _query;
-    private PythonInterpreter _interpreter;
 
     /**
      * Initialize the board request handler
