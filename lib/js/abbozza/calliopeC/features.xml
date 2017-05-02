@@ -1,0 +1,103 @@
+<features>
+
+    <feature id="feat.BASE">
+        <category name="Entscheidungen" id="cat.COND">
+            <block type="cond_if"></block>
+            <block type="cond_if_else"></block>
+        </category>
+
+        <category name="Schleifen" id="cat.LOOPS">
+            <block type="loop_endless"></block>
+            <block type="loop_while"></block>
+            <block type="loop_fixed"></block>
+            <block type="loop_count"></block>
+            <block type="loop_break"></block>
+            <block type="loop_delay">
+                <value name="TIME">
+                    <block type="math_number"></block>
+                </value>
+            </block>            
+        </category>
+
+        <category name="Variablen" id="cat.VAR">
+            <block type="var_block"></block>
+            <block type="var_assign">
+                <value name="LEFT">
+                    <block type="var_block"></block>
+                </value>
+            </block>
+        </category>
+
+        <category name="Logik" id="cat.LOGIC">
+            <block type="logic_const"></block>
+            <block type="logic_op"></block>
+            <block type="logic_not"></block>
+            <block type="logic_compare"></block>
+        </category>
+	    
+        <category name="Mathe" id="cat.MATH">
+            <block type="math_number"></block>
+            <block type="math_calc"></block>
+            <block type="math_round"></block>
+            <block type="math_unary_x"></block>
+            <block type="math_binary"></block>
+            <block type="math_random"></block>
+            <block type="math_random2"></block>
+            <block type="math_randomseed"></block>
+            <block type="math_millis"></block>
+        </category>
+	    
+        <category name="Text" id="cat.TEXT">
+            <block type="text_const"></block>
+            <block type="text_charat"></block>
+            <block type="text_concat"></block>
+            <block type="text_from_number"></block>
+            <block type="text_from_ascii"></block>
+            <block type="ascii_from_text"></block>
+        </category>
+
+        <category name="Display" id="cat.DISPLAY">
+            <block type="display_scroll"></block>
+            <block type="display_show_internal_image"></block>
+            <block type="display_show_image"></block>
+            <block type="display_set_pixel">
+                <value name="COL">
+                    <block type="display_coord"></block>
+                </value>
+                <value name="ROW">
+                    <block type="display_coord"></block>
+                </value>
+                <value name="COLOR">
+                    <block type="display_color"></block>
+                </value>
+            </block>
+            <block type="display_get_pixel"></block>
+            <block type="display_clear"></block>
+            <block type="display_on"></block>
+            <block type="display_off"></block>
+            <block type="display_is_on"></block>
+        </category>
+
+        <category  id="cat.DEVIN">
+            <block type="dev_button_pressed"></block>
+            <block type="dev_button_was_pressed"></block>
+            <block type="dev_button_get_presses"></block>
+            <block type="dev_accel_get"></block>
+            <block type="dev_accel_gesture"></block>
+            <block type="dev_accel_is_gesture"></block>
+            <block type="dev_accel_was_gesture"></block>
+            <block type="dev_gesture"></block>
+        </category>
+        	            
+    </feature>
+		
+    <feature id="feat.FUNC">
+        <category id="cat.FUNC">
+            <block type="func_decl"></block>
+            <block type="func_call"></block>
+            <block type="func_return"></block>
+        </category>
+    </feature>
+	
+    
+</features>
