@@ -49,14 +49,15 @@
 	    
         <category name="Mathe" id="cat.MATH">
             <block type="math_number"></block>
+            <block type="math_decimal"></block>
             <block type="math_calc"></block>
             <block type="math_round"></block>
             <block type="math_unary_x"></block>
-            <block type="math_binary"></block>
+            <!-- block type="math_binary"></block-->
             <block type="math_random"></block>
-            <block type="math_random2"></block>
-            <block type="math_randomseed"></block>
-            <block type="math_millis"></block>
+            <!-- block type="math_random2"></block-->
+            <!-- block type="math_randomseed"></block-->
+            <!-- block type="math_millis"></block-->
         </category>
 	    
         <category name="Text" id="cat.TEXT">
