@@ -11,12 +11,24 @@
             <block type="loop_while"></block>
             <block type="loop_fixed"></block>
             <block type="loop_count"></block>
+            <block type="loop_count_dir"></block>
+            <block type="loop_count_dir_step"></block>
             <block type="loop_break"></block>
+            <block type="loop_delay_seconds">
+                <value name="TIME">
+                    <block type="math_decimal"></block>
+                </value>
+            </block>  
             <block type="loop_delay">
                 <value name="TIME">
                     <block type="math_number"></block>
                 </value>
-            </block>            
+            </block>  
+            <block type="loop_delay_micros">
+                <value name="TIME">
+                    <block type="math_number"></block>
+                </value>
+            </block>  
         </category>
 
         <category name="Variablen" id="cat.VAR">
