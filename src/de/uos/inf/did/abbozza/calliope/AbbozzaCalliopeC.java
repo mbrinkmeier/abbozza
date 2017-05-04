@@ -107,6 +107,8 @@ public class AbbozzaCalliopeC extends AbbozzaCalliope {
                 
                 exitValue = proc.exitValue();
                 
+                AbbozzaLogger.out("Exit value: " + exitValue, AbbozzaLogger.INFO);
+                
                 BufferedReader buf = new BufferedReader(new InputStreamReader(err));
                 while (buf.ready()) {
                     errMsg = errMsg + "\n" + buf.readLine();
