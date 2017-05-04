@@ -70,7 +70,11 @@
         </category>
 
         <category name="Display" id="cat.DISPLAY">
-            <block type="display_scroll"></block>
+            <block type="display_scroll">
+                <value name="TEXT">
+                    <block type="text_const"></block>
+                </value>
+            </block>
             <block type="display_show_internal_image"></block>
             <block type="display_image"></block>
             <block type="display_show_image"></block>

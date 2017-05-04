@@ -22,47 +22,126 @@
 package de.uos.inf.did.abbozza.calliope;
 
 import de.uos.inf.did.abbozza.AbbozzaLogger;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author mbrinkmeier
  */
 public class AbbozzaCalliopeC extends AbbozzaCalliope {
-    
-    public static void main (String args[]) {
+
+    protected String _buildPath;
+
+    public static void main(String args[]) {
         AbbozzaCalliopeC abbozza = new AbbozzaCalliopeC();
         abbozza.init("calliopeC");
-        
+
         abbozza.startServer();
         // abbozza.startBrowser("calliope.html");        
     }
 
+    /**
+     * Initialize Server
+     *
+     * @param system
+     */
+    public void init(String system) {
+        super.init(system);
+        _buildPath = System.getProperty("user.home") + "/abbozza/build/calliope/";
+        AbbozzaLogger.out("Build path set to " + _buildPath, AbbozzaLogger.INFO);
+    }
+
+    /**
+     * Copy code to <buildPath>/source/abbozza.cpp and compile it.
+     *
+     * @param code
+     * @return
+     */
     @Override
     public String compileCode(String code) {
-        AbbozzaLogger.out("Code generated",4);
+        AbbozzaLogger.out("Code generated", AbbozzaLogger.INFO);
+        // Set code in frame
         this.frame.setCode(code);
-        return "";
+
+        // Redirect error stream
+        PrintStream origErr = System.err;
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        PrintStream newErr = new PrintStream(buffer);
+        System.setErr(newErr);
+
+        // Copy code to <buildPath>/source/abbozza.cpp
+        AbbozzaLogger.out("Writing code to " + _buildPath + "source/abbozza.cpp");
+        if (code != "") {
+            try {
+                PrintWriter out = new PrintWriter(_buildPath + "source/abbozza.cpp");
+                out.write(code);
+                out.flush();
+                out.close();
+
+                // Now compile it by calling "yt build" in _buildPath
+                String scriptName = "compile.sh";
+                String osName = System.getProperty("os.name");
+                if (osName.indexOf("Windows") != -1) {
+                    scriptName = "compile.bat";
+                }
+                Process proc = Runtime.getRuntime().exec(_buildPath + scriptName);
+                proc.waitFor();
+                
+            } catch (FileNotFoundException ex) {
+                AbbozzaLogger.out(ex.getLocalizedMessage(), AbbozzaLogger.ERROR);
+            } catch (IOException ex) {
+                AbbozzaLogger.out(ex.getLocalizedMessage(), AbbozzaLogger.ERROR);
+            } catch (InterruptedException ex) {
+                AbbozzaLogger.out(ex.getLocalizedMessage(), AbbozzaLogger.ERROR);
+            }
+        }
+
+        // Reset error stream
+        newErr.flush();
+        System.setErr(origErr);
+
+        // Fetch response
+        String errMsg = buffer.toString();
+        if (errMsg.length() > 0) {
+            AbbozzaLogger.out(errMsg,AbbozzaLogger.ERROR);
+        } else {
+            AbbozzaLogger.out("Compilation successful",AbbozzaLogger.INFO);            
+        }
+
+        return errMsg;
     }
 
     @Override
     public String uploadCode(String code) {
-        this.frame.setCode(code);        
-        /*
-        String java = embed(hexlify(code));
-        AbbozzaLogger.out("Writing hex code to " + _pathToBoard + "/abbozza.hex",4);
         
-        if ( java != "" ) {
-                try {
-                    PrintWriter out = new PrintWriter(_pathToBoard + "/abbozza.hex");
-                    out.write(java);
-                    out.flush();
-                    out.close();
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(AbbozzaCalliope.class.getName()).log(Level.SEVERE, null, ex);
+        String errMsg = compileCode(code);
+        
+        if (errMsg.length() == 0) {
+            FileInputStream in = null;
+            try {
+                AbbozzaLogger.out("Copying " + _buildPath + "build/calliope-mini-classic-gcc/source/abbozza-combined.hex to " + _pathToBoard + "/abbozza.hex",4);
+                in = new FileInputStream(_buildPath + "build/calliope-mini-classic-gcc/source/abbozza-combined.hex");
+                PrintWriter out = new PrintWriter(_pathToBoard + "/abbozza.hex");
+                while ( in.available() > 0 ) {
+                    out.write(in.read());
                 }
-        } else {
-        }
-        */
+                out.flush();
+                out.close();
+                in.close();
+            } catch (FileNotFoundException ex) {
+                AbbozzaLogger.err(ex.getLocalizedMessage());
+            } catch (IOException ex) {
+                AbbozzaLogger.err(ex.getLocalizedMessage());
+            }
+         }
+    
         return "";
     }
 

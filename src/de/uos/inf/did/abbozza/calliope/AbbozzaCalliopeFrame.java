@@ -94,6 +94,8 @@ public class AbbozzaCalliopeFrame  extends javax.swing.JFrame implements Abbozza
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("abbozza! Calliope");
 
+        tabs.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/uos/inf/did/abbozza/img/abbozza200.png"))); // NOI18N
         jLabel1.setToolTipText("");
@@ -127,6 +129,10 @@ public class AbbozzaCalliopeFrame  extends javax.swing.JFrame implements Abbozza
 
         tabs.addTab("Info", LogoPanel);
 
+        sourcePanel.setMaximumSize(null);
+        sourcePanel.setPreferredSize(null);
+        sourcePanel.setRequestFocusEnabled(false);
+
         sourceArea.setEditable(false);
         sourceArea.setColumns(20);
         sourceArea.setRows(5);
@@ -134,9 +140,12 @@ public class AbbozzaCalliopeFrame  extends javax.swing.JFrame implements Abbozza
 
         tabs.addTab(AbbozzaLocale.entry("gui.sourceCode"), sourcePanel);
 
+        logPanel.setPreferredSize(null);
+
         consoleArea.setEditable(false);
         consoleArea.setColumns(20);
         consoleArea.setRows(5);
+        consoleArea.setMaximumSize(null);
         logPanel.setViewportView(consoleArea);
 
         tabs.addTab(AbbozzaLocale.entry("gui.console"), logPanel);
@@ -182,7 +191,9 @@ public class AbbozzaCalliopeFrame  extends javax.swing.JFrame implements Abbozza
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabs)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         tabs.getAccessibleContext().setAccessibleName(AbbozzaLocale.entry("gui.sourceCode"));
