@@ -22,10 +22,13 @@
 package de.uos.inf.did.abbozza.calliope;
 
 import de.uos.inf.did.abbozza.AbbozzaLogger;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -70,12 +73,17 @@ public class AbbozzaCalliopeC extends AbbozzaCalliope {
         // Set code in frame
         this.frame.setCode(code);
 
-        // Redirect error stream
-        PrintStream origErr = System.err;
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        PrintStream newErr = new PrintStream(buffer);
-        System.setErr(newErr);
+        String errMsg = "";
+        int exitValue = 1;
+        
+        InputStream err;
+        InputStream stdout;
 
+        // Redirect error stream
+        // PrintStream origErr = System.err;
+        // ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        // PrintStream newErr = new PrintStream(buffer);
+        // System.setErr(newErr);
         // Copy code to <buildPath>/source/abbozza.cpp
         AbbozzaLogger.out("Writing code to " + _buildPath + "source/abbozza.cpp");
         if (code != "") {
@@ -92,8 +100,17 @@ public class AbbozzaCalliopeC extends AbbozzaCalliope {
                     scriptName = "compile.bat";
                 }
                 Process proc = Runtime.getRuntime().exec(_buildPath + scriptName);
+                err = proc.getErrorStream();
+                stdout = proc.getInputStream();
+
                 proc.waitFor();
                 
+                exitValue = proc.exitValue();
+                
+                BufferedReader buf = new BufferedReader(new InputStreamReader(err));
+                while (buf.ready()) {
+                    errMsg = errMsg + "\n" + buf.readLine();
+                }
             } catch (FileNotFoundException ex) {
                 AbbozzaLogger.out(ex.getLocalizedMessage(), AbbozzaLogger.ERROR);
             } catch (IOException ex) {
@@ -101,18 +118,17 @@ public class AbbozzaCalliopeC extends AbbozzaCalliope {
             } catch (InterruptedException ex) {
                 AbbozzaLogger.out(ex.getLocalizedMessage(), AbbozzaLogger.ERROR);
             }
-        }
 
-        // Reset error stream
-        newErr.flush();
-        System.setErr(origErr);
-
-        // Fetch response
-        String errMsg = buffer.toString();
-        if (errMsg.length() > 0) {
-            AbbozzaLogger.out(errMsg,AbbozzaLogger.ERROR);
-        } else {
-            AbbozzaLogger.out("Compilation successful",AbbozzaLogger.INFO);            
+            // Reset error stream
+            // newErr.flush();
+            // System.setErr(origErr);
+            // Fetch response
+            if (exitValue > 0) {
+                AbbozzaLogger.out(errMsg, AbbozzaLogger.ERROR);
+            } else {
+                errMsg = "";
+                AbbozzaLogger.out("Compilation successful", AbbozzaLogger.INFO);
+            }
         }
 
         return errMsg;
@@ -120,16 +136,16 @@ public class AbbozzaCalliopeC extends AbbozzaCalliope {
 
     @Override
     public String uploadCode(String code) {
-        
+
         String errMsg = compileCode(code);
-        
+
         if (errMsg.length() == 0) {
             FileInputStream in = null;
             try {
-                AbbozzaLogger.out("Copying " + _buildPath + "build/calliope-mini-classic-gcc/source/abbozza-combined.hex to " + _pathToBoard + "/abbozza.hex",4);
+                AbbozzaLogger.out("Copying " + _buildPath + "build/calliope-mini-classic-gcc/source/abbozza-combined.hex to " + _pathToBoard + "/abbozza.hex", 4);
                 in = new FileInputStream(_buildPath + "build/calliope-mini-classic-gcc/source/abbozza-combined.hex");
                 PrintWriter out = new PrintWriter(_pathToBoard + "/abbozza.hex");
-                while ( in.available() > 0 ) {
+                while (in.available() > 0) {
                     out.write(in.read());
                 }
                 out.flush();
@@ -140,8 +156,8 @@ public class AbbozzaCalliopeC extends AbbozzaCalliope {
             } catch (IOException ex) {
                 AbbozzaLogger.err(ex.getLocalizedMessage());
             }
-         }
-    
+        }
+
         return "";
     }
 

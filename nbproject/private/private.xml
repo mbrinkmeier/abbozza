@@ -13,15 +13,6 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="NetBeansProjects"/>
         <group>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliope/Code.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/calliope.html</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/micropython/blocks/Buttons.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/micropython/blocks/Text.js</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/arduino.html</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliope/features.xml</file>
-            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/micropython/blocks/Functions.js</file>
-        </group>
-        <group>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/gui/field_pindropdown.js</file>
             <file>file:/home/michael/Projekte/abbozza/src/de/uos/inf/did/abbozza/calliope/AbbozzaCalliope.java</file>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/micropython/blocks/InOut.js</file>
@@ -32,6 +23,11 @@
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/arduino/Boards.js</file>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliope/features.xml</file>
             <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliope/languages/en.xml</file>
+        </group>
+        <group>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliopeC/abbozza.h</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/calliopeC.html</file>
+            <file>file:/home/michael/Projekte/abbozza/lib/js/abbozza/calliopeC/blocks/Display.js</file>
         </group>
     </open-files>
 </project-private>

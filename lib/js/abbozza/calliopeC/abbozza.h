@@ -5,7 +5,7 @@ const uint8_t __heart[] __attribute__ ((aligned (4))) = { 0xff,0xff,5,0,5,0, 0,2
 MicroBitImage Image_HEART((ImageData*) __heart);
 
 const uint8_t __small_heart[] __attribute__ ((aligned (4))) = { 0xff,0xff,5,0,5,0, 0,0,0,0,0, 0,255,0,255,0, 0,255,255,255,0, 0,0,255,0,0, 0,0,0,0,0 };
-MicroBitImage Image_SMALL_HEART((ImageData*) __small_heart);
+MicroBitImage Image_HEART_SMALL((ImageData*) __small_heart);
 
 const uint8_t __happy[] __attribute__ ((aligned (4))) = { 0xff,0xff,5,0,5,0, 0,0,0,0,0, 0,255,0,255,0, 0,0,0,0,0, 255,0,0,0,255, 0,255,255,255,0 };
 MicroBitImage Image_HAPPY((ImageData*) __happy);
@@ -32,10 +32,5 @@ const uint8_t __no[] __attribute__ ((aligned (4))) = { 0xff, 0xff, 5, 0, 5,0, 25
 MicroBitImage Image_NO((ImageData*) __no);
 
 uint8_t __abz_image_data[31] = { 0xff,0xff,5,0,5,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0};
-
-MicroBitImage __abz_image;
-
-void __set_abz_image() {
-}
 
 #endif
