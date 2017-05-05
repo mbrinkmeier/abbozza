@@ -78,6 +78,26 @@
             <block type="display_is_on"></block>
         </category>
 
+        <category name="Ein- und Ausgabe" id="cat.INOUT">
+            <block type="inout_level"></block>
+            <block type="inout_digital_read">
+            </block>
+            <block type="inout_digital_write">
+                <value name="LEVEL">
+                    <block type="inout_level"></block>
+                </value>
+            </block>
+            <block type="inout_analog_read">
+            </block>
+            <block type="inout_analog_write">
+                <value name="VALUE">
+                    <block type="math_number"></block>
+                </value>
+            </block>
+            <block type="inout_touched">
+            </block>
+        </category>
+
         <category  id="cat.DEVIN">
             <block type="dev_button_pressed"></block>
             <block type="dev_button_was_pressed"></block>

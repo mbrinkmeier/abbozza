@@ -38,6 +38,8 @@
         <msg id="dev.6G">6G</msg>
         <msg id="dev.8G">8G</msg>
         <msg id="dev.SHAKE">Geschüttelt</msg>
+        
+        <msg id="io.TOUCHEDPIN">wird berührt</msg>
     </blocks>
     <cat>
         <msg id="cat.DISPLAY">Anzeige</msg>
