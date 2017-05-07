@@ -24,7 +24,6 @@
  */
 package de.uos.inf.did.abbozza.monitor;
 
-import cc.arduino.packages.BoardPort;
 import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.arduino.handler.SerialHandler;
 import java.io.IOException;
@@ -39,7 +38,7 @@ public class Sender extends Thread {
    
     private boolean stopped;
     private AbbozzaMonitor _monitor;
-    private BoardPort _port;
+    private String _port;
     
     public Sender(AbbozzaMonitor manager) {
         this._monitor = manager;

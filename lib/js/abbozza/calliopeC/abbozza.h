@@ -1,6 +1,13 @@
 #ifndef _ABBOZZA_H
 #define _ABBOZZA_H
 
+// MicroBitI2C __abz_i2c = MicroBitI2C(I2C_SDA0, I2C_SCL0);
+
+// MicroBitAccelerometer __abz_accelerometer = MicroBitAccelerometer(__abz_i2c);
+// MicroBitCompass __abz_compass = MicroBitCompass(__abz_i2c);
+// MicroBitThermometer __abz_thermometer;
+
+
 /**
  * Pins
  */

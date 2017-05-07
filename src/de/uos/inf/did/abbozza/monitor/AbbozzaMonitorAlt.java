@@ -16,11 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+ 
 /**
  * @fileoverview The abbozza! varsion of the serial monitor.
- *
+ * 
  * @author michael.brinkmeier@uni-osnabrueck.de (Michael Brinkmeier)
  */
+
 package de.uos.inf.did.abbozza.monitor;
 
 import com.sun.net.httpserver.HttpExchange;
@@ -48,64 +50,70 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 import javax.swing.text.DefaultCaret;
+import jssc.SerialPortList;
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
+import processing.app.Serial;
 
 /**
  *
  * @author mbrinkmeier
  */
-public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPortEventListener {
+public class AbbozzaMonitorAlt extends JFrame implements ActionListener, SerialPortEventListener {
 
     private String boardPort;
-    private int baudRate = SerialPort.BAUDRATE_115200;
     private boolean monitorEnabled;
     private boolean closed;
     private StringBuffer updateBuffer = null;
     private Timer updateTimer = null;
-    // private Serial serial;
+    private Serial serial;
     private SerialPort serialPort;
-    private StringBuffer unprocessedMsg;
-    private HashMap<String, MonitorPanel> panels;
+    private StringBuffer unprocessedMsg;    
+    private HashMap<String,MonitorPanel> panels;
     protected ArrayBlockingQueue<Message> _msgQueue;
-    protected HashMap<String, Message> _waitingMsg;
+    protected HashMap<String,Message> _waitingMsg;
     private Sender _sender;
-
+    
     // private AbbozzaMonitorPanel monitor = null;
+
     /**
      * Creates new AbbozzaMonitor and asks for port
      *
      * @param boardport
      */
-    public AbbozzaMonitor() {
+    public AbbozzaMonitorAlt() {
 
         init();
         // TODO Choice of port
         // return portNames[0];
-
+        
     }
 
+    
     /**
      * Creates new AbbozzaMonitor with given port
      *
      * @param boardport
      */
-    public AbbozzaMonitor(String port, int rate) {
+    public AbbozzaMonitorAlt(String port) {
         init();
-        setBoardPort(port, rate);
+        setBoardPort(port);
     }
 
     private void init() {
         _msgQueue = new ArrayBlockingQueue<Message>(10);
-        _waitingMsg = new HashMap<String, Message>();
-
-        _sender = new Sender(this);
+        _waitingMsg = new HashMap<String,Message>();
+        
+        AbbozzaLogger.out("AA",AbbozzaLogger.INFO);
+        
+        // _sender = new Sender(this);
         _sender.start();
-
+        
+        AbbozzaLogger.out("AB",AbbozzaLogger.INFO);
         initComponents();
-        DefaultCaret caret = (DefaultCaret) textArea.getCaret();
+        DefaultCaret caret = (DefaultCaret)textArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         this.sendText.getEditor().addActionListener(new java.awt.event.ActionListener() {
@@ -113,7 +121,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
                 sendTextEditorActionPerformed(evt);
             }
         });
-
+        
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent event) {
                 try {
@@ -131,8 +139,8 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         updateTimer = new Timer(33, this);  // redraw serial monitor at 30 Hz
         updateTimer.start();
         unprocessedMsg = new StringBuffer();
-
-        panels = new HashMap<String, MonitorPanel>();
+        
+        panels = new HashMap<String,MonitorPanel>();
         TableMonitor tableMonitor = new TableMonitor();
         this.addMonitorPanel(tableMonitor, "table");
         this.addMonitorPanel(new GraphMonitor(tableMonitor.getTableModel()), "graph");
@@ -140,7 +148,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
 
         textArea.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                maybeShowPopup(e);
+                  maybeShowPopup(e);
             }
 
             public void mouseReleased(MouseEvent e) {
@@ -149,18 +157,19 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
 
             private void maybeShowPopup(MouseEvent e) {
                 if (e.isPopupTrigger()) {
-                    protocolPopUp.show(e.getComponent(), e.getX(), e.getY());
-                }
+                    protocolPopUp.show(e.getComponent(),e.getX(), e.getY());
+               }
             }
         });
-
+        
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (screen.width - this.getWidth()) / 2;
         int y = (screen.height - this.getHeight()) / 2;
-        this.setLocation(x, y);
+        this.setLocation(x, y);    
     }
 
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -196,7 +205,6 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("abbozza! Monitor");
         setMinimumSize(new java.awt.Dimension(640, 480));
-        setPreferredSize(new java.awt.Dimension(640, 480));
 
         java.awt.GridBagLayout jPanel1Layout = new java.awt.GridBagLayout();
         jPanel1Layout.columnWidths = new int[] {0};
@@ -270,9 +278,9 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         }
     }//GEN-LAST:event_sendButtonActionPerformed
 
-    private void sendTextEditorActionPerformed(java.awt.event.ActionEvent evt) {
+    private void sendTextEditorActionPerformed(java.awt.event.ActionEvent evt) {                                         
         String msg = evt.getActionCommand();
-        if (msg != null && !msg.isEmpty()) {
+        if (msg != null && !msg.isEmpty() ) {
             this.sendMessage(msg);
             this.sendText.addItem(new String(msg));
             this.sendText.setSelectedItem(null);
@@ -280,11 +288,7 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     }
 
     public synchronized void addToUpdateBuffer(char buff[], int n) {
-        updateBuffer.append(buff, 0, n);
-    }
-
-    public synchronized void addToUpdateBuffer(String buf) {
-        updateBuffer.append(buf.toCharArray(), 0, buf.length());
+        updateBuffer.append(buff,0, n);
     }
 
     private synchronized String consumeUpdateBuffer() {
@@ -305,23 +309,23 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     private javax.swing.JTextArea textArea;
     private javax.swing.JScrollPane textPane;
     // End of variables declaration//GEN-END:variables
-
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         // Check waiting messages for timed out requests
-        if (!_waitingMsg.isEmpty()) {
+        if ( !_waitingMsg.isEmpty() ) {
             Set<String> keys = _waitingMsg.keySet();
             Iterator<String> it = keys.iterator();
             while (it.hasNext()) {
                 String key = it.next();
                 Message msg = _waitingMsg.get(key);
                 // Remove timed out requests
-                if (msg.isTimedOut()) {
+                if ( msg.isTimedOut() ) {
                     _waitingMsg.remove(key);
                     try {
                         msg.getHandler().sendResponse(msg.getHttpExchange(), 400, "text/plain", "query timed out!");
                     } catch (IOException ex) {
-                        Logger.getLogger(AbbozzaMonitor.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(AbbozzaMonitorAlt.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -338,100 +342,94 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         appendText(s);
 
         // Send to all monitor panels
-        processMessage(s);
+        processMessage(s);        
 
     }
-
+    
     /**
      * Write a message to the serial port
-     *
+     * 
      * @param msg The message
      */
     protected void writeMessage(String msg) {
-        try {
-            serialPort.writeString(msg);
-            appendText("-> " + msg + "\n");
-        } catch (SerialPortException ex) {
-            AbbozzaLogger.err("Error sendig to serial port");
-        }
+        serial.write(msg);
+        appendText("-> " + msg + "\n");
     }
-
+    
     /**
      * Enque a message for sending without timeout and without waiting for it.
-     *
+     * 
      * @param msg The message
      */
     public void sendMessage(String msg) {
-        if (this.boardPort != null) {
-            _msgQueue.add(new Message("", msg, null, null, 0));
+        if ( this.boardPort != null ) {
+            _msgQueue.add(new Message("",msg,null,null,0));
         }
     }
 
     /**
-     * Enque a message from a HTTP-request for sending. Assign an ID to it and
-     * wait for a response, if the timeout is positive.
-     *
+     * Enque a message from a HTTP-request for sending. Assign an ID to it
+     * and wait for a response, if the timeout is positive.
+     * 
      * @param msg The message to be send
      * @param exchg The HttpExchange object representing the request
      * @param handler The Handler handling the request
      * @param timeout The timeout for the response (if greater than zero)
      */
     public void sendMessage(String msg, HttpExchange exchg, SerialHandler handler, long timeout) {
-        if (this.boardPort == null) {
-            return;
-        }
-        if (timeout > 0) {
+        if ( this.boardPort == null ) return;
+        if ( timeout > 0 ) {
             String id = "_" + Long.toHexString(System.currentTimeMillis());
-            Message _msg = new Message(id, msg, exchg, handler, timeout);
+            Message _msg = new Message(id,msg,exchg,handler,timeout); 
             _msgQueue.add(_msg);
         } else {
             sendMessage(msg);
             try {
                 handler.sendResponse(exchg, 200, "text/plain", "");
             } catch (IOException ex) {
-                Logger.getLogger(AbbozzaMonitor.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AbbozzaMonitorAlt.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
     /**
      * Append a text to the textfield showing the communication.
-     *
+     * 
      * @param msg The text to be appended
      */
     protected void appendText(String msg) {
         this.textArea.append(msg);
     }
-
+    
     /**
-     * Process a message received from the board. If it is enclose double
-     * brackets [[ <prefix> <msg> ]]. Check the <prefix> and send it to the
-     * appropriate Panel. If <prefix> is of the form _.* it is processed by the
-     * Monitor itself, since it is an answer to a request.
-     *
+     * Process a message received from the board. If it is enclose
+     * double brackets [[ <prefix> <msg> ]]. Check the <prefix> and send it 
+     * to the appropriate Panel. If <prefix> is of the form _.* it is
+     * processed by the Monitor itself, since it is an answer to a request.
+     * 
      * @param s The string received
      */
     private void processMessage(String s) {
         unprocessedMsg.append(s);
-
+        
         String cmd;
         String prefix;
-
+        
         int end = -1;
         int start = -1;
         do {
             start = unprocessedMsg.indexOf("[[");
-            if (start >= 0) {
-                end = unprocessedMsg.indexOf("]]", start + 2);
-                if (end >= 0) {
-                    cmd = unprocessedMsg.substring(start + 2, end);
-                    unprocessedMsg.delete(0, end + 2);
+            if ( start >= 0 ) {
+                end = unprocessedMsg.indexOf("]]",start+2);
+                if ( end >= 0 ) {
+                    cmd = unprocessedMsg.substring(start+2, end);
+                    unprocessedMsg.delete(0, end+2);
                     int space = cmd.indexOf(' ');
-                    if (space >= 0) {
-                        prefix = cmd.substring(0, space);
+                    if ( space >= 0 ) {
+                        prefix = cmd.substring(0,space);
                         MonitorPanel panel = panels.get(prefix);
                         if (panel != null) {
-                            cmd = cmd.substring(space + 1, cmd.length());
+                            cmd = cmd.substring(space+1,cmd.length());
                             panel.processMessage(cmd);
                         } else {
                             respondTo(cmd);
@@ -439,38 +437,38 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
                     }
                 }
             }
-        } while ((start != -1) && (end != -1));
+        } while( (start != -1) && (end != -1) );
     }
-
+    
     /**
      * This method responds to a received message wih leading id.
-     *
+     * 
      * @param msg The message
      */
     private void respondTo(String msg) {
         int pos;
         Message _msg;
         msg = msg.trim();
-        if (msg.startsWith("_")) {
+        if ( msg.startsWith("_") ) {
             pos = msg.indexOf(' ');
             String id = msg.substring(0, pos);
             _msg = _waitingMsg.get(id);
-            if (_msg != null) {
-                msg = "[[" + _msg.getIdPostfix() + " " + msg.substring(pos).trim() + "]]";
+            if ( _msg != null ) {
+                msg = "[["+ _msg.getIdPostfix() + " " + msg.substring(pos).trim() +"]]";
                 _waitingMsg.remove(id);
                 try {
                     _msg.getHandler().sendResponse(_msg.getHttpExchange(), 200, "text/plain", msg);
                 } catch (IOException ex) {
-                    Logger.getLogger(AbbozzaMonitor.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(AbbozzaMonitorAlt.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
     }
-
+    
     /**
-     * Add a Panel to the Monitor. Messages enclosed in double brackets of the
-     * form [[ <prefix> <msg> ]] are send to the panel.
-     *
+     * Add a Panel to the Monitor. Messages enclosed in double brackets 
+     * of the form [[ <prefix> <msg> ]] are send to the panel.
+     * 
      * @param panel The panel to be added
      * @param prefix The prefix of messages handled by the panel
      */
@@ -478,30 +476,28 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         if (panel != null) {
             tabPanel.add(panel, 0);
             panels.put(prefix, panel);
-        }
+        }        
     }
 
     /**
      * Returns the current port is a board is connected, null otherwise.
-     *
-     * @return
+     * @return 
      */
     public String getBoardPort() {
         return boardPort;
     }
 
-    public void setBoardPort(String boardPort, int rate) {
+    public void setBoardPort(String boardPort) {
         this.boardPort = boardPort;
-        this.baudRate = rate;
     }
 
     public void enableWindow(boolean enable) {
         this.setVisible(true);
-
+        
         monitorEnabled = enable;
-
+        
         textArea.setEnabled(enable);
-        for (MonitorPanel panel : panels.values()) {
+        for ( MonitorPanel panel : panels.values()) {
             panel.setEnabled(enable);
         }
     }
@@ -510,9 +506,9 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     // to allow other entity (the programmer) to use it
     public void suspend() throws Exception {
         enableWindow(false);
-        if (serialPort != null) {
-            serialPort.closePort();
-            serialPort = null;
+        if (serial != null) {
+            serial.dispose();
+            serial = null;
         }
         // close();
     }
@@ -520,40 +516,22 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     public void resume() throws Exception {
         // Enable the window
         enableWindow(true);
-
+        
         // If the window is visible, try to open the serial port
-        if (serialPort != null) {
-            if ( !serialPort.isOpened() ) {
-                AbbozzaLogger.out("Serial port " + serialPort.getPortName() + " not available!",AbbozzaLogger.INFO);
-                serialPort = null;
-            } else {
-                return;
-            }
+        if (serial != null) {
+            return;
         }
 
-        if (boardPort != null) {
-            /* serial = new Serial(boardPort, 9600) {
+        if ( boardPort != null ) {
+            serial = new Serial(boardPort, 9600) {
                 @Override
                 protected void message(char buff[], int n) {
                     addToUpdateBuffer(buff, n);
                 }
-            };*/
-            AbbozzaLogger.out("Openeing serial port " + boardPort,AbbozzaLogger.INFO);
-            serialPort = new SerialPort(boardPort);
-            try {
-                serialPort.openPort();
-                serialPort.addEventListener(this, SerialPort.MASK_RXCHAR);
-                serialPort.setParams(baudRate,
-                        SerialPort.DATABITS_8,
-                        SerialPort.STOPBITS_1,
-                        SerialPort.PARITY_NONE);
-            } catch (SerialPortException ex) {
-                AbbozzaLogger.err(ex.getLocalizedMessage());
-
-            }
+            };
         } else {
             String msg = AbbozzaLocale.entry("msg.no_board");
-            addToUpdateBuffer(msg.toCharArray(), msg.length());
+            addToUpdateBuffer(msg.toCharArray(),msg.length());
         }
     }
 
@@ -563,39 +541,28 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
 
     public void open() throws Exception {
         closed = false;
-        if (serialPort != null) {
+        if (serial != null) {
             return;
         }
         this.setVisible(true);
 
-        if (boardPort != null) {
-            AbbozzaLogger.out("Open " + boardPort, AbbozzaLogger.INFO);
+        if ( boardPort != null ) {
+            AbbozzaLogger.out("Open " + boardPort,AbbozzaLogger.INFO);
             try {
-//                serial = new Serial(boardPort, 9600) {
-//                    @Override
-//                    protected void message(char buff[], int n) {
-//                        addToUpdateBuffer(buff, n);
-//                    }
-//                };
-                serialPort = new SerialPort(boardPort);
-                try {
-                    serialPort.openPort();
-                    serialPort.addEventListener(this, SerialPort.MASK_RXCHAR);
-                    serialPort.setParams(baudRate,
-                            SerialPort.DATABITS_8,
-                            SerialPort.STOPBITS_1,
-                            SerialPort.PARITY_NONE);
-                } catch (SerialPortException ex) {
-                    AbbozzaLogger.err(ex.getLocalizedMessage());
-
+            serial = new Serial(boardPort, 9600) {
+                @Override
+                protected void message(char buff[], int n) {
+                    addToUpdateBuffer(buff, n);
                 }
+            };
             } catch (Exception ex) {
                 ex.printStackTrace(System.err);
-                AbbozzaLogger.out(ex.getLocalizedMessage(), AbbozzaLogger.INFO);
+                AbbozzaLogger.out(ex.getLocalizedMessage(),AbbozzaLogger.INFO);
             }
+            AbbozzaLogger.out(serial.toString(),AbbozzaLogger.INFO);
         } else {
             String msg = "No board connected!";
-            addToUpdateBuffer(msg.toCharArray(), msg.length());
+            addToUpdateBuffer(msg.toCharArray(),msg.length());
         }
 
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -607,9 +574,9 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
     public void close() throws Exception {
         closed = true;
         this.setVisible(false);
-        if (serialPort != null) {
-            serialPort.closePort();
-            serialPort = null;
+        if (serial != null) {
+            serial.dispose();
+            serial = null;
         }
     }
 
@@ -617,16 +584,19 @@ public class AbbozzaMonitor extends JFrame implements ActionListener, SerialPort
         _waitingMsg.put(msg.getID(), msg);
     }
 
+    
     @Override
     public void serialEvent(SerialPortEvent event) {
-        if (event.isRXCHAR() && event.getEventValue() > 0) {
+        if(event.isRXCHAR() && event.getEventValue() > 0) {
             try {
                 String receivedData = serialPort.readString(event.getEventValue());
-                this.addToUpdateBuffer(receivedData);
-            } catch (SerialPortException ex) {
-                AbbozzaLogger.err("Error in receiving string from serial port: " + ex);
+                AbbozzaLogger.out("Received message on serial port: " + receivedData);
+            }
+            catch (SerialPortException ex) {
+                AbbozzaLogger.err("Error in receiving string from COM-port: " + ex);
             }
         }
     }
-
+    
+    
 }

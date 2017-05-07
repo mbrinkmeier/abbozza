@@ -56,8 +56,8 @@
             <!-- block type="math_binary"></block-->
             <block type="math_random"></block>
             <!-- block type="math_random2"></block-->
-            <!-- block type="math_randomseed"></block-->
-            <!-- block type="math_millis"></block-->
+            <block type="math_randomseed"></block>
+            <block type="math_millis"></block>
         </category>
 	    
         <category name="Text" id="cat.TEXT">
@@ -128,15 +128,19 @@
             </block>
         </category>
 
+        <category id="catSERIAL">
+            <block type="serial_println"></block>
+            <block type="serial_readln"></block>
+            <block type="serial_table"></block>
+        </category>
+        
         <category  id="cat.DEVIN">
             <block type="dev_button_pressed"></block>
-            <block type="dev_button_was_pressed"></block>
-            <block type="dev_button_get_presses"></block>
             <block type="dev_accel_get"></block>
             <block type="dev_accel_gesture"></block>
-            <block type="dev_accel_is_gesture"></block>
             <block type="dev_accel_was_gesture"></block>
-            <block type="dev_gesture"></block>
+            <block type="dev_compass_get"></block>
+            <block type="dev_thermometer_get"></block>
         </category>
         	            
     </feature>

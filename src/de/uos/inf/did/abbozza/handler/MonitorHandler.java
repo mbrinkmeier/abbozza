@@ -22,13 +22,11 @@
  */
 package de.uos.inf.did.abbozza.handler;
 
-import cc.arduino.packages.BoardPort;
 import com.sun.net.httpserver.HttpExchange;
+import de.uos.inf.did.abbozza.AbbozzaLogger;
 import de.uos.inf.did.abbozza.AbbozzaServer;
 import de.uos.inf.did.abbozza.monitor.AbbozzaMonitor;
 import java.io.IOException;
-import processing.app.Base;
-import processing.app.PreferencesData;
 
 /**
  *
@@ -44,6 +42,7 @@ public class MonitorHandler extends AbstractHandler {
 
     @Override
     public void handle(HttpExchange exchg) throws IOException {
+        
         String path = exchg.getRequestURI().getPath();
         boolean result = false;
         if (path.endsWith("/monitor")) {
@@ -59,6 +58,8 @@ public class MonitorHandler extends AbstractHandler {
     }
 
     public boolean open() {
+        
+        AbbozzaLogger.out("Open monitor", AbbozzaLogger.INFO );
         if (monitor != null) {
             if (resume()) {
                 monitor.toFront();
@@ -68,21 +69,37 @@ public class MonitorHandler extends AbstractHandler {
             }
         }
 
-        BoardPort port = Base.getDiscoveryManager().find(PreferencesData.get("serial.port"));
-        monitor = new AbbozzaMonitor(port);
+        String port = this._abbozzaServer.getSerialPort();
+        int rate = this._abbozzaServer.getBaudRate();
+        
+        if (port != null) {
+            AbbozzaLogger.out("Port discovered: " + port , AbbozzaLogger.INFO);
+            AbbozzaLogger.out("Initializing ... " , AbbozzaLogger.INFO);        
+            try {
+                monitor = new AbbozzaMonitor(port,rate);
+            } catch (Exception ex) {
+                AbbozzaLogger.err(ex.getLocalizedMessage());
+            }
+            AbbozzaLogger.out("Monitor initialized" , AbbozzaLogger.INFO);
+        } else {
+            AbbozzaLogger.out("No board discovered" , AbbozzaLogger.INFO);
+            monitor = new AbbozzaMonitor();
+        }
+        
         try {
             monitor.open();
             monitor.setVisible(true);
             monitor.toFront();
             monitor.setAlwaysOnTop(true);
         } catch (Exception ex) {
-            ex.printStackTrace(System.out);
+            AbbozzaLogger.err(ex.getLocalizedMessage());
             return false;
         }
         return true;
     }
 
     public boolean resume() {
+        AbbozzaLogger.out("Resume monitor", AbbozzaLogger.INFO );
         if (monitor == null) {
             return false;
         }

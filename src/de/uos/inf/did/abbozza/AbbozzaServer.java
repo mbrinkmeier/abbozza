@@ -74,6 +74,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import jssc.SerialPort;
+import jssc.SerialPortList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -121,6 +123,8 @@ public abstract class AbbozzaServer implements HttpHandler {
     protected String localPluginPath;
     private PluginManager pluginManager;
 
+    protected String _boardName;
+    
     /**
      * The system independent initialization of the server
      *
@@ -151,10 +155,10 @@ public abstract class AbbozzaServer implements HttpHandler {
 
         // Load plugins
         pluginManager = new PluginManager(this);
-               
 
         /**
-         * Read the configuration from <user.home>/.abbozza/<system>/abbozza.cfg
+         * Read the configuration from
+         * <user.home>/.abbozza/<system>/abbozza.cfg
          */
         configPath = System.getProperty("user.home") + "/.abbozza/" + this.system + "/abbozza.cfg";
         System.out.println("Reading config from " + configPath);
@@ -581,21 +585,21 @@ public abstract class AbbozzaServer implements HttpHandler {
                     Node parent = null;
                     String parentName = plugin.getParentOption();
                     NodeList nodes = optionsXml.getElementsByTagName("item");
-                    for (int i = 0 ; i < nodes.getLength(); i++) {
+                    for (int i = 0; i < nodes.getLength(); i++) {
                         String name = null;
                         Node node = (Node) nodes.item(i);
-                        if ( node.getAttributes().getNamedItem("option") != null ) {
+                        if (node.getAttributes().getNamedItem("option") != null) {
                             name = node.getAttributes().getNamedItem("option").getTextContent();
-                            if ( name.equals(parentName) ) {
+                            if (name.equals(parentName)) {
                                 parent = node;
                             }
                         }
                     }
                     optionsXml.adoptNode(pluginOpts);
 
-                    if ( parent != null ) {
+                    if (parent != null) {
                         parent.appendChild(pluginOpts);
-                    } else {                 
+                    } else {
                         root.appendChild(pluginOpts);
                     }
                 }
@@ -666,6 +670,33 @@ public abstract class AbbozzaServer implements HttpHandler {
         return jarHandler;
     }
 
+    public String getSerialPort() {
+        AbbozzaLogger.out("Checking serial ports", AbbozzaLogger.INFO);
+
+        String[] portNames = SerialPortList.getPortNames();
+
+        AbbozzaLogger.out("Fetched serial ports", AbbozzaLogger.INFO);
+
+        if (portNames.length == 0) {
+            System.out.println("No serial ports found");
+            return null;
+        } else if (portNames.length == 1) {
+            System.out.println("Unique port found: " + portNames[0]);
+            return portNames[0];
+        } else {
+            System.out.println("Several ports found:");
+            for (int i = 0; i < portNames.length; i++) {
+                System.out.println("\t" + portNames[i]);
+            }
+        }
+
+        return portNames[0];
+    }
+
+    public int getBaudRate() {
+        return SerialPort.BAUDRATE_115200;
+    }
+
     /*
     public int getRunningServerPort() {
         return serverPort;
@@ -721,4 +752,12 @@ public abstract class AbbozzaServer implements HttpHandler {
         return false;
     }
 
+    public void setBoardName(String name) {
+        this._boardName = name;
+    }
+    
+    public String getBoardName() {
+        return this._boardName;
+    }
+    
 }

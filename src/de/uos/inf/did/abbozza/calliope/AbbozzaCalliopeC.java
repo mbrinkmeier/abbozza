@@ -36,12 +36,14 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author mbrinkmeier
+ * @author mbrinkmeier1G
  */
 public class AbbozzaCalliopeC extends AbbozzaCalliope {
 
     protected String _buildPath;
-
+    protected String _hexPath;
+    protected int _exitValue;
+    
     public static void main(String args[]) {
         AbbozzaCalliopeC abbozza = new AbbozzaCalliopeC();
         abbozza.init("calliopeC");
@@ -57,8 +59,6 @@ public class AbbozzaCalliopeC extends AbbozzaCalliope {
      */
     public void init(String system) {
         super.init(system);
-        _buildPath = System.getProperty("user.home") + "/abbozza/build/calliope/";
-        AbbozzaLogger.out("Build path set to " + _buildPath, AbbozzaLogger.INFO);
     }
 
     /**
@@ -69,12 +69,29 @@ public class AbbozzaCalliopeC extends AbbozzaCalliope {
      */
     @Override
     public String compileCode(String code) {
+        if (this._boardName == null ) {
+            this.setBoardName("calliope");
+        }
+        
+        _buildPath = System.getProperty("user.home") + "/abbozza/build/" + this._boardName + "/";
+        
+        
+        // _hexPath = _buildPath + "build/calliope-mini-classic-gcc/source/abbozza-combined.hex";
+        if ( this._boardName.equals("microbit") ) {
+            _hexPath = _buildPath + "build/bbc-microbit-classic-gcc/source/abbozza-combined.hex";
+        } else {
+            _hexPath = _buildPath + "build/calliope-mini-classic-gcc/source/abbozza-combined.hex";            
+        }
+        AbbozzaLogger.out("Build path set to " + _buildPath, AbbozzaLogger.INFO);
+        
         AbbozzaLogger.out("Code generated", AbbozzaLogger.INFO);
         // Set code in frame
         this.frame.setCode(code);
 
         String errMsg = "";
-        int exitValue = 1;
+        String stdMsg = "";
+        
+        _exitValue = 1;
         
         InputStream err;
         InputStream stdout;
@@ -105,13 +122,18 @@ public class AbbozzaCalliopeC extends AbbozzaCalliope {
 
                 proc.waitFor();
                 
-                exitValue = proc.exitValue();
+                _exitValue = proc.exitValue();
                 
-                AbbozzaLogger.out("Exit value: " + exitValue, AbbozzaLogger.INFO);
+                AbbozzaLogger.out("Exit value: " + _exitValue, AbbozzaLogger.INFO);
                 
                 BufferedReader buf = new BufferedReader(new InputStreamReader(err));
                 while (buf.ready()) {
                     errMsg = errMsg + "\n" + buf.readLine();
+                }
+                
+                buf = new BufferedReader(new InputStreamReader(stdout));
+                while (buf.ready()) {
+                    stdMsg = stdMsg + "\n" + buf.readLine();
                 }
             } catch (FileNotFoundException ex) {
                 AbbozzaLogger.out(ex.getLocalizedMessage(), AbbozzaLogger.ERROR);
@@ -125,27 +147,30 @@ public class AbbozzaCalliopeC extends AbbozzaCalliope {
             // newErr.flush();
             // System.setErr(origErr);
             // Fetch response
-            if (exitValue > 0) {
+            if (_exitValue > 0) {
                 AbbozzaLogger.out(errMsg, AbbozzaLogger.ERROR);
             } else {
                 errMsg = "";
+                stdMsg = "";
                 AbbozzaLogger.out("Compilation successful", AbbozzaLogger.INFO);
             }
         }
 
-        return errMsg;
+        return stdMsg;
     }
 
     @Override
     public String uploadCode(String code) {
 
+        _exitValue = 0;
+        
         String errMsg = compileCode(code);
 
-        if (errMsg.length() == 0) {
+        if (_exitValue == 0) {
             FileInputStream in = null;
             try {
-                AbbozzaLogger.out("Copying " + _buildPath + "build/calliope-mini-classic-gcc/source/abbozza-combined.hex to " + _pathToBoard + "/abbozza.hex", 4);
-                in = new FileInputStream(_buildPath + "build/calliope-mini-classic-gcc/source/abbozza-combined.hex");
+                AbbozzaLogger.out("Copying " + _hexPath + " to " + _pathToBoard + "/abbozza.hex", 4);
+                in = new FileInputStream(_hexPath);
                 PrintWriter out = new PrintWriter(_pathToBoard + "/abbozza.hex");
                 while (in.available() > 0) {
                     out.write(in.read());
@@ -160,7 +185,7 @@ public class AbbozzaCalliopeC extends AbbozzaCalliope {
             }
         }
 
-        return "";
+        return errMsg;
     }
 
 }
