@@ -1,5 +1,5 @@
 # abbozza
-##This Project is obsolete! 
+## This Project is obsolete! 
 
 It was replaces by the following projects:
 - abbozza-common
